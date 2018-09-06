@@ -217,21 +217,20 @@ Expression Power(const std::vector<Expression> & args) {
 
 	// check all aruments are numbers, while multiplying
 	double result = 0;
-	for (auto & a : args) {
-		if (a.isHeadNumber()) {
-			if (result == 0)
-			{
-				result += a.head().asNumber();
-			}
-			else
-			{
-				result = pow(result, a.head().asNumber());
-			}
+	if (nargs_equal(args, 2))
+	{
+		if (args[0].isHeadNumber() && args[1].isHeadNumber()) {
+
+			result = pow(args[0].head().asNumber(), args[1].head().asNumber());
 		}
 		else {
 
 			throw SemanticError("Error in call to pow, argument not a number");
 		}
+	}
+	else
+	{
+		throw SemanticError("Error in call to pow: invalid number of arguments.");
 	}
 
 	return Expression(result);
