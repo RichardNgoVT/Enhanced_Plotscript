@@ -49,6 +49,10 @@ bool Expression::isHeadNumber() const noexcept{
   return m_head.isNumber();
 }
 
+bool Expression::isHeadComplex() const noexcept {
+	return m_head.isComplex();
+}
+
 bool Expression::isHeadSymbol() const noexcept{
   return m_head.isSymbol();
 }  

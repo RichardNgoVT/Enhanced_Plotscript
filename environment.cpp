@@ -38,13 +38,26 @@ Expression add(const std::vector<Expression> & args){
 
   // check all aruments are numbers, while adding
   double result = 0;
+  complex<double> resultI;
+  bool complexed = false;
   for( auto & a :args){
     if(a.isHeadNumber()){
       result += a.head().asNumber();      
     }
+	else if (a.isHeadComplex())
+	{
+		resultI += a.head().asComplex();
+		complexed = true;
+	}
     else{
       throw SemanticError("Error in call to add, argument not a number");
     }
+  }
+
+  if (complexed == true)
+  {
+	  resultI = resultI + result;
+	  return Expression(resultI);
   }
 
   return Expression(result);
@@ -326,7 +339,7 @@ void Environment::reset(){
   //Exponential Value
   envmap.emplace("e", EnvResult(ExpressionType, Expression(EXP)));
 
-  envmap.emplace("I", EnvResult(ExpressionType, Expression(Im)));//
+  envmap.emplace("I", EnvResult(ExpressionType, Expression(Im)));
 
   // Procedure: add;
   envmap.emplace("+", EnvResult(ProcedureType, add)); 
