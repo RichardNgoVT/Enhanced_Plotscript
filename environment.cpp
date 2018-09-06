@@ -241,40 +241,38 @@ Expression NLog(const std::vector<Expression> & args) {
 		if (args[0].isHeadNumber()) {
 			if (args[0].head().asNumber() <= 0)
 			{
-				throw SemanticError("Error in call to log, argument can't be less than or equal to 0");
+				throw SemanticError("Error in call to ln, argument can't be less than or equal to 0");
 			}
 			result = log(args[0].head().asNumber());
 		}
 		else {
 
-			throw SemanticError("Error in call to log, argument not a number");
+			throw SemanticError("Error in call to ln, argument not a number");
 		}
 	}
 	else
 	{
-		throw SemanticError("Error in call to log: invalid number of arguments.");
+		throw SemanticError("Error in call to ln: invalid number of arguments.");
 	}
 
 	return Expression(result);
 };
 
 Expression SIN(const std::vector<Expression> & args) {
-
-	// check all aruments are numbers, while multiplying
 	double result = 0;
-	for (auto & a : args) {
-		if (a.isHeadNumber()) {
-			result += sin(a.head().asNumber());
-			break;
+	if (nargs_equal(args, 1))
+	{
+		if (args[0].isHeadNumber()) {
+			result = sin(args[0].head().asNumber());
 		}
 		else {
-
-			throw SemanticError("Error in call to ln, argument not a number");
-
-
+			throw SemanticError("Error in call to sin, argument not a number");
 		}
 	}
-
+	else
+	{
+		throw SemanticError("Error in call to sin: invalid number of arguments.");
+	}
 	return Expression(result);
 };
 
