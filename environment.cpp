@@ -386,6 +386,24 @@ Expression TAN(const std::vector<Expression> & args) {
 	return Expression(result);
 };
 
+Expression REAL(const std::vector<Expression> & args) {
+	double result = 0;
+	if (nargs_equal(args, 1))
+	{
+		if (args[0].isHeadComplex()) {
+			result = real(args[0].head().asComplex());
+		}
+		else {
+			throw SemanticError("Error in call to real, argument not a complex number");
+		}
+	}
+	else
+	{
+		throw SemanticError("Error in call to tan: invalid number of arguments.");
+	}
+	return Expression(result);
+};
+
 /*
 Reset the environment to the default state. First remove all entries and
 then re-add the default ones.
@@ -431,4 +449,7 @@ void Environment::reset(){
 
   //TAN
   envmap.emplace("tan", EnvResult(ProcedureType, TAN));
+
+  //real part
+  envmap.emplace("real", EnvResult(ProcedureType, REAL));
 }
