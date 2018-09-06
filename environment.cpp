@@ -295,22 +295,20 @@ Expression COS(const std::vector<Expression> & args) {
 };
 
 Expression TAN(const std::vector<Expression> & args) {
-
-	// check all aruments are numbers, while multiplying
 	double result = 0;
-	for (auto & a : args) {
-		if (a.isHeadNumber()) {
-			result += tan(a.head().asNumber());
-			break;
+	if (nargs_equal(args, 1))
+	{
+		if (args[0].isHeadNumber()) {
+			result = tan(args[0].head().asNumber());
 		}
 		else {
-
-			throw SemanticError("Error in call to ln, argument not a number");
-
-
+			throw SemanticError("Error in call to tan, argument not a number");
 		}
 	}
-
+	else
+	{
+		throw SemanticError("Error in call to tan: invalid number of arguments.");
+	}
 	return Expression(result);
 };
 
