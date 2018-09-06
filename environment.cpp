@@ -6,6 +6,14 @@
 #include "environment.hpp"
 #include "semantic_error.hpp"
 
+//independent
+#include <complex>
+#include <string>       // std::string
+
+using namespace std;
+
+
+
 /*********************************************************************** 
 Helper Functions
 **********************************************************************/
@@ -106,6 +114,7 @@ Expression div(const std::vector<Expression> & args){
 
 const double PI = std::atan2(0, -1);
 const double EXP = std::exp(1);
+const std::complex<double> Im = 1i;
 
 
 
@@ -140,6 +149,8 @@ Expression Environment::get_exp(const Atom & sym) const{
 
   return exp;
 }
+
+
 
 void Environment::add_exp(const Atom & sym, const Expression & exp){
 
@@ -180,20 +191,23 @@ Expression SquareRoot(const std::vector<Expression> & args) {
 
 	// check all aruments are numbers, while multiplying
 	double result = 0;
-	for (auto & a : args) {
-		if (a.isHeadNumber() && a.head().asNumber()>= 0) {
-			result += sqrt(a.head().asNumber());
-			break;
+	if (nargs_equal(args, 1))
+	{
+		if (args[0].isHeadNumber()) {
+			if (args[0].head().asNumber() < 0)
+			{
+				throw SemanticError("Error in call to sqrt, argument can't be less than 0");
+			}
+			result = sqrt(args[0].head().asNumber());
 		}
 		else {
-			if (a.head().asNumber() < 0)
-			{
-				throw SemanticError("Error in call to sqrt, argument is a negative number");
-			}
+
 			throw SemanticError("Error in call to sqrt, argument not a number");
-
-
 		}
+	}
+	else
+	{
+		throw SemanticError("Error in call to sqrt: invalid number of arguments.");
 	}
 
 	return Expression(result);
@@ -319,6 +333,8 @@ void Environment::reset(){
 
   //Exponential Value
   envmap.emplace("e", EnvResult(ExpressionType, Expression(EXP)));
+
+  envmap.emplace("I", EnvResult(ExpressionType, Expression(Im)));
 
   // Procedure: add;
   envmap.emplace("+", EnvResult(ProcedureType, add)); 
