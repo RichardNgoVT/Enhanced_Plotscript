@@ -463,7 +463,7 @@ Expression CONJ(const std::vector<Expression> & args) {
 	if (nargs_equal(args, 1))
 	{
 		if (args[0].isHeadComplex()) {
-			result = args[0].head().asComplex() - (imag(args[0].head().asComplex()) * 2 * 1i);
+			result = args[0].head().asComplex() - (imag(args[0].head().asComplex()) * 2 * Im);
 		}
 		else {
 			throw SemanticError("Error in call to conj, argument not a complex number");
