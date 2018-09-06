@@ -258,7 +258,7 @@ Expression NLog(const std::vector<Expression> & args) {
 	return Expression(result);
 };
 
-Expression SIN(const std::vector<Expression> & args) {
+Expression SIN(const std::vector<Expression> & args) {//
 	double result = 0;
 	if (nargs_equal(args, 1))
 	{
