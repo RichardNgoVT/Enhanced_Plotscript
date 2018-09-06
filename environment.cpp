@@ -326,7 +326,7 @@ void Environment::reset(){
   //Exponential Value
   envmap.emplace("e", EnvResult(ExpressionType, Expression(EXP)));
 
-  envmap.emplace("I", EnvResult(ExpressionType, Expression(Im)));
+  envmap.emplace("I", EnvResult(ExpressionType, Expression(Im)));//
 
   // Procedure: add;
   envmap.emplace("+", EnvResult(ProcedureType, add)); 
