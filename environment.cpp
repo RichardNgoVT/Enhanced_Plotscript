@@ -458,7 +458,23 @@ Expression ARG(const std::vector<Expression> & args) {
 	return Expression(result);
 };
 
-
+Expression CONJ(const std::vector<Expression> & args) {
+	complex<double> result = 0;
+	if (nargs_equal(args, 1))
+	{
+		if (args[0].isHeadComplex()) {
+			result = args[0].head().asComplex() - (imag(args[0].head().asComplex()) * 2 * 1i);
+		}
+		else {
+			throw SemanticError("Error in call to conj, argument not a complex number");
+		}
+	}
+	else
+	{
+		throw SemanticError("Error in call to conj: invalid number of arguments.");
+	}
+	return Expression(result);
+};
 
 /*
 Reset the environment to the default state. First remove all entries and
@@ -517,4 +533,7 @@ void Environment::reset(){
 
   //angle of complex
   envmap.emplace("arg", EnvResult(ProcedureType, ARG));
+
+  //conjugate of complex
+  envmap.emplace("conj", EnvResult(ProcedureType, CONJ));
 }
