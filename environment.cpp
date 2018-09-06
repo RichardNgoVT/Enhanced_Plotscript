@@ -422,6 +422,24 @@ Expression IMAG(const std::vector<Expression> & args) {
 	return Expression(result);
 };
 
+Expression MAG(const std::vector<Expression> & args) {
+	double result = 0;
+	if (nargs_equal(args, 1))
+	{
+		if (args[0].isHeadComplex()) {
+			result = sqrt(pow(real(args[0].head().asComplex()), 2) + pow(imag(args[0].head().asComplex()), 2));
+		}
+		else {
+			throw SemanticError("Error in call to mag, argument not a complex number");
+		}
+	}
+	else
+	{
+		throw SemanticError("Error in call to mag: invalid number of arguments.");
+	}
+	return Expression(result);
+};
+
 /*
 Reset the environment to the default state. First remove all entries and
 then re-add the default ones.
@@ -468,9 +486,12 @@ void Environment::reset(){
   //TAN
   envmap.emplace("tan", EnvResult(ProcedureType, TAN));
 
-  //real part
+  //real part of complex
   envmap.emplace("real", EnvResult(ProcedureType, REAL));
 
-  //imag part
+  //imag part of complex
   envmap.emplace("imag", EnvResult(ProcedureType, IMAG));
+
+  //magnitude of complex
+  envmap.emplace("mag", EnvResult(ProcedureType, MAG));
 }
