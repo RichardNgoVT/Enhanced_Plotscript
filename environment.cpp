@@ -189,7 +189,6 @@ Procedure Environment::get_proc(const Atom & sym) const{
 
 Expression SquareRoot(const std::vector<Expression> & args) {
 
-	// check all aruments are numbers, while multiplying
 	double result = 0;
 	if (nargs_equal(args, 1))
 	{
@@ -215,7 +214,6 @@ Expression SquareRoot(const std::vector<Expression> & args) {
 
 Expression Power(const std::vector<Expression> & args) {
 
-	// check all aruments are numbers, while multiplying
 	double result = 0;
 	if (nargs_equal(args, 2))
 	{
@@ -237,23 +235,24 @@ Expression Power(const std::vector<Expression> & args) {
 };
 
 Expression NLog(const std::vector<Expression> & args) {
-
-	// check all aruments are numbers, while multiplying
 	double result = 0;
-	for (auto & a : args) {
-		if (a.isHeadNumber() && a.head().asNumber() > 0) {
-			result += log(a.head().asNumber());
-			break;
+	if (nargs_equal(args, 1))
+	{
+		if (args[0].isHeadNumber()) {
+			if (args[0].head().asNumber() <= 0)
+			{
+				throw SemanticError("Error in call to log, argument can't be less than or equal to 0");
+			}
+			result = log(args[0].head().asNumber());
 		}
 		else {
-			if (a.head().asNumber() < 0)
-			{
-				throw SemanticError("Error in call to ln, argument is a number less than or equal to 0");
-			}
-			throw SemanticError("Error in call to ln, argument not a number");
 
-
+			throw SemanticError("Error in call to log, argument not a number");
 		}
+	}
+	else
+	{
+		throw SemanticError("Error in call to log: invalid number of arguments.");
 	}
 
 	return Expression(result);
