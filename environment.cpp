@@ -399,7 +399,25 @@ Expression REAL(const std::vector<Expression> & args) {
 	}
 	else
 	{
-		throw SemanticError("Error in call to tan: invalid number of arguments.");
+		throw SemanticError("Error in call to real: invalid number of arguments.");
+	}
+	return Expression(result);
+};
+
+Expression IMAG(const std::vector<Expression> & args) {
+	double result = 0;
+	if (nargs_equal(args, 1))
+	{
+		if (args[0].isHeadComplex()) {
+			result = imag(args[0].head().asComplex());
+		}
+		else {
+			throw SemanticError("Error in call to imag, argument not a complex number");
+		}
+	}
+	else
+	{
+		throw SemanticError("Error in call to imag: invalid number of arguments.");
 	}
 	return Expression(result);
 };
@@ -452,4 +470,7 @@ void Environment::reset(){
 
   //real part
   envmap.emplace("real", EnvResult(ProcedureType, REAL));
+
+  //imag part
+  envmap.emplace("imag", EnvResult(ProcedureType, IMAG));
 }
