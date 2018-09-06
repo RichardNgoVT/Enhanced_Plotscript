@@ -107,6 +107,8 @@ Expression div(const std::vector<Expression> & args){
 const double PI = std::atan2(0, -1);
 const double EXP = std::exp(1);
 
+
+
 Environment::Environment(){
 
   reset();
@@ -174,6 +176,136 @@ Procedure Environment::get_proc(const Atom & sym) const{
   return default_proc;
 }
 
+Expression SquareRoot(const std::vector<Expression> & args) {
+
+	// check all aruments are numbers, while multiplying
+	double result = 0;
+	for (auto & a : args) {
+		if (a.isHeadNumber() && a.head().asNumber()>= 0) {
+			result += sqrt(a.head().asNumber());
+			break;
+		}
+		else {
+			if (a.head().asNumber() < 0)
+			{
+				throw SemanticError("Error in call to sqrt, argument is a negative number");
+			}
+			throw SemanticError("Error in call to sqrt, argument not a number");
+
+
+		}
+	}
+
+	return Expression(result);
+};
+
+Expression Power(const std::vector<Expression> & args) {
+
+	// check all aruments are numbers, while multiplying
+	double result = 0;
+	for (auto & a : args) {
+		if (a.isHeadNumber()) {
+			if (result == 0)
+			{
+				result += a.head().asNumber();
+			}
+			else
+			{
+				result = pow(result, a.head().asNumber());
+			}
+		}
+		else {
+
+			throw SemanticError("Error in call to pow, argument not a number");
+		}
+	}
+
+	return Expression(result);
+};
+
+Expression NLog(const std::vector<Expression> & args) {
+
+	// check all aruments are numbers, while multiplying
+	double result = 0;
+	for (auto & a : args) {
+		if (a.isHeadNumber() && a.head().asNumber() > 0) {
+			result += log(a.head().asNumber());
+			break;
+		}
+		else {
+			if (a.head().asNumber() < 0)
+			{
+				throw SemanticError("Error in call to ln, argument is a number less than or equal to 0");
+			}
+			throw SemanticError("Error in call to ln, argument not a number");
+
+
+		}
+	}
+
+	return Expression(result);
+};
+
+Expression SIN(const std::vector<Expression> & args) {
+
+	// check all aruments are numbers, while multiplying
+	double result = 0;
+	for (auto & a : args) {
+		if (a.isHeadNumber()) {
+			result += sin(a.head().asNumber());
+			break;
+		}
+		else {
+
+			throw SemanticError("Error in call to ln, argument not a number");
+
+
+		}
+	}
+
+	return Expression(result);
+};
+
+Expression COS(const std::vector<Expression> & args) {
+
+	// check all aruments are numbers, while multiplying
+	double result = 0;
+	for (auto & a : args) {
+		if (a.isHeadNumber()) {
+			result += cos(a.head().asNumber());
+			break;
+		}
+		else {
+
+			throw SemanticError("Error in call to ln, argument not a number");
+
+
+		}
+	}
+
+	return Expression(result);
+};
+
+Expression TAN(const std::vector<Expression> & args) {
+
+	// check all aruments are numbers, while multiplying
+	double result = 0;
+	for (auto & a : args) {
+		if (a.isHeadNumber()) {
+			result += tan(a.head().asNumber());
+			break;
+		}
+		else {
+
+			throw SemanticError("Error in call to ln, argument not a number");
+
+
+		}
+	}
+
+	return Expression(result);
+};
+
 /*
 Reset the environment to the default state. First remove all entries and
 then re-add the default ones.
@@ -184,6 +316,9 @@ void Environment::reset(){
   
   // Built-In value of pi
   envmap.emplace("pi", EnvResult(ExpressionType, Expression(PI)));
+
+  //Exponential Value
+  envmap.emplace("e", EnvResult(ExpressionType, Expression(EXP)));
 
   // Procedure: add;
   envmap.emplace("+", EnvResult(ProcedureType, add)); 
@@ -196,4 +331,22 @@ void Environment::reset(){
 
   // Procedure: div;
   envmap.emplace("/", EnvResult(ProcedureType, div)); 
+
+  //square root
+  envmap.emplace("sqrt", EnvResult(ProcedureType, SquareRoot));
+
+  //exponent ^
+  envmap.emplace("^", EnvResult(ProcedureType, Power));
+
+  //Natural Log
+  envmap.emplace("ln", EnvResult(ProcedureType, NLog));
+
+  //SIN
+  envmap.emplace("sin", EnvResult(ProcedureType, SIN));
+
+  //COS
+  envmap.emplace("cos", EnvResult(ProcedureType, COS));
+
+  //TAN
+  envmap.emplace("tan", EnvResult(ProcedureType, TAN));
 }
