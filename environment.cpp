@@ -258,7 +258,7 @@ Expression NLog(const std::vector<Expression> & args) {
 	return Expression(result);
 };
 
-Expression SIN(const std::vector<Expression> & args) {//
+Expression SIN(const std::vector<Expression> & args) {
 	double result = 0;
 	if (nargs_equal(args, 1))
 	{
@@ -277,22 +277,20 @@ Expression SIN(const std::vector<Expression> & args) {//
 };
 
 Expression COS(const std::vector<Expression> & args) {
-
-	// check all aruments are numbers, while multiplying
 	double result = 0;
-	for (auto & a : args) {
-		if (a.isHeadNumber()) {
-			result += cos(a.head().asNumber());
-			break;
+	if (nargs_equal(args, 1))
+	{
+		if (args[0].isHeadNumber()) {
+			result = cos(args[0].head().asNumber());
 		}
 		else {
-
-			throw SemanticError("Error in call to ln, argument not a number");
-
-
+			throw SemanticError("Error in call to cos, argument not a number");
 		}
 	}
-
+	else
+	{
+		throw SemanticError("Error in call to cos: invalid number of arguments.");
+	}
 	return Expression(result);
 };
 
