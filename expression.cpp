@@ -196,7 +196,7 @@ Expression Expression::eval(Environment & env){
 
 
 std::ostream & operator<<(std::ostream & out, const Expression & exp){
-	if (exp.isHeadComplex())
+	if (exp.isHeadComplex())//checks if outer parentheses are needed
 	{
 		out << exp.head();
 

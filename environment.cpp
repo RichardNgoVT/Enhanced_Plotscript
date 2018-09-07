@@ -41,10 +41,10 @@ Expression add(const std::vector<Expression> & args){
   complex<double> resultI(0,0);
   bool complexed = false;
   for( auto & a :args){
-    if(a.isHeadNumber()){
+    if(a.isHeadNumber()){//check for real
       result += a.head().asNumber();      
     }
-	else if (a.isHeadComplex())
+	else if (a.isHeadComplex())//check for complex
 	{
 		resultI += a.head().asComplex();
 		complexed = true;
@@ -54,7 +54,7 @@ Expression add(const std::vector<Expression> & args){
     }
   }
 
-  if (complexed == true)
+  if (complexed == true)//choose format
   {
 	  resultI = resultI + result;
 	  return Expression(resultI);
@@ -70,10 +70,10 @@ Expression mul(const std::vector<Expression> & args){
 	complex<double> resultI(1,0);
 	bool complexed = false;
   for( auto & a :args){
-    if(a.isHeadNumber()){
+    if(a.isHeadNumber()){//check for real
       result *= a.head().asNumber();      
     }
-	else if (a.isHeadComplex())
+	else if (a.isHeadComplex())//check for complex
 	{
 		resultI *= a.head().asComplex();
 		complexed = true;
@@ -82,7 +82,7 @@ Expression mul(const std::vector<Expression> & args){
       throw SemanticError("Error in call to mul, argument not a number");
     }
   }
-  if (complexed == true)
+  if (complexed == true)//check for format
   {
 	  resultI = resultI * result;
 	  return Expression(resultI);
@@ -111,7 +111,7 @@ Expression subneg(const std::vector<Expression> & args){
     }
   }
   else if(nargs_equal(args,2)){
-    if(args[0].isHeadNumber()){
+    if(args[0].isHeadNumber()){//added number
       result = args[0].head().asNumber();
     }
 	else if (args[0].isHeadComplex())
@@ -122,7 +122,7 @@ Expression subneg(const std::vector<Expression> & args){
     else{      
       throw SemanticError("Error in call to subtraction: invalid argument.");
     }
-	if (args[1].isHeadNumber()) {
+	if (args[1].isHeadNumber()) {//subtracting number
 		result -= args[1].head().asNumber();
 	}
 	else if (args[1].isHeadComplex())
@@ -152,7 +152,7 @@ Expression div(const std::vector<Expression> & args){
 	bool complexed = false;
 
   if(nargs_equal(args,2)){
-	  if (args[0].isHeadNumber()) {
+	  if (args[0].isHeadNumber()) {//base number
 		  result = args[0].head().asNumber();
 	  }
 	  else if (args[0].isHeadComplex())
@@ -163,7 +163,7 @@ Expression div(const std::vector<Expression> & args){
 	  else {
 		  throw SemanticError("Error in call to subtraction: invalid argument.");
 	  }
-	  if (args[1].isHeadNumber()) {
+	  if (args[1].isHeadNumber()) {//divided by
 		  result /= args[1].head().asNumber();
 	  }
 	  else if (args[1].isHeadComplex())
@@ -187,8 +187,8 @@ Expression div(const std::vector<Expression> & args){
 };
 
 const double PI = std::atan2(0, -1);
-const double EXP = std::exp(1);
-const std::complex<double> Im = 1i;
+const double EXP = std::exp(1);//e constant
+const std::complex<double> Im = 1i;//I constant
 
 
 
@@ -266,21 +266,21 @@ Expression SquareRoot(const std::vector<Expression> & args) {
 	double result = 0;
 	complex<double> resultI(0, 0);
 	bool complexed = false;
-	if (nargs_equal(args, 1))
+	if (nargs_equal(args, 1))//check for single input
 	{
 		if (args[0].isHeadNumber()) {
-			if (args[0].head().asNumber() < 0)
+			if (args[0].head().asNumber() < 0)//convert sqrt negative number to sqrt real number multiplied by i 
 			{
 				result = args[0].head().asNumber() * -1;
 				resultI = sqrt(result) * Im;
 				complexed = true;
 			}
-			else
+			else//no complex
 			{
 				result = sqrt(args[0].head().asNumber());
 			}
 		}
-		else if (args[0].isHeadComplex())
+		else if (args[0].isHeadComplex())//complex
 		{
 			resultI = sqrt(args[0].head().asComplex());
 			complexed = true;
@@ -308,20 +308,20 @@ Expression Power(const std::vector<Expression> & args) {
 	bool complexed = false;
 	if (nargs_equal(args, 2))
 	{
-		if ((args[0].isHeadNumber() || args[0].isHeadComplex()) && (args[1].isHeadNumber() || args[1].isHeadComplex())) {
+		if ((args[0].isHeadNumber() || args[0].isHeadComplex()) && (args[1].isHeadNumber() || args[1].isHeadComplex())) {//if of type real or complex
 
-			if (args[0].isHeadNumber() && args[1].isHeadNumber() && (args[0].head().asNumber() >= 0 || args[1].isHeadNumber() >= 1 || args[1].isHeadNumber() <= -1 || (1/ args[1].isHeadNumber()) % 2 == 1))
+			if (args[0].isHeadNumber() && args[1].isHeadNumber() && (args[0].head().asNumber() >= 0 || args[1].isHeadNumber() >= 1 || args[1].isHeadNumber() <= -1 || (1/ args[1].isHeadNumber()) % 2 == 1))//checks both numbers are real, or if both negative number and even fraction power exists, (^ (- 1) (/ 1 2)) is essentially sqrt(-1)
 			{
 				result = pow(args[0].head().asNumber(), args[1].head().asNumber());
 			}
-			else
+			else//all other cases require complex format
 			{
 				complexed = true;
-				if (args[0].isHeadNumber())
+				if (args[0].isHeadNumber())//base number
 				{
 					resultI = resultI + args[0].head().asNumber();
 				}
-				else
+				else//power of number
 				{
 					resultI = resultI + args[0].head().asComplex();
 				}
@@ -344,7 +344,7 @@ Expression Power(const std::vector<Expression> & args) {
 	{
 		throw SemanticError("Error in call to pow: invalid number of arguments.");
 	}
-	if (complexed == true)
+	if (complexed == true)//chooses format
 	{
 		return Expression(resultI);
 	}
@@ -356,7 +356,7 @@ Expression NLog(const std::vector<Expression> & args) {
 	if (nargs_equal(args, 1))
 	{
 		if (args[0].isHeadNumber()) {
-			if (args[0].head().asNumber() <= 0)
+			if (args[0].head().asNumber() <= 0)//checks if valid input
 			{
 				throw SemanticError("Error in call to ln, argument can't be less than or equal to 0");
 			}
@@ -433,7 +433,7 @@ Expression REAL(const std::vector<Expression> & args) {
 	double result = 0;
 	if (nargs_equal(args, 1))
 	{
-		if (args[0].isHeadComplex()) {
+		if (args[0].isHeadComplex()) {//checks for complex
 			result = real(args[0].head().asComplex());
 		}
 		else {
@@ -451,7 +451,7 @@ Expression IMAG(const std::vector<Expression> & args) {
 	double result = 0;
 	if (nargs_equal(args, 1))
 	{
-		if (args[0].isHeadComplex()) {
+		if (args[0].isHeadComplex()) {//checks for complex
 			result = imag(args[0].head().asComplex());
 		}
 		else {
@@ -469,7 +469,7 @@ Expression MAG(const std::vector<Expression> & args) {
 	double result = 0;
 	if (nargs_equal(args, 1))
 	{
-		if (args[0].isHeadComplex()) {
+		if (args[0].isHeadComplex()) {//checks for complex
 			result = sqrt(pow(real(args[0].head().asComplex()), 2) + pow(imag(args[0].head().asComplex()), 2));
 		}
 		else {
@@ -487,7 +487,7 @@ Expression ARG(const std::vector<Expression> & args) {
 	double result = 0;
 	if (nargs_equal(args, 1))
 	{
-		if (args[0].isHeadComplex()) {
+		if (args[0].isHeadComplex()) {//checks for complex
 			result = atan(imag(args[0].head().asComplex()) / real(args[0].head().asComplex()));
 		}
 		else {
@@ -505,7 +505,7 @@ Expression CONJ(const std::vector<Expression> & args) {
 	complex<double> result = 0;
 	if (nargs_equal(args, 1))
 	{
-		if (args[0].isHeadComplex()) {
+		if (args[0].isHeadComplex()) {//checks for complex
 			result = args[0].head().asComplex() - (imag(args[0].head().asComplex()) * 2 * Im);
 		}
 		else {
