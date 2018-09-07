@@ -264,14 +264,26 @@ Procedure Environment::get_proc(const Atom & sym) const{
 Expression SquareRoot(const std::vector<Expression> & args) {
 
 	double result = 0;
+	complex<double> resultI(0, 0);
+	bool complexed = false;
 	if (nargs_equal(args, 1))
 	{
 		if (args[0].isHeadNumber()) {
 			if (args[0].head().asNumber() < 0)
 			{
-				throw SemanticError("Error in call to sqrt, argument can't be less than 0");
+				result = args[0].head().asNumber() * -1;
+				resultI = sqrt(result) * Im;
+				complexed = true;
 			}
-			result = sqrt(args[0].head().asNumber());
+			else
+			{
+				result = sqrt(args[0].head().asNumber());
+			}
+		}
+		else if (args[0].isHeadComplex())
+		{
+			resultI = sqrt(args[0].head().asNumber());
+			complexed = true;
 		}
 		else {
 
@@ -282,7 +294,10 @@ Expression SquareRoot(const std::vector<Expression> & args) {
 	{
 		throw SemanticError("Error in call to sqrt: invalid number of arguments.");
 	}
-
+	if (complexed == true)
+	{
+		return Expression(resultI);
+	}
 	return Expression(result);
 };
 
