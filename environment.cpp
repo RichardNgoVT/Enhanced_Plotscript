@@ -304,14 +304,39 @@ Expression SquareRoot(const std::vector<Expression> & args) {
 Expression Power(const std::vector<Expression> & args) {
 
 	double result = 0;
+	complex<double> resultI(0, 0);
+	bool complexed = false;
 	if (nargs_equal(args, 2))
 	{
-		if (args[0].isHeadNumber() && args[1].isHeadNumber()) {
+		if ((args[0].isHeadNumber() || args[0].isHeadComplex()) && (args[1].isHeadNumber() || args[1].isHeadComplex())) {
 
-			result = pow(args[0].head().asNumber(), args[1].head().asNumber());
+			if (args[0].isHeadNumber() && args[1].isHeadNumber() && (args[0].head().asNumber() < 0 && (args[1].isHeadNumber() >= 1 || args[1].isHeadNumber() <= -1 || (1/ args[1].isHeadNumber()) % 2 == 1)))
+			{
+				result = pow(args[0].head().asNumber(), args[1].head().asNumber());
+			}
+			else
+			{
+				complexed = true;
+				if (args[0].isHeadNumber())
+				{
+					resultI = resultI + args[0].head().asNumber();
+				}
+				else
+				{
+					resultI = resultI + args[0].head().asComplex();
+				}
+				if (args[1].isHeadNumber())
+				{
+					resultI = pow(resultI, args[1].head().asNumber());
+				}
+				else
+				{
+					resultI = pow(resultI, args[1].head().asComplex());
+				}
+
+			}
 		}
 		else {
-
 			throw SemanticError("Error in call to pow, argument not a number");
 		}
 	}
@@ -319,7 +344,10 @@ Expression Power(const std::vector<Expression> & args) {
 	{
 		throw SemanticError("Error in call to pow: invalid number of arguments.");
 	}
-
+	if (complexed == true)
+	{
+		return Expression(resultI);
+	}
 	return Expression(result);
 };
 
