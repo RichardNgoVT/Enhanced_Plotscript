@@ -282,7 +282,7 @@ Expression SquareRoot(const std::vector<Expression> & args) {
 		}
 		else if (args[0].isHeadComplex())
 		{
-			resultI = sqrt(args[0].head().asNumber());
+			resultI = sqrt(args[0].head().asComplex());
 			complexed = true;
 		}
 		else {
