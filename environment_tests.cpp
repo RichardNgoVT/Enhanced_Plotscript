@@ -58,11 +58,31 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
   REQUIRE(p1(args) == Expression());
   REQUIRE(p2(args) == Expression());
 
-  INFO("trying add procedure")
+  INFO("test add procedure (normal + normal)")
   Procedure padd = env.get_proc(Atom("+"));
   args.emplace_back(1.0);
   args.emplace_back(2.0);
   REQUIRE(padd(args) == Expression(3.0));
+
+  INFO("test add procedure (normal + complex)")
+  args.clear();
+  complex<double> Imag(1.0, 0.0);
+  complex<double> imagTest(0.0, 0.0);
+  imagTest = 2.0 * Imag + 1.0;
+  args.emplace_back(imagTest);
+  args.emplace_back(3.0);
+  imagTest = 2.0 * Imag + 4.0;
+
+  REQUIRE(padd(args) == Expression(imagTest));
+
+  INFO("test add procedure (complex + complex)")
+  args.clear();
+  args.emplace_back(imagTest);
+  imagTest = Imag + 3.0;
+  args.emplace_back(imagTest);
+  imagTest = 3.0*Imag + 7.0;
+  REQUIRE(padd(args) == Expression(imagTest));
+
 }
 
 TEST_CASE( "Test reset", "[environment]" ) {
