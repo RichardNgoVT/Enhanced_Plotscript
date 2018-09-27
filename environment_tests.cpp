@@ -66,7 +66,7 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
 
   INFO("test add procedure (normal + complex)")
   args.clear();
-  complex<double> Imag(1.0, 0.0);
+  complex<double> Imag(0.0, 1.0);
   complex<double> imagTest(0.0, 0.0);
   imagTest = 2.0 * Imag + 1.0;
   args.emplace_back(imagTest);
@@ -84,7 +84,35 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
   REQUIRE(padd(args) == Expression(imagTest));
   args.emplace_back(Atom("invalid"));
   REQUIRE_THROWS_AS(padd(args), SemanticError);
+  args.clear();
 
+
+  INFO("test mul procedure (normal * normal)")
+	  padd = env.get_proc(Atom("*"));
+  args.emplace_back(1.0);
+  args.emplace_back(2.0);
+  REQUIRE(padd(args) == Expression(2.0));
+
+  INFO("test mul procedure (normal * complex)")
+	  args.clear();
+  imagTest = 2.0 * Imag + 1.0;
+  args.emplace_back(imagTest);
+  args.emplace_back(3.0);
+  imagTest = 6.0 * Imag + 3.0;
+
+  REQUIRE(padd(args) == Expression(imagTest));
+
+  INFO("test mul procedure (complex * complex)")
+	  args.clear();
+  args.emplace_back(imagTest);
+  imagTest = Imag + 3.0;
+  args.emplace_back(imagTest);
+  imagTest = 21.0*Imag + 3.0;
+  REQUIRE(padd(args) == Expression(imagTest));
+
+  INFO("test mul errors")
+  args.emplace_back(Atom("invalid"));
+  REQUIRE_THROWS_AS(padd(args), SemanticError);
 
 }
 
