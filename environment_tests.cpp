@@ -82,6 +82,9 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
   args.emplace_back(imagTest);
   imagTest = 3.0*Imag + 7.0;
   REQUIRE(padd(args) == Expression(imagTest));
+  args.emplace_back(Atom("invalid"));
+  REQUIRE_THROWS_AS(padd(args), SemanticError);
+
 
 }
 
