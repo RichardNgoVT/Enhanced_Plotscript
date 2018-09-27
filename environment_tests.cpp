@@ -167,6 +167,60 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
   REQUIRE_THROWS_AS(padd(args), SemanticError);
   args.clear();
 
+  INFO("test div procedure (normal / normal)")
+	  padd = env.get_proc(Atom("/"));
+  args.emplace_back(1.0);
+  args.emplace_back(2.0);
+  REQUIRE(padd(args) == Expression(0.5));
+
+  INFO("test div procedure (normal / complex)")
+	  args.clear();
+  imagTest = 2.0 * Imag + 1.0;
+  args.emplace_back(imagTest);
+  args.emplace_back(3.0);
+  imagTest = (2.0 * Imag + 1.0)/3.0;
+
+  REQUIRE(padd(args) == Expression(imagTest));
+
+  INFO("test div procedure (complex / complex)")
+	  args.clear();
+  args.emplace_back(imagTest);
+  imagTest = Imag + 3.0;
+  args.emplace_back(imagTest);
+  imagTest = ((2.0 * Imag + 1.0) / 3.0 )/(Imag + 3.0);
+  REQUIRE(padd(args) == Expression(imagTest));
+
+  /*
+  INFO("test div procedure (- normal)")
+	  args.clear();
+  args.emplace_back(5.0);
+  REQUIRE(padd(args) == Expression(-5.0));
+
+  INFO("test div procedure (- complex)")
+	  args.clear();
+  imagTest = 2.0 * Imag;
+  args.emplace_back(imagTest);
+  imagTest = -2.0 * Imag;
+  REQUIRE(padd(args) == Expression(imagTest));
+
+  */
+  INFO("test div errors")
+	  args.clear();
+  args.emplace_back(Atom(1));
+  args.emplace_back(Atom("invalid"));
+  REQUIRE_THROWS_AS(padd(args), SemanticError);
+  args[0] = (Atom("invalid"));
+  REQUIRE_THROWS_AS(padd(args), SemanticError);
+  args.clear();
+  args.emplace_back(Atom(1));
+  args.emplace_back(Atom(1));
+  args.emplace_back(Atom(1));
+  REQUIRE_THROWS_AS(padd(args), SemanticError);
+  args.clear();
+  args.emplace_back(Atom("invalid"));
+  REQUIRE_THROWS_AS(padd(args), SemanticError);
+  args.clear();
+
 }
 
 TEST_CASE( "Test reset", "[environment]" ) {
