@@ -113,6 +113,59 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
   INFO("test mul errors")
   args.emplace_back(Atom("invalid"));
   REQUIRE_THROWS_AS(padd(args), SemanticError);
+  args.clear();
+
+  INFO("test subneg procedure (normal - normal)")
+	  padd = env.get_proc(Atom("-"));
+  args.emplace_back(1.0);
+  args.emplace_back(2.0);
+  REQUIRE(padd(args) == Expression(-1.0));
+
+  INFO("test subneg procedure (normal - complex)")
+	  args.clear();
+  imagTest = 2.0 * Imag + 1.0;
+  args.emplace_back(imagTest);
+  args.emplace_back(3.0);
+  imagTest = 2.0 * Imag - 2.0;
+
+  REQUIRE(padd(args) == Expression(imagTest));
+
+  INFO("test subneg procedure (complex - complex)")
+	  args.clear();
+  args.emplace_back(imagTest);
+  imagTest = Imag + 3.0;
+  args.emplace_back(imagTest);
+  imagTest = Imag - 5.0;
+  REQUIRE(padd(args) == Expression(imagTest));
+
+  INFO("test subneg procedure (- normal)")
+	  args.clear();
+  args.emplace_back(5.0);
+  REQUIRE(padd(args) == Expression(-5.0));
+
+  INFO("test subneg procedure (- complex)")
+	  args.clear();
+  imagTest = 2.0 * Imag;
+  args.emplace_back(imagTest);
+  imagTest = -2.0 * Imag;
+  REQUIRE(padd(args) == Expression(imagTest));
+
+  INFO("test subneg errors")
+	  args.clear();
+	args.emplace_back(Atom(1));
+	  args.emplace_back(Atom("invalid"));
+  REQUIRE_THROWS_AS(padd(args), SemanticError);
+  args[0] = (Atom("invalid"));
+  REQUIRE_THROWS_AS(padd(args), SemanticError);
+  args.clear();
+  args.emplace_back(Atom(1));
+  args.emplace_back(Atom(1));
+  args.emplace_back(Atom(1));
+  REQUIRE_THROWS_AS(padd(args), SemanticError);
+  args.clear();
+  args.emplace_back(Atom("invalid"));
+  REQUIRE_THROWS_AS(padd(args), SemanticError);
+  args.clear();
 
 }
 
