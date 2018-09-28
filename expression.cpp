@@ -322,6 +322,15 @@ Expression Expression::handle_apply(Environment & env) {
 		throw SemanticError("Error in call to apply function: first argument not a procedure");
 	}
 	*/
+	bool procedurecatch;
+	if (m_tail.empty())
+	{
+		procedurecatch = false;
+	}
+	else
+	{
+		procedurecatch = true;
+	}
 	m_head = m_tail[0].head();
 	Expression list = m_tail[1].eval(env);
 	if (!list.isHeadList())
@@ -332,6 +341,10 @@ Expression Expression::handle_apply(Environment & env) {
 
 	if (env.is_proc(m_head))
 	{
+		if (procedurecatch == true)
+		{
+			throw SemanticError("Error in call to apply function: first argument not a procedure");
+		}
 		return apply(m_head, m_tail, env);
 
 
@@ -412,6 +425,10 @@ Expression Expression::handle_map(Environment & env) {
 Expression Expression::eval(Environment & env){
   
   if(m_tail.empty()){
+	  if (m_head.asSymbol() == "list")
+	  {
+		  return apply(m_head, m_tail, env);
+	  }
     return handle_lookup(m_head, env);
   }
   // handle begin special-form

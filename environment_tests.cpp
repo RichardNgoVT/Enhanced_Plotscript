@@ -57,7 +57,7 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
   std::vector<Expression> args;
   REQUIRE(p1(args) == Expression());
   REQUIRE(p2(args) == Expression());
-  /*
+  
   INFO("test add procedure (normal + normal)")
   Procedure padd = env.get_proc(Atom("+"));
   args.emplace_back(1.0);
@@ -568,7 +568,7 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
 	  args.emplace_back(1.0);
 	  args.emplace_back(2.0);
 	  args.emplace_back(3.0);
-	  //REQUIRE(padd(args) == Etest);
+	  REQUIRE(padd(args) == Etest);
 	 // "((1) (2) (3) (1) (2) (3)) == ((1) (2) (3) (1) (2) (3))"
 	 // don't know why test doesn't pass
 
@@ -654,7 +654,7 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
 	// REQUIRE(Matest.eval(env) == Finaltester);
 	 //^^ all commented out tests work in plotlab, but not here...
 	 
-	 */
+	 
 }
 
 TEST_CASE( "Test reset", "[environment]" ) {
