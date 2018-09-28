@@ -434,6 +434,25 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
 	  args.emplace_back(Atom(1.0));
 	  REQUIRE_THROWS_AS(padd(args), SemanticError);
 
+	  INFO("test arg")
+		  args.clear();
+	  padd = env.get_proc(Atom("arg"));
+	  imagTest = 3.0 * Imag + 3.0;
+	  args.emplace_back(imagTest);
+	  number = std::atan2(0, -1) / 4;
+	  REQUIRE(padd(args) == Expression(number));
+
+	  INFO("test arg errors")
+		  args.clear();
+	  args.emplace_back(Atom("invalid"));
+	  REQUIRE_THROWS_AS(padd(args), SemanticError);
+	  args.clear();
+	  args.emplace_back(imagTest);
+	  args.emplace_back(imagTest);
+	  REQUIRE_THROWS_AS(padd(args), SemanticError);
+	  args.clear();
+	  args.emplace_back(Atom(1.0));
+	  REQUIRE_THROWS_AS(padd(args), SemanticError);
 
 
 
