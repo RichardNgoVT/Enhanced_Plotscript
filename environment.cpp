@@ -686,10 +686,17 @@ Expression RangeLIST(const std::vector<Expression> & args) {
 		if (args[0].isHeadNumber() && args[1].isHeadNumber() && args[2].isHeadNumber()) {
 			if (args[0].head().asNumber() < args[1].head().asNumber())
 			{
-				for (double i = args[0].head().asNumber(); i <= args[1].head().asNumber(); i+= args[2].head().asNumber()) {
-					list.append(Expression(i));
+				if (args[2].head().asNumber() >0)
+				{
+					for (double i = args[0].head().asNumber(); i <= args[1].head().asNumber(); i += args[2].head().asNumber()) {
+						list.append(Expression(i));
+					}
+					return list;
 				}
-				return list;
+				else
+				{
+					throw SemanticError("Error in call to range, increment is negative");
+				}
 			}
 			else
 			{
