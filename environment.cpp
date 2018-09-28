@@ -642,6 +642,34 @@ Expression JoinLIST(const std::vector<Expression> & args) {
 
 };
 
+Expression RangeLIST(const std::vector<Expression> & args) {
+	Expression list;
+	list.markList();
+	if (nargs_equal(args, 3))
+	{
+		if (args[0].isHeadNumber() && args[1].isHeadNumber() && args[2].isHeadNumber()) {
+			if (args[0].head().asNumber() < args[1].head().asNumber())
+			{
+				for (double i = args[0].head().asNumber(); i <= args[1].head().asNumber(); i+= args[2].head().asNumber()) {
+					list.append(Expression(i));
+				}
+				return list;
+			}
+			else
+			{
+				throw SemanticError("Error in call to range, first argument is not less than second argument");
+			}
+		}
+		else {
+			throw SemanticError("Error in call to range, argument/arguments not a number");
+		}
+	}
+	else
+	{
+		throw SemanticError("Error in call to join: invalid number of arguments.");
+	}
+
+};
 
 /*
 Reset the environment to the default state. First remove all entries and
@@ -721,4 +749,7 @@ void Environment::reset(){
 
   //adds element to a list to another list
   envmap.emplace("join", EnvResult(ProcedureType, JoinLIST));
+
+  //creates a list of numbers starting from a lower bound, to a upper bound, in specified increments
+  envmap.emplace("range", EnvResult(ProcedureType, RangeLIST));
 }
