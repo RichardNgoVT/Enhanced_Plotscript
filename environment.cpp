@@ -151,7 +151,8 @@ Expression div(const std::vector<Expression> & args){
 	complex<double> resultI(1, 0);
 	bool complexed = false;
 
-  if(nargs_equal(args,2)){
+  if(nargs_equal(args,2))
+  {
 	  if (args[0].isHeadNumber()) {//base number
 		  result = args[0].head().asNumber();
 	  }
@@ -169,6 +170,20 @@ Expression div(const std::vector<Expression> & args){
 	  else if (args[1].isHeadComplex())
 	  {
 		  resultI /= args[1].head().asComplex();
+		  complexed = true;
+	  }
+	  else {
+		  throw SemanticError("Error in call to subtraction: invalid argument.");
+	  }
+  }
+  else if (nargs_equal(args, 1))
+  {
+	  if (args[0].isHeadNumber()) {//base number
+		  result = 1.0/args[0].head().asNumber();
+	  }
+	  else if (args[0].isHeadComplex())
+	  {
+		  resultI = 1.0/args[0].head().asComplex();
 		  complexed = true;
 	  }
 	  else {

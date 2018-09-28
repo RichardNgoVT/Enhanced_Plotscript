@@ -304,12 +304,24 @@ Expression Expression::handle_lambdaProcedure(Environment & env) {
 	}
 }
 
+
+
 Expression Expression::handle_apply(Environment & env) {
+	if (m_tail.size() != 2) {
+		throw SemanticError("Error call to apply function: invalid number of arguments to define");
+	}
+
+	
+
+
+
+/*
 	Expression checker = handle_lookup(m_tail[0].head(), env);
 	if (!checker.isHeadProcedure())
 	{
 		throw SemanticError("Error in call to apply function: first argument not a procedure");
 	}
+	*/
 	m_head = m_tail[0].head();
 	Expression list = m_tail[1].eval(env);
 	if (!list.isHeadList())
@@ -317,7 +329,81 @@ Expression Expression::handle_apply(Environment & env) {
 		throw SemanticError("Error in call to apply function: second argument not a list");
 	}
 	m_tail = list.tailVector();
-	return handle_lambdaProcedure(env);
+
+	if (env.is_proc(m_head))
+	{
+		return apply(m_head, m_tail, env);
+
+
+
+	}
+	else
+	{
+		if (env.is_exp(m_head))
+		{
+			return handle_lambdaProcedure(env);
+		}
+		else
+		{
+			throw SemanticError("Error in call to apply function: first argument not a procedure");
+		}
+	}
+}
+
+Expression Expression::handle_map(Environment & env) {
+	if (m_tail.size() != 2) {
+		throw SemanticError("Error call to map function: invalid number of arguments to define");
+	}
+	/*
+	Expression checker = handle_lookup(m_tail[0].head(), env);
+	if (!checker.isHeadProcedure())
+	{
+		throw SemanticError("Error in call to map function: first argument not a procedure");
+	}
+	*/
+	m_head = m_tail[0].head();
+	std::vector<Expression> Results;
+	Expression list = m_tail[1].eval(env);
+
+	if (!list.isHeadList())
+	{
+		throw SemanticError("Error in call to map function: second argument not a list");
+	}
+
+	Expression resultHold;
+	for (int i = 0; i < list.tailVector().size(); i++)
+	{
+		m_tail.clear();
+		
+
+		resultHold = list.tailVector()[i].eval(env);
+		if (resultHold.isHeadList())
+		{
+			m_tail = resultHold.tailVector();
+		}
+		else
+		{
+			m_tail.emplace_back(resultHold.head());
+		}
+		if (env.is_proc(m_head))
+		{
+			Results.emplace_back(apply(m_head, m_tail, env));
+		}
+		else
+		{
+			if (env.is_proc(m_head))
+			{
+				Results.emplace_back(handle_lambdaProcedure(env));
+			}
+			else
+			{
+				throw SemanticError("Error in call to map function: first argument not a procedure");
+			}
+		}
+	}
+
+	Procedure proc = env.get_proc(Atom("list"));
+	return proc(Results);
 }
 
 // this is a simple recursive version. the iterative version is more
@@ -342,6 +428,10 @@ Expression Expression::eval(Environment & env){
   //handle "procedure" apply
   else if (m_head.isSymbol() && m_head.asSymbol() == "apply") {
 	  return handle_apply(env);
+  }
+  //handle "procedure" map
+  else if (m_head.isSymbol() && m_head.asSymbol() == "map") {
+	  return handle_map(env);
   }
   // else attempt to treat as procedure
   else{ 

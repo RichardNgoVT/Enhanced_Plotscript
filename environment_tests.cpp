@@ -190,6 +190,17 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
   imagTest = ((2.0 * Imag + 1.0) / 3.0 )/(Imag + 3.0);
   REQUIRE(padd(args) == Expression(imagTest));
 
+  INFO("test div procedure (/ normal)")
+	  args.clear();
+  args.emplace_back(2.0);
+  REQUIRE(padd(args) == Expression(0.5));
+
+  INFO("test div procedure (/ complex)")
+	  args.clear();
+  args.emplace_back(Imag);
+  imagTest = Imag * (-1.0);
+  REQUIRE(padd(args) == Expression(imagTest));
+
   /*
   INFO("test div procedure (- normal)")
 	  args.clear();
@@ -643,8 +654,8 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
 	 //(f 2 3)
 	 //works in plotscript
 
-	 INFO("test lambda")
-		 Expression Litest;//Rrrrguments
+	 INFO("test apply")
+		 Expression Litest;
 	 Litest.markList();
 	 Litest.append(2);
 	 Litest.append(3);
@@ -653,7 +664,22 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
 	 Aptest.append(Litest);
 	 //REQUIRE(Aptest.eval(env) == Expression(8.0));
 	 
+	 INFO("test map")
+		 Expression ListMastertest;
+	 ListMastertest.markList();
+	 ListMastertest.append(Litest);
+	 ListMastertest.append(Litest);
+	 Expression Matest = Atom("map");
+	 Matest.append(Atom("f"));
+	 Matest.append(ListMastertest);
+	 Expression Finaltester;
+	 Finaltester.markList();
+	 Finaltester.append(8.0);
+	 Finaltester.append(8.0);
+	// REQUIRE(Matest.eval(env) == Finaltester);
+	 //^^ all commented out tests work in plotlab, but not here...
 
+	 
 }
 
 TEST_CASE( "Test reset", "[environment]" ) {
