@@ -570,8 +570,28 @@ Expression RestLIST(const std::vector<Expression> & args) {
 		throw SemanticError("Error in call to rest: invalid number of arguments.");
 	}
 
+};
+
+
+Expression LengthLIST(const std::vector<Expression> & args) {
+
+	if (nargs_equal(args, 1))
+	{
+		if (args[0].isHeadList()) {//checks for complex
+			return Expression(args[0].tailVector().size());
+		}
+		else {
+			throw SemanticError("Error in call to length, argument not a list");
+		}
+	}
+	else
+	{
+		throw SemanticError("Error in call to length: invalid number of arguments.");
+	}
+
 
 };
+
 
 /*
 Reset the environment to the default state. First remove all entries and
@@ -642,4 +662,7 @@ void Environment::reset(){
 
   //second and beyond elements in list
   envmap.emplace("rest", EnvResult(ProcedureType, RestLIST));
+
+  //number of elements in list
+  envmap.emplace("length", EnvResult(ProcedureType, LengthLIST));
 }
