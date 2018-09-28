@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2018-09-28 06:16:05</td>
+            <td class="headerValue">2018-09-28 06:37:46</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">8</td>
@@ -71,69 +71,69 @@
 <span class="lineNum">       9 </span>            : const char CLOSECHAR = ')';
 <a name="10"><span class="lineNum">      10 </span>            : const char COMMENTCHAR = ';';</a>
 <span class="lineNum">      11 </span>            : 
-<a name="12"><span class="lineNum">      12 </span><span class="lineCov">       5499 : Token::Token(TokenType t): m_type(t){}</span></a>
+<a name="12"><span class="lineNum">      12 </span><span class="lineCov">       5922 : Token::Token(TokenType t): m_type(t){}</span></a>
 <span class="lineNum">      13 </span>            : 
-<a name="14"><span class="lineNum">      14 </span><span class="lineCov">       6474 : Token::Token(const std::string &amp; str): m_type(STRING), value(str) {}</span></a>
+<a name="14"><span class="lineNum">      14 </span><span class="lineCov">       6972 : Token::Token(const std::string &amp; str): m_type(STRING), value(str) {}</span></a>
 <span class="lineNum">      15 </span>            : 
-<span class="lineNum">      16 </span><span class="lineCov">      19578 : Token::TokenType Token::type() const{</span>
-<span class="lineNum">      17 </span><span class="lineCov">      19578 :   return m_type;</span>
+<span class="lineNum">      16 </span><span class="lineCov">      21084 : Token::TokenType Token::type() const{</span>
+<span class="lineNum">      17 </span><span class="lineCov">      21084 :   return m_type;</span>
 <a name="18"><span class="lineNum">      18 </span>            : }</a>
 <span class="lineNum">      19 </span>            : 
-<span class="lineNum">      20 </span><span class="lineCov">      13065 : std::string Token::asString() const{</span>
-<span class="lineNum">      21 </span><span class="lineCov">      13065 :   switch(m_type){</span>
-<span class="lineNum">      22 </span><span class="lineCov">         39 :   case OPEN:</span>
-<span class="lineNum">      23 </span><span class="lineCov">         39 :     return &quot;(&quot;;</span>
-<span class="lineNum">      24 </span><span class="lineCov">         39 :   case CLOSE:</span>
-<span class="lineNum">      25 </span><span class="lineCov">         39 :     return &quot;)&quot;;</span>
-<span class="lineNum">      26 </span><span class="lineCov">      12987 :   case STRING:</span>
-<span class="lineNum">      27 </span><span class="lineCov">      12987 :     return value;</span>
+<span class="lineNum">      20 </span><span class="lineCov">      14070 : std::string Token::asString() const{</span>
+<span class="lineNum">      21 </span><span class="lineCov">      14070 :   switch(m_type){</span>
+<span class="lineNum">      22 </span><span class="lineCov">         42 :   case OPEN:</span>
+<span class="lineNum">      23 </span><span class="lineCov">         42 :     return &quot;(&quot;;</span>
+<span class="lineNum">      24 </span><span class="lineCov">         42 :   case CLOSE:</span>
+<span class="lineNum">      25 </span><span class="lineCov">         42 :     return &quot;)&quot;;</span>
+<span class="lineNum">      26 </span><span class="lineCov">      13986 :   case STRING:</span>
+<span class="lineNum">      27 </span><span class="lineCov">      13986 :     return value;</span>
 <span class="lineNum">      28 </span>            :   }
 <span class="lineNum">      29 </span><span class="lineNoCov">          0 :   return &quot;&quot;;</span>
 <span class="lineNum">      30 </span>            : }
 <span class="lineNum">      31 </span>            : 
 <a name="32"><span class="lineNum">      32 </span>            : </a>
 <span class="lineNum">      33 </span>            : // add token to sequence unless it is empty, clears token
-<span class="lineNum">      34 </span><span class="lineCov">      12402 : void store_ifnot_empty(std::string &amp; token, TokenSequenceType &amp; seq){</span>
-<span class="lineNum">      35 </span><span class="lineCov">      12402 :   if(!token.empty()){</span>
-<span class="lineNum">      36 </span><span class="lineCov">       6396 :     seq.emplace_back(token);</span>
-<span class="lineNum">      37 </span><span class="lineCov">       6396 :     token.clear();</span>
+<span class="lineNum">      34 </span><span class="lineCov">      13356 : void store_ifnot_empty(std::string &amp; token, TokenSequenceType &amp; seq){</span>
+<span class="lineNum">      35 </span><span class="lineCov">      13356 :   if(!token.empty()){</span>
+<span class="lineNum">      36 </span><span class="lineCov">       6888 :     seq.emplace_back(token);</span>
+<span class="lineNum">      37 </span><span class="lineCov">       6888 :     token.clear();</span>
 <span class="lineNum">      38 </span>            :   }
-<a name="39"><span class="lineNum">      39 </span><span class="lineCov">      12402 : }</span></a>
+<a name="39"><span class="lineNum">      39 </span><span class="lineCov">      13356 : }</span></a>
 <span class="lineNum">      40 </span>            : 
-<span class="lineNum">      41 </span><span class="lineCov">       1755 : TokenSequenceType tokenize(std::istream &amp; seq){</span>
-<span class="lineNum">      42 </span><span class="lineCov">       1755 :   TokenSequenceType tokens;</span>
-<span class="lineNum">      43 </span><span class="lineCov">       3510 :   std::string token;</span>
+<span class="lineNum">      41 </span><span class="lineCov">       1890 : TokenSequenceType tokenize(std::istream &amp; seq){</span>
+<span class="lineNum">      42 </span><span class="lineCov">       1890 :   TokenSequenceType tokens;</span>
+<span class="lineNum">      43 </span><span class="lineCov">       3780 :   std::string token;</span>
 <span class="lineNum">      44 </span>            :   
 <span class="lineNum">      45 </span>            :   while(true){
-<span class="lineNum">      46 </span><span class="lineCov">      26169 :     char c = seq.get();</span>
-<span class="lineNum">      47 </span><span class="lineCov">      26169 :     if(seq.eof()) break;</span>
+<span class="lineNum">      46 </span><span class="lineCov">      28182 :     char c = seq.get();</span>
+<span class="lineNum">      47 </span><span class="lineCov">      28182 :     if(seq.eof()) break;</span>
 <span class="lineNum">      48 </span>            :     
-<span class="lineNum">      49 </span><span class="lineCov">      24414 :     if(c == COMMENTCHAR){</span>
+<span class="lineNum">      49 </span><span class="lineCov">      26292 :     if(c == COMMENTCHAR){</span>
 <span class="lineNum">      50 </span>            :       // chomp until the end of the line
-<span class="lineNum">      51 </span><span class="lineCov">        897 :       while((!seq.eof()) &amp;&amp; (c != '\n')){</span>
-<span class="lineNum">      52 </span><span class="lineCov">        429 :         c = seq.get();</span>
+<span class="lineNum">      51 </span><span class="lineCov">        966 :       while((!seq.eof()) &amp;&amp; (c != '\n')){</span>
+<span class="lineNum">      52 </span><span class="lineCov">        462 :         c = seq.get();</span>
 <span class="lineNum">      53 </span>            :       }
-<span class="lineNum">      54 </span><span class="lineCov">         39 :       if(seq.eof()) break;</span>
+<span class="lineNum">      54 </span><span class="lineCov">         42 :       if(seq.eof()) break;</span>
 <span class="lineNum">      55 </span>            :     }
-<span class="lineNum">      56 </span><span class="lineCov">      24375 :     else if(c == OPENCHAR){</span>
-<span class="lineNum">      57 </span><span class="lineCov">       2691 :       store_ifnot_empty(token, tokens);</span>
-<span class="lineNum">      58 </span><span class="lineCov">       2691 :       tokens.push_back(Token::TokenType::OPEN);</span>
+<span class="lineNum">      56 </span><span class="lineCov">      26250 :     else if(c == OPENCHAR){</span>
+<span class="lineNum">      57 </span><span class="lineCov">       2898 :       store_ifnot_empty(token, tokens);</span>
+<span class="lineNum">      58 </span><span class="lineCov">       2898 :       tokens.push_back(Token::TokenType::OPEN);</span>
 <span class="lineNum">      59 </span>            :     }
-<span class="lineNum">      60 </span><span class="lineCov">      21684 :     else if(c == CLOSECHAR){</span>
-<span class="lineNum">      61 </span><span class="lineCov">       2730 :       store_ifnot_empty(token, tokens);</span>
-<span class="lineNum">      62 </span><span class="lineCov">       2730 :       tokens.push_back(Token::TokenType::CLOSE);</span>
+<span class="lineNum">      60 </span><span class="lineCov">      23352 :     else if(c == CLOSECHAR){</span>
+<span class="lineNum">      61 </span><span class="lineCov">       2940 :       store_ifnot_empty(token, tokens);</span>
+<span class="lineNum">      62 </span><span class="lineCov">       2940 :       tokens.push_back(Token::TokenType::CLOSE);</span>
 <span class="lineNum">      63 </span>            :     }
-<span class="lineNum">      64 </span><span class="lineCov">      18954 :     else if(isspace(c)){</span>
-<span class="lineNum">      65 </span><span class="lineCov">       5226 :       store_ifnot_empty(token, tokens);</span>
+<span class="lineNum">      64 </span><span class="lineCov">      20412 :     else if(isspace(c)){</span>
+<span class="lineNum">      65 </span><span class="lineCov">       5628 :       store_ifnot_empty(token, tokens);</span>
 <span class="lineNum">      66 </span>            :     }
 <span class="lineNum">      67 </span>            :     else{
-<span class="lineNum">      68 </span><span class="lineCov">      13728 :       token.push_back(c);</span>
+<span class="lineNum">      68 </span><span class="lineCov">      14784 :       token.push_back(c);</span>
 <span class="lineNum">      69 </span>            :     }
-<span class="lineNum">      70 </span><span class="lineCov">      24414 :   }</span>
-<span class="lineNum">      71 </span><span class="lineCov">       1755 :   store_ifnot_empty(token, tokens);</span>
+<span class="lineNum">      70 </span><span class="lineCov">      26292 :   }</span>
+<span class="lineNum">      71 </span><span class="lineCov">       1890 :   store_ifnot_empty(token, tokens);</span>
 <a name="72"><span class="lineNum">      72 </span>            : </a>
-<span class="lineNum">      73 </span><span class="lineCov">       3510 :   return tokens;</span>
-<span class="lineNum">      74 </span><span class="lineCov">        117 : }</span>
+<span class="lineNum">      73 </span><span class="lineCov">       3780 :   return tokens;</span>
+<span class="lineNum">      74 </span><span class="lineCov">        126 : }</span>
 </pre>
       </td>
     </tr>

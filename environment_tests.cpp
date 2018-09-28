@@ -482,6 +482,19 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
 	  args.emplace_back(3.0);
 	  REQUIRE(padd(args).isHeadList());
 
+	  INFO("test first")
+		  args.clear();
+	  padd = env.get_proc(Atom("list"));
+	  args.emplace_back(1.0);
+	  args.emplace_back(2.0);
+	  args.emplace_back(3.0);
+	  Expression Etest;
+	  Etest = padd(args);
+	  args.clear();
+	  args.emplace_back(Etest);
+	  padd = env.get_proc(Atom("first"));
+	  REQUIRE(padd(args) == Expression(1.0));
+
 	 
 
 

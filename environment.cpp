@@ -530,6 +530,25 @@ Expression LIST(const std::vector<Expression> & args) {
 
 };
 
+Expression FirstLIST(const std::vector<Expression> & args) {
+
+	if (nargs_equal(args, 1))
+	{
+		if (args[0].isHeadList()) {//checks for complex
+			return args[0].tailVector()[0];
+		}
+		else {
+			throw SemanticError("Error in call to first, argument not a list");
+		}
+	}
+	else
+	{
+		throw SemanticError("Error in call to first: invalid number of arguments.");
+	}
+
+
+};
+
 /*
 Reset the environment to the default state. First remove all entries and
 then re-add the default ones.
@@ -593,4 +612,7 @@ void Environment::reset(){
 
   //creates list
   envmap.emplace("list", EnvResult(ProcedureType, LIST));
+
+  //first element in list
+  envmap.emplace("first", EnvResult(ProcedureType, FirstLIST));
 }

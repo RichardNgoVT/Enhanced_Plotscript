@@ -41,8 +41,14 @@ public:
   /// return a reference to the head Atom
   Atom & head();
 
+  /// return a reference to the head Atom
+  std::vector<Expression> & tailVector();
+
   /// return a const-reference to the head Atom
   const Atom & head() const;
+
+  /// return a const-reference to the head Atom
+  const std::vector<Expression> & tailVector() const;
 
   /// append Atom to tail of the expression
   void append(const Atom & a);
