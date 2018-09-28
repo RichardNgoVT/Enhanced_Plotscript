@@ -31,13 +31,13 @@
             <td class="headerValue">Coverage.combined.cleaned</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">387</td>
-            <td class="headerCovTableEntry">387</td>
+            <td class="headerCovTableEntry">405</td>
+            <td class="headerCovTableEntry">405</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2018-09-28 05:36:27</td>
+            <td class="headerValue">2018-09-28 05:39:53</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">8</td>
@@ -516,42 +516,62 @@
 <span class="lineNum">     454 </span><span class="lineCov">          1 :           args.emplace_back(Atom(1.0));</span>
 <span class="lineNum">     455 </span><span class="lineCov">          1 :           REQUIRE_THROWS_AS(padd(args), SemanticError);</span>
 <span class="lineNum">     456 </span>            : 
-<span class="lineNum">     457 </span>            : 
-<span class="lineNum">     458 </span>            : 
-<span class="lineNum">     459 </span>            : 
-<span class="lineNum">     460 </span>            : 
-<a name="461"><span class="lineNum">     461 </span><span class="lineCov">          1 : }</span></a>
-<span class="lineNum">     462 </span>            : 
-<span class="lineNum">     463 </span><span class="lineCov">          2 : TEST_CASE( &quot;Test reset&quot;, &quot;[environment]&quot; ) {</span>
-<span class="lineNum">     464 </span><span class="lineCov">          2 :   Environment env;</span>
-<span class="lineNum">     465 </span>            : 
-<span class="lineNum">     466 </span><span class="lineCov">          2 :   Expression a(Atom(1.0));</span>
-<span class="lineNum">     467 </span><span class="lineCov">          1 :   env.add_exp(Atom(&quot;one&quot;), a);</span>
-<span class="lineNum">     468 </span><span class="lineCov">          2 :   Expression b(Atom(&quot;hello&quot;));</span>
-<span class="lineNum">     469 </span><span class="lineCov">          1 :   env.add_exp(Atom(&quot;hi&quot;), b);</span>
-<span class="lineNum">     470 </span>            : 
-<span class="lineNum">     471 </span><span class="lineCov">          1 :   env.reset();</span>
-<span class="lineNum">     472 </span><span class="lineCov">          1 :   REQUIRE(!env.is_known(Atom(&quot;one&quot;)));</span>
-<span class="lineNum">     473 </span><span class="lineCov">          1 :   REQUIRE(!env.is_exp(Atom(&quot;one&quot;)));</span>
-<span class="lineNum">     474 </span><span class="lineCov">          1 :   REQUIRE(env.get_exp(Atom(&quot;one&quot;)) == Expression());</span>
-<span class="lineNum">     475 </span><span class="lineCov">          1 :   REQUIRE(!env.is_known(Atom(&quot;hi&quot;)));</span>
-<span class="lineNum">     476 </span><span class="lineCov">          1 :   REQUIRE(!env.is_exp(Atom(&quot;hi&quot;)));</span>
-<span class="lineNum">     477 </span><span class="lineCov">          1 :   REQUIRE(env.get_exp(Atom(&quot;hi&quot;)) == Expression());</span>
+<span class="lineNum">     457 </span><span class="lineCov">          2 :           INFO(&quot;test conj&quot;)</span>
+<span class="lineNum">     458 </span><span class="lineCov">          1 :                   args.clear();</span>
+<span class="lineNum">     459 </span><span class="lineCov">          1 :           padd = env.get_proc(Atom(&quot;conj&quot;));</span>
+<span class="lineNum">     460 </span><span class="lineCov">          1 :           imagTest = 4.0 * Imag + 3.0;</span>
+<span class="lineNum">     461 </span><span class="lineCov">          1 :           args.emplace_back(imagTest);</span>
+<span class="lineNum">     462 </span><span class="lineCov">          1 :           imagTest = 3.0 - 4.0 * Imag;</span>
+<span class="lineNum">     463 </span><span class="lineCov">          1 :           REQUIRE(padd(args) == Expression(imagTest));</span>
+<span class="lineNum">     464 </span>            : 
+<span class="lineNum">     465 </span><span class="lineCov">          2 :           INFO(&quot;test conj errors&quot;)</span>
+<span class="lineNum">     466 </span><span class="lineCov">          1 :                   args.clear();</span>
+<span class="lineNum">     467 </span><span class="lineCov">          1 :           args.emplace_back(Atom(&quot;invalid&quot;));</span>
+<span class="lineNum">     468 </span><span class="lineCov">          1 :           REQUIRE_THROWS_AS(padd(args), SemanticError);</span>
+<span class="lineNum">     469 </span><span class="lineCov">          1 :           args.clear();</span>
+<span class="lineNum">     470 </span><span class="lineCov">          1 :           args.emplace_back(imagTest);</span>
+<span class="lineNum">     471 </span><span class="lineCov">          1 :           args.emplace_back(imagTest);</span>
+<span class="lineNum">     472 </span><span class="lineCov">          1 :           REQUIRE_THROWS_AS(padd(args), SemanticError);</span>
+<span class="lineNum">     473 </span><span class="lineCov">          1 :           args.clear();</span>
+<span class="lineNum">     474 </span><span class="lineCov">          1 :           args.emplace_back(Atom(1.0));</span>
+<span class="lineNum">     475 </span><span class="lineCov">          1 :           REQUIRE_THROWS_AS(padd(args), SemanticError);</span>
+<span class="lineNum">     476 </span>            : 
+<span class="lineNum">     477 </span>            : 
 <span class="lineNum">     478 </span>            : 
 <span class="lineNum">     479 </span>            : 
-<a name="480"><span class="lineNum">     480 </span><span class="lineCov">          1 : }</span></a>
-<span class="lineNum">     481 </span>            : 
-<span class="lineNum">     482 </span><span class="lineCov">          2 : TEST_CASE( &quot;Test semeantic errors&quot;, &quot;[environment]&quot; ) {</span>
-<span class="lineNum">     483 </span>            : 
+<span class="lineNum">     480 </span>            : 
+<a name="481"><span class="lineNum">     481 </span><span class="lineCov">          1 : }</span></a>
+<span class="lineNum">     482 </span>            : 
+<span class="lineNum">     483 </span><span class="lineCov">          2 : TEST_CASE( &quot;Test reset&quot;, &quot;[environment]&quot; ) {</span>
 <span class="lineNum">     484 </span><span class="lineCov">          2 :   Environment env;</span>
 <span class="lineNum">     485 </span>            : 
-<span class="lineNum">     486 </span>            :   {
-<span class="lineNum">     487 </span><span class="lineCov">          2 :     Expression exp(Atom(&quot;begin&quot;));</span>
-<span class="lineNum">     488 </span>            :     
-<a name="489"><span class="lineNum">     489 </span><span class="lineCov">          1 :     REQUIRE_THROWS_AS(exp.eval(env), SemanticError);</span></a>
-<span class="lineNum">     490 </span>            :   }
-<span class="lineNum">     491 </span><span class="lineCov">          4 : }</span>
-<span class="lineNum">     492 </span>            : 
+<span class="lineNum">     486 </span><span class="lineCov">          2 :   Expression a(Atom(1.0));</span>
+<span class="lineNum">     487 </span><span class="lineCov">          1 :   env.add_exp(Atom(&quot;one&quot;), a);</span>
+<span class="lineNum">     488 </span><span class="lineCov">          2 :   Expression b(Atom(&quot;hello&quot;));</span>
+<span class="lineNum">     489 </span><span class="lineCov">          1 :   env.add_exp(Atom(&quot;hi&quot;), b);</span>
+<span class="lineNum">     490 </span>            : 
+<span class="lineNum">     491 </span><span class="lineCov">          1 :   env.reset();</span>
+<span class="lineNum">     492 </span><span class="lineCov">          1 :   REQUIRE(!env.is_known(Atom(&quot;one&quot;)));</span>
+<span class="lineNum">     493 </span><span class="lineCov">          1 :   REQUIRE(!env.is_exp(Atom(&quot;one&quot;)));</span>
+<span class="lineNum">     494 </span><span class="lineCov">          1 :   REQUIRE(env.get_exp(Atom(&quot;one&quot;)) == Expression());</span>
+<span class="lineNum">     495 </span><span class="lineCov">          1 :   REQUIRE(!env.is_known(Atom(&quot;hi&quot;)));</span>
+<span class="lineNum">     496 </span><span class="lineCov">          1 :   REQUIRE(!env.is_exp(Atom(&quot;hi&quot;)));</span>
+<span class="lineNum">     497 </span><span class="lineCov">          1 :   REQUIRE(env.get_exp(Atom(&quot;hi&quot;)) == Expression());</span>
+<span class="lineNum">     498 </span>            : 
+<span class="lineNum">     499 </span>            : 
+<a name="500"><span class="lineNum">     500 </span><span class="lineCov">          1 : }</span></a>
+<span class="lineNum">     501 </span>            : 
+<span class="lineNum">     502 </span><span class="lineCov">          2 : TEST_CASE( &quot;Test semeantic errors&quot;, &quot;[environment]&quot; ) {</span>
+<span class="lineNum">     503 </span>            : 
+<span class="lineNum">     504 </span><span class="lineCov">          2 :   Environment env;</span>
+<span class="lineNum">     505 </span>            : 
+<span class="lineNum">     506 </span>            :   {
+<span class="lineNum">     507 </span><span class="lineCov">          2 :     Expression exp(Atom(&quot;begin&quot;));</span>
+<span class="lineNum">     508 </span>            :     
+<a name="509"><span class="lineNum">     509 </span><span class="lineCov">          1 :     REQUIRE_THROWS_AS(exp.eval(env), SemanticError);</span></a>
+<span class="lineNum">     510 </span>            :   }
+<span class="lineNum">     511 </span><span class="lineCov">          4 : }</span>
+<span class="lineNum">     512 </span>            : 
 </pre>
       </td>
     </tr>
