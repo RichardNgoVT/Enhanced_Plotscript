@@ -31,13 +31,13 @@
             <td class="headerValue">Coverage.combined.cleaned</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">115</td>
-            <td class="headerCovTableEntry">123</td>
-            <td class="headerCovTableEntryHi">93.5 %</td>
+            <td class="headerCovTableEntry">118</td>
+            <td class="headerCovTableEntry">129</td>
+            <td class="headerCovTableEntryHi">91.5 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2018-09-28 10:31:21</td>
+            <td class="headerValue">2018-09-28 18:09:59</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">25</td>
@@ -67,49 +67,49 @@
 <span class="lineNum">       5 </span>            : #include &lt;cmath&gt;
 <a name="6"><span class="lineNum">       6 </span>            : #include &lt;limits&gt;</a>
 <span class="lineNum">       7 </span>            : 
-<a name="8"><span class="lineNum">       8 </span><span class="lineCov">      83630 : Atom::Atom(): m_type(NoneKind) {}</span></a>
+<a name="8"><span class="lineNum">       8 </span><span class="lineCov">      56400 : Atom::Atom(): m_type(NoneKind) {}</span></a>
 <span class="lineNum">       9 </span>            : 
-<span class="lineNum">      10 </span><span class="lineCov">       5019 : Atom::Atom(double value){</span>
+<span class="lineNum">      10 </span><span class="lineCov">       3327 : Atom::Atom(double value){</span>
 <span class="lineNum">      11 </span>            : 
-<span class="lineNum">      12 </span><span class="lineCov">       5019 :   setNumber(value);</span>
-<span class="lineNum">      13 </span><span class="lineCov">       5019 : }</span>
+<span class="lineNum">      12 </span><span class="lineCov">       3327 :   setNumber(value);</span>
+<span class="lineNum">      13 </span><span class="lineCov">       3327 : }</span>
 <a name="14"><span class="lineNum">      14 </span>            : </a>
 <span class="lineNum">      15 </span>            : 
-<span class="lineNum">      16 </span><span class="lineCov">       1873 : Atom::Atom(complex&lt;double&gt; value) {</span>
+<span class="lineNum">      16 </span><span class="lineCov">       1243 : Atom::Atom(complex&lt;double&gt; value) {</span>
 <span class="lineNum">      17 </span>            : 
-<span class="lineNum">      18 </span><span class="lineCov">       1873 :         setComplex(value);</span>
-<a name="19"><span class="lineNum">      19 </span><span class="lineCov">       1873 : }</span></a>
+<span class="lineNum">      18 </span><span class="lineCov">       1243 :         setComplex(value);</span>
+<a name="19"><span class="lineNum">      19 </span><span class="lineCov">       1243 : }</span></a>
 <span class="lineNum">      20 </span>            : 
-<span class="lineNum">      21 </span><span class="lineCov">       2584 : Atom::Atom(const Token &amp; token): Atom(){</span>
+<span class="lineNum">      21 </span><span class="lineCov">       1672 : Atom::Atom(const Token &amp; token): Atom(){</span>
 <span class="lineNum">      22 </span>            :   
 <span class="lineNum">      23 </span>            :   // is token a number?
 <span class="lineNum">      24 </span>            :   double temp;
-<span class="lineNum">      25 </span><span class="lineCov">       5168 :   std::istringstream iss(token.asString());</span>
-<span class="lineNum">      26 </span><span class="lineCov">       2584 :   if(iss &gt;&gt; temp){</span>
+<span class="lineNum">      25 </span><span class="lineCov">       3344 :   std::istringstream iss(token.asString());</span>
+<span class="lineNum">      26 </span><span class="lineCov">       1672 :   if(iss &gt;&gt; temp){</span>
 <span class="lineNum">      27 </span>            :     // check for trailing characters if &gt;&gt; succeeds
-<span class="lineNum">      28 </span><span class="lineCov">       1105 :     if(iss.rdbuf()-&gt;in_avail() == 0){</span>
-<span class="lineNum">      29 </span><span class="lineCov">       1054 :       setNumber(temp);</span>
+<span class="lineNum">      28 </span><span class="lineCov">        715 :     if(iss.rdbuf()-&gt;in_avail() == 0){</span>
+<span class="lineNum">      29 </span><span class="lineCov">        682 :       setNumber(temp);</span>
 <span class="lineNum">      30 </span>            :     }
 <span class="lineNum">      31 </span>            :   }
 <span class="lineNum">      32 </span>            :   else{ // else assume symbol
 <span class="lineNum">      33 </span>            :     // make sure does not start with number
-<span class="lineNum">      34 </span><span class="lineCov">       1479 :     if(!std::isdigit(token.asString()[0])){</span>
-<span class="lineNum">      35 </span><span class="lineCov">       1479 :       setSymbol(token.asString());</span>
+<span class="lineNum">      34 </span><span class="lineCov">        957 :     if(!std::isdigit(token.asString()[0])){</span>
+<span class="lineNum">      35 </span><span class="lineCov">        957 :       setSymbol(token.asString());</span>
 <span class="lineNum">      36 </span>            :     }
 <span class="lineNum">      37 </span>            :   }
-<a name="38"><span class="lineNum">      38 </span><span class="lineCov">       2584 : }</span></a>
+<a name="38"><span class="lineNum">      38 </span><span class="lineCov">       1672 : }</span></a>
 <span class="lineNum">      39 </span>            : 
-<span class="lineNum">      40 </span><span class="lineCov">       1861 : Atom::Atom(const std::string &amp; value): Atom() {</span>
+<span class="lineNum">      40 </span><span class="lineCov">       1248 : Atom::Atom(const std::string &amp; value): Atom() {</span>
 <span class="lineNum">      41 </span>            :   
-<span class="lineNum">      42 </span><span class="lineCov">       1861 :   setSymbol(value);</span>
-<a name="43"><span class="lineNum">      43 </span><span class="lineCov">       1861 : }</span></a>
+<span class="lineNum">      42 </span><span class="lineCov">       1248 :   setSymbol(value);</span>
+<a name="43"><span class="lineNum">      43 </span><span class="lineCov">       1248 : }</span></a>
 <span class="lineNum">      44 </span>            : 
-<span class="lineNum">      45 </span><span class="lineCov">         34 : Atom::Atom(const Atom &amp; x): Atom(){</span>
-<span class="lineNum">      46 </span><span class="lineCov">         34 :   if(x.isNumber()){</span>
-<span class="lineNum">      47 </span><span class="lineCov">         17 :     setNumber(x.numberValue);</span>
+<span class="lineNum">      45 </span><span class="lineCov">         22 : Atom::Atom(const Atom &amp; x): Atom(){</span>
+<span class="lineNum">      46 </span><span class="lineCov">         22 :   if(x.isNumber()){</span>
+<span class="lineNum">      47 </span><span class="lineCov">         11 :     setNumber(x.numberValue);</span>
 <span class="lineNum">      48 </span>            :   }
-<span class="lineNum">      49 </span><span class="lineCov">         17 :   else if(x.isSymbol()){</span>
-<span class="lineNum">      50 </span><span class="lineCov">         17 :     setSymbol(x.stringValue);</span>
+<span class="lineNum">      49 </span><span class="lineCov">         11 :   else if(x.isSymbol()){</span>
+<span class="lineNum">      50 </span><span class="lineCov">         11 :     setSymbol(x.stringValue);</span>
 <span class="lineNum">      51 </span>            :   }
 <span class="lineNum">      52 </span><span class="lineNoCov">          0 :   else if (x.isComplex()) {</span>
 <span class="lineNum">      53 </span><span class="lineNoCov">          0 :           setComplex(x.complexValue);</span>
@@ -121,181 +121,191 @@
 <span class="lineNum">      59 </span>            :   {
 <span class="lineNum">      60 </span><span class="lineNoCov">          0 :           setProcedure();</span>
 <span class="lineNum">      61 </span>            :   }
-<a name="62"><span class="lineNum">      62 </span><span class="lineCov">         34 : }</span></a>
+<a name="62"><span class="lineNum">      62 </span><span class="lineCov">         22 : }</span></a>
 <span class="lineNum">      63 </span>            : 
-<span class="lineNum">      64 </span><span class="lineCov">      60668 : Atom &amp; Atom::operator=(const Atom &amp; x){</span>
+<span class="lineNum">      64 </span><span class="lineCov">      41435 : Atom &amp; Atom::operator=(const Atom &amp; x){</span>
 <span class="lineNum">      65 </span>            : 
-<span class="lineNum">      66 </span><span class="lineCov">      60668 :   if(this != &amp;x){</span>
-<span class="lineNum">      67 </span><span class="lineCov">      60668 :     if(x.m_type == NoneKind){</span>
-<span class="lineNum">      68 </span><span class="lineCov">      17465 :       m_type = NoneKind;</span>
+<span class="lineNum">      66 </span><span class="lineCov">      41435 :   if(this != &amp;x){</span>
+<span class="lineNum">      67 </span><span class="lineCov">      41435 :     if(x.m_type == NoneKind){</span>
+<span class="lineNum">      68 </span><span class="lineCov">      11348 :       m_type = NoneKind;</span>
 <span class="lineNum">      69 </span>            :     }
-<span class="lineNum">      70 </span><span class="lineCov">      43203 :     else if(x.m_type == NumberKind){</span>
-<span class="lineNum">      71 </span><span class="lineCov">      25914 :       setNumber(x.numberValue);</span>
+<span class="lineNum">      70 </span><span class="lineCov">      30087 :     else if(x.m_type == NumberKind){</span>
+<span class="lineNum">      71 </span><span class="lineCov">      18580 :       setNumber(x.numberValue);</span>
 <span class="lineNum">      72 </span>            :     }
-<span class="lineNum">      73 </span><span class="lineCov">      17289 :     else if(x.m_type == SymbolKind){</span>
-<span class="lineNum">      74 </span><span class="lineCov">      12297 :       setSymbol(x.stringValue);</span>
+<span class="lineNum">      73 </span><span class="lineCov">      11507 :     else if(x.m_type == SymbolKind){</span>
+<span class="lineNum">      74 </span><span class="lineCov">       8656 :       setSymbol(x.stringValue);</span>
 <span class="lineNum">      75 </span>            :     }
-<span class="lineNum">      76 </span><span class="lineCov">       4992 :         else if (x.m_type == ComplexKind) {</span>
-<span class="lineNum">      77 </span><span class="lineCov">       3471 :                 setComplex(x.complexValue);</span>
+<span class="lineNum">      76 </span><span class="lineCov">       2851 :         else if (x.m_type == ComplexKind) {</span>
+<span class="lineNum">      77 </span><span class="lineCov">       2277 :                 setComplex(x.complexValue);</span>
 <span class="lineNum">      78 </span>            :         }
-<span class="lineNum">      79 </span><span class="lineCov">       1521 :         else if (x.m_type == ListKind) {</span>
-<span class="lineNum">      80 </span><span class="lineCov">       1463 :                 setList();</span>
+<span class="lineNum">      79 </span><span class="lineCov">        574 :         else if (x.m_type == ListKind) {</span>
+<span class="lineNum">      80 </span><span class="lineCov">        514 :                 setList();</span>
 <span class="lineNum">      81 </span>            :         }
-<span class="lineNum">      82 </span><span class="lineCov">         58 :         else if (x.m_type == ProcedureKind) {</span>
-<span class="lineNum">      83 </span><span class="lineCov">         58 :                 setProcedure();</span>
+<span class="lineNum">      82 </span><span class="lineCov">         60 :         else if (x.m_type == ProcedureKind) {</span>
+<span class="lineNum">      83 </span><span class="lineCov">         60 :                 setProcedure();</span>
 <span class="lineNum">      84 </span>            :         }
 <span class="lineNum">      85 </span>            :   }
-<span class="lineNum">      86 </span><span class="lineCov">      60668 :   return *this;</span>
+<span class="lineNum">      86 </span><span class="lineCov">      41435 :   return *this;</span>
 <a name="87"><span class="lineNum">      87 </span>            : }</a>
 <span class="lineNum">      88 </span>            :   
-<span class="lineNum">      89 </span><span class="lineCov">     181044 : Atom::~Atom(){</span>
+<span class="lineNum">      89 </span><span class="lineCov">     121940 : Atom::~Atom(){</span>
 <span class="lineNum">      90 </span>            : 
 <span class="lineNum">      91 </span>            :   // we need to ensure the destructor of the symbol string is called
-<span class="lineNum">      92 </span><span class="lineCov">      90522 :   if(m_type == SymbolKind){</span>
-<span class="lineNum">      93 </span><span class="lineCov">      15618 :     stringValue.~basic_string();</span>
+<span class="lineNum">      92 </span><span class="lineCov">      60970 :   if(m_type == SymbolKind){</span>
+<span class="lineNum">      93 </span><span class="lineCov">      10823 :     stringValue.~basic_string();</span>
 <span class="lineNum">      94 </span>            :   }
-<a name="95"><span class="lineNum">      95 </span><span class="lineCov">      90522 : }</span></a>
+<a name="95"><span class="lineNum">      95 </span><span class="lineCov">      60970 : }</span></a>
 <span class="lineNum">      96 </span>            : 
-<span class="lineNum">      97 </span><span class="lineCov">       2720 : bool Atom::isNone() const noexcept{</span>
-<span class="lineNum">      98 </span><span class="lineCov">       2720 :   return m_type == NoneKind;</span>
+<span class="lineNum">      97 </span><span class="lineCov">       1794 : bool Atom::isNone() const noexcept{</span>
+<span class="lineNum">      98 </span><span class="lineCov">       1794 :   return m_type == NoneKind;</span>
 <a name="99"><span class="lineNum">      99 </span>            : }</a>
 <span class="lineNum">     100 </span>            : 
-<span class="lineNum">     101 </span><span class="lineCov">       5783 : bool Atom::isNumber() const noexcept{</span>
-<span class="lineNum">     102 </span><span class="lineCov">       5783 :   return m_type == NumberKind;</span>
+<span class="lineNum">     101 </span><span class="lineCov">       4517 : bool Atom::isNumber() const noexcept{</span>
+<span class="lineNum">     102 </span><span class="lineCov">       4517 :   return m_type == NumberKind;</span>
 <a name="103"><span class="lineNum">     103 </span>            : }</a>
 <span class="lineNum">     104 </span>            : 
-<span class="lineNum">     105 </span><span class="lineCov">       5756 : bool Atom::isComplex() const noexcept {</span>
-<span class="lineNum">     106 </span><span class="lineCov">       5756 :         return m_type == ComplexKind;</span>
+<span class="lineNum">     105 </span><span class="lineCov">       5041 : bool Atom::isComplex() const noexcept {</span>
+<span class="lineNum">     106 </span><span class="lineCov">       5041 :         return m_type == ComplexKind;</span>
 <a name="107"><span class="lineNum">     107 </span>            : }</a>
 <span class="lineNum">     108 </span>            : 
-<span class="lineNum">     109 </span><span class="lineCov">      10798 : bool Atom::isSymbol() const noexcept{</span>
-<span class="lineNum">     110 </span><span class="lineCov">      10798 :   return m_type == SymbolKind;</span>
+<span class="lineNum">     109 </span><span class="lineCov">       9389 : bool Atom::isSymbol() const noexcept{</span>
+<span class="lineNum">     110 </span><span class="lineCov">       9389 :   return m_type == SymbolKind;</span>
 <a name="111"><span class="lineNum">     111 </span>            : }  </a>
 <span class="lineNum">     112 </span>            : 
-<span class="lineNum">     113 </span><span class="lineCov">       1889 : bool Atom::isList() const noexcept {</span>
-<span class="lineNum">     114 </span><span class="lineCov">       1889 :         return m_type == ListKind;</span>
+<span class="lineNum">     113 </span><span class="lineCov">       1910 : bool Atom::isList() const noexcept {</span>
+<span class="lineNum">     114 </span><span class="lineCov">       1910 :         return m_type == ListKind;</span>
 <a name="115"><span class="lineNum">     115 </span>            : }</a>
 <span class="lineNum">     116 </span>            : 
-<span class="lineNum">     117 </span><span class="lineCov">       1786 : bool Atom::isProcedure() const noexcept</span>
+<span class="lineNum">     117 </span><span class="lineCov">       1751 : bool Atom::isProcedure() const noexcept</span>
 <span class="lineNum">     118 </span>            : {
-<span class="lineNum">     119 </span><span class="lineCov">       1786 :         return m_type == ProcedureKind;</span>
+<span class="lineNum">     119 </span><span class="lineCov">       1751 :         return m_type == ProcedureKind;</span>
 <span class="lineNum">     120 </span>            : }
 <a name="121"><span class="lineNum">     121 </span>            : </a>
 <span class="lineNum">     122 </span>            : 
-<span class="lineNum">     123 </span><span class="lineCov">      32004 : void Atom::setNumber(double value){</span>
+<span class="lineNum">     123 </span><span class="lineCov">      22600 : void Atom::setNumber(double value){</span>
 <span class="lineNum">     124 </span>            : 
-<span class="lineNum">     125 </span><span class="lineCov">      32004 :   m_type = NumberKind;</span>
-<span class="lineNum">     126 </span><span class="lineCov">      32004 :   numberValue = value;</span>
-<a name="127"><span class="lineNum">     127 </span><span class="lineCov">      32004 : }</span></a>
+<span class="lineNum">     125 </span><span class="lineCov">      22600 :   m_type = NumberKind;</span>
+<span class="lineNum">     126 </span><span class="lineCov">      22600 :   numberValue = value;</span>
+<a name="127"><span class="lineNum">     127 </span><span class="lineCov">      22600 : }</span></a>
 <span class="lineNum">     128 </span>            : 
-<span class="lineNum">     129 </span><span class="lineCov">       5344 : void Atom::setComplex(complex&lt;double&gt; value) {</span>
+<span class="lineNum">     129 </span><span class="lineCov">       3520 : void Atom::setComplex(complex&lt;double&gt; value) {</span>
 <span class="lineNum">     130 </span>            : 
-<span class="lineNum">     131 </span><span class="lineCov">       5344 :         m_type = ComplexKind;</span>
-<span class="lineNum">     132 </span><span class="lineCov">       5344 :         complexValue = value;</span>
-<a name="133"><span class="lineNum">     133 </span><span class="lineCov">       5344 : }</span></a>
+<span class="lineNum">     131 </span><span class="lineCov">       3520 :         m_type = ComplexKind;</span>
+<span class="lineNum">     132 </span><span class="lineCov">       3520 :         complexValue = value;</span>
+<a name="133"><span class="lineNum">     133 </span><span class="lineCov">       3520 : }</span></a>
 <span class="lineNum">     134 </span>            : 
-<span class="lineNum">     135 </span><span class="lineCov">      15654 : void Atom::setSymbol(const std::string &amp; value){</span>
+<span class="lineNum">     135 </span><span class="lineCov">      10872 : void Atom::setSymbol(const std::string &amp; value){</span>
 <span class="lineNum">     136 </span>            : 
 <span class="lineNum">     137 </span>            :   // we need to ensure the destructor of the symbol string is called
-<span class="lineNum">     138 </span><span class="lineCov">      15654 :   if(m_type == SymbolKind){</span>
-<span class="lineNum">     139 </span><span class="lineCov">         19 :     stringValue.~basic_string();</span>
+<span class="lineNum">     138 </span><span class="lineCov">      10872 :   if(m_type == SymbolKind){</span>
+<span class="lineNum">     139 </span><span class="lineCov">         24 :     stringValue.~basic_string();</span>
 <span class="lineNum">     140 </span>            :   }
 <span class="lineNum">     141 </span>            :     
-<span class="lineNum">     142 </span><span class="lineCov">      15654 :   m_type = SymbolKind;</span>
+<span class="lineNum">     142 </span><span class="lineCov">      10872 :   m_type = SymbolKind;</span>
 <span class="lineNum">     143 </span>            : 
 <span class="lineNum">     144 </span>            :   // copy construct in place
-<span class="lineNum">     145 </span><span class="lineCov">      15654 :   new (&amp;stringValue) std::string(value);</span>
-<a name="146"><span class="lineNum">     146 </span><span class="lineCov">      15654 : }</span></a>
+<span class="lineNum">     145 </span><span class="lineCov">      10872 :   new (&amp;stringValue) std::string(value);</span>
+<a name="146"><span class="lineNum">     146 </span><span class="lineCov">      10872 : }</span></a>
 <span class="lineNum">     147 </span>            : 
-<span class="lineNum">     148 </span><span class="lineCov">       1673 : void Atom::setList() {</span>
+<span class="lineNum">     148 </span><span class="lineCov">        708 : void Atom::setList() {</span>
 <span class="lineNum">     149 </span>            : 
-<span class="lineNum">     150 </span><span class="lineCov">       1673 :         m_type = ListKind;</span>
-<a name="151"><span class="lineNum">     151 </span><span class="lineCov">       1673 : }</span></a>
+<span class="lineNum">     150 </span><span class="lineCov">        708 :         m_type = ListKind;</span>
+<a name="151"><span class="lineNum">     151 </span><span class="lineCov">        708 : }</span></a>
 <span class="lineNum">     152 </span>            : 
-<span class="lineNum">     153 </span><span class="lineCov">         72 : void Atom::setProcedure() {</span>
+<span class="lineNum">     153 </span><span class="lineCov">         71 : void Atom::setProcedure() {</span>
 <span class="lineNum">     154 </span>            : 
-<span class="lineNum">     155 </span><span class="lineCov">         72 :         m_type = ProcedureKind;</span>
-<a name="156"><span class="lineNum">     156 </span><span class="lineCov">         72 : }</span></a>
+<span class="lineNum">     155 </span><span class="lineCov">         71 :         m_type = ProcedureKind;</span>
+<a name="156"><span class="lineNum">     156 </span><span class="lineCov">         71 : }</span></a>
 <span class="lineNum">     157 </span>            : 
-<span class="lineNum">     158 </span><span class="lineCov">       3029 : double Atom::asNumber() const noexcept{</span>
+<span class="lineNum">     158 </span><span class="lineCov">       2607 : double Atom::asNumber() const noexcept{</span>
 <span class="lineNum">     159 </span>            : 
-<span class="lineNum">     160 </span><span class="lineCov">       3029 :   return (m_type == NumberKind) ? numberValue : 0.0;  </span>
+<span class="lineNum">     160 </span><span class="lineCov">       2607 :   return (m_type == NumberKind) ? numberValue : 0.0;  </span>
 <a name="161"><span class="lineNum">     161 </span>            : }</a>
 <span class="lineNum">     162 </span>            : 
-<span class="lineNum">     163 </span><span class="lineCov">       1040 : complex&lt;double&gt; Atom::asComplex() const noexcept {</span>
+<span class="lineNum">     163 </span><span class="lineCov">        704 : complex&lt;double&gt; Atom::asComplex() const noexcept {</span>
 <span class="lineNum">     164 </span>            : 
-<span class="lineNum">     165 </span><span class="lineCov">       1040 :         return (m_type == ComplexKind) ? complexValue : (1i-1i);</span>
+<span class="lineNum">     165 </span><span class="lineCov">        704 :         return (m_type == ComplexKind) ? complexValue : (1i-1i);</span>
 <a name="166"><span class="lineNum">     166 </span>            : }</a>
 <span class="lineNum">     167 </span>            : 
-<span class="lineNum">     168 </span><span class="lineCov">       4871 : std::string Atom::asSymbol() const noexcept{</span>
+<span class="lineNum">     168 </span><span class="lineCov">       4935 : std::string Atom::asSymbol() const noexcept{</span>
 <span class="lineNum">     169 </span>            : 
-<span class="lineNum">     170 </span><span class="lineCov">       4871 :   std::string result;</span>
+<span class="lineNum">     170 </span><span class="lineCov">       4935 :   std::string result;</span>
 <span class="lineNum">     171 </span>            : 
-<span class="lineNum">     172 </span><span class="lineCov">       4871 :   if(m_type == SymbolKind){</span>
-<span class="lineNum">     173 </span><span class="lineCov">       4857 :     result = stringValue;</span>
+<span class="lineNum">     172 </span><span class="lineCov">       4935 :   if(m_type == SymbolKind){</span>
+<span class="lineNum">     173 </span><span class="lineCov">       4320 :     result = stringValue;</span>
 <span class="lineNum">     174 </span>            :   }
 <span class="lineNum">     175 </span>            : 
-<span class="lineNum">     176 </span><span class="lineCov">       4871 :   return result;</span>
+<span class="lineNum">     176 </span><span class="lineCov">       4935 :   return result;</span>
 <a name="177"><span class="lineNum">     177 </span>            : }</a>
 <span class="lineNum">     178 </span>            : 
-<span class="lineNum">     179 </span><span class="lineCov">       1923 : bool Atom::operator==(const Atom &amp; right) const noexcept{</span>
+<span class="lineNum">     179 </span><span class="lineCov">       1574 : bool Atom::operator==(const Atom &amp; right) const noexcept{</span>
 <span class="lineNum">     180 </span>            :   
-<span class="lineNum">     181 </span><span class="lineCov">       1923 :   if(m_type != right.m_type) return false;</span>
+<span class="lineNum">     181 </span><span class="lineCov">       1574 :   if(m_type != right.m_type) return false;</span>
 <span class="lineNum">     182 </span>            : 
-<span class="lineNum">     183 </span><span class="lineCov">       1294 :   switch(m_type){</span>
-<span class="lineNum">     184 </span><span class="lineCov">        323 :   case NoneKind:</span>
-<span class="lineNum">     185 </span><span class="lineCov">        323 :     if(right.m_type != NoneKind) return false;</span>
-<span class="lineNum">     186 </span><span class="lineCov">        323 :     break;</span>
-<span class="lineNum">     187 </span><span class="lineCov">        664 :   case NumberKind:</span>
+<span class="lineNum">     183 </span><span class="lineCov">       1162 :   switch(m_type){</span>
+<span class="lineNum">     184 </span><span class="lineCov">        209 :   case NoneKind:</span>
+<span class="lineNum">     185 </span><span class="lineCov">        209 :     if(right.m_type != NoneKind) return false;</span>
+<span class="lineNum">     186 </span><span class="lineCov">        209 :     break;</span>
+<span class="lineNum">     187 </span><span class="lineCov">        699 :   case NumberKind:</span>
 <span class="lineNum">     188 </span>            :     {
-<span class="lineNum">     189 </span><span class="lineCov">        664 :       if(right.m_type != NumberKind) return false;</span>
-<span class="lineNum">     190 </span><span class="lineCov">        664 :       double dleft = numberValue;</span>
-<span class="lineNum">     191 </span><span class="lineCov">        664 :       double dright = right.numberValue;</span>
-<span class="lineNum">     192 </span><span class="lineCov">        664 :       double diff = fabs(dleft - dright);</span>
-<span class="lineNum">     193 </span><span class="lineCov">       1328 :       if(std::isnan(diff) ||</span>
-<span class="lineNum">     194 </span><span class="lineCov">        681 :          (diff &gt; std::numeric_limits&lt;double&gt;::epsilon())) return false;</span>
+<span class="lineNum">     189 </span><span class="lineCov">        699 :       if(right.m_type != NumberKind) return false;</span>
+<span class="lineNum">     190 </span><span class="lineCov">        699 :       double dleft = numberValue;</span>
+<span class="lineNum">     191 </span><span class="lineCov">        699 :       double dright = right.numberValue;</span>
+<span class="lineNum">     192 </span><span class="lineCov">        699 :       double diff = fabs(dleft - dright);</span>
+<span class="lineNum">     193 </span><span class="lineCov">       1398 :       if(std::isnan(diff) ||</span>
+<span class="lineNum">     194 </span><span class="lineCov">        710 :          (diff &gt; std::numeric_limits&lt;double&gt;::epsilon())) return false;</span>
 <span class="lineNum">     195 </span>            :     }
-<span class="lineNum">     196 </span><span class="lineCov">        647 :     break;</span>
-<span class="lineNum">     197 </span><span class="lineCov">         51 :   case SymbolKind:</span>
+<span class="lineNum">     196 </span><span class="lineCov">        688 :     break;</span>
+<span class="lineNum">     197 </span><span class="lineCov">         33 :   case SymbolKind:</span>
 <span class="lineNum">     198 </span>            :     {
-<span class="lineNum">     199 </span><span class="lineCov">         51 :       if(right.m_type != SymbolKind) return false;</span>
+<span class="lineNum">     199 </span><span class="lineCov">         33 :       if(right.m_type != SymbolKind) return false;</span>
 <span class="lineNum">     200 </span>            : 
-<span class="lineNum">     201 </span><span class="lineCov">         51 :       return stringValue == right.stringValue;</span>
+<span class="lineNum">     201 </span><span class="lineCov">         33 :       return stringValue == right.stringValue;</span>
 <span class="lineNum">     202 </span>            :     }
 <span class="lineNum">     203 </span>            :     break;
-<span class="lineNum">     204 </span><span class="lineCov">        256 :   case ComplexKind:</span>
+<span class="lineNum">     204 </span><span class="lineCov">        176 :   case ComplexKind:</span>
 <span class="lineNum">     205 </span>            :   {
-<span class="lineNum">     206 </span><span class="lineCov">        256 :           if (right.m_type != ComplexKind) return false;</span>
+<span class="lineNum">     206 </span><span class="lineCov">        176 :           if (right.m_type != ComplexKind) return false;</span>
 <span class="lineNum">     207 </span>            : 
-<span class="lineNum">     208 </span><span class="lineCov">        256 :           return complexValue == right.complexValue;</span>
+<span class="lineNum">     208 </span><span class="lineCov">        176 :           return complexValue == right.complexValue;</span>
 <span class="lineNum">     209 </span>            :   }
 <span class="lineNum">     210 </span>            :   break;
-<span class="lineNum">     211 </span><span class="lineNoCov">          0 :   default:</span>
-<span class="lineNum">     212 </span><span class="lineNoCov">          0 :     return false;</span>
-<span class="lineNum">     213 </span>            :   }
-<span class="lineNum">     214 </span>            : 
-<span class="lineNum">     215 </span><span class="lineCov">        970 :   return true;</span>
-<a name="216"><span class="lineNum">     216 </span>            : }</a>
-<span class="lineNum">     217 </span>            : 
-<span class="lineNum">     218 </span><span class="lineCov">        136 : bool operator!=(const Atom &amp; left, const Atom &amp; right) noexcept{</span>
-<span class="lineNum">     219 </span>            :   
-<span class="lineNum">     220 </span><span class="lineCov">        136 :   return !(left == right);</span>
-<span class="lineNum">     221 </span>            : }
-<a name="222"><span class="lineNum">     222 </span>            : </a>
-<span class="lineNum">     223 </span>            : 
-<span class="lineNum">     224 </span><span class="lineCov">       2656 : std::ostream &amp; operator&lt;&lt;(std::ostream &amp; out, const Atom &amp; a){</span>
-<span class="lineNum">     225 </span>            : 
-<span class="lineNum">     226 </span><span class="lineCov">       2656 :   if(a.isNumber()){</span>
-<span class="lineNum">     227 </span><span class="lineCov">       1413 :     out &lt;&lt; a.asNumber();</span>
-<span class="lineNum">     228 </span>            :   }
-<span class="lineNum">     229 </span><span class="lineCov">       2656 :   if(a.isSymbol()){</span>
-<span class="lineNum">     230 </span><span class="lineCov">        306 :     out &lt;&lt; a.asSymbol();</span>
-<span class="lineNum">     231 </span>            :   }
-<span class="lineNum">     232 </span><span class="lineCov">       2656 :   if (a.isComplex()) {</span>
-<span class="lineNum">     233 </span><span class="lineCov">        512 :           out &lt;&lt; a.asComplex();</span>
-<span class="lineNum">     234 </span>            :   }
-<span class="lineNum">     235 </span><span class="lineCov">       2656 :   return out;</span>
-<span class="lineNum">     236 </span>            : }
+<span class="lineNum">     211 </span><span class="lineCov">         45 :   case ListKind:</span>
+<span class="lineNum">     212 </span>            :   {
+<span class="lineNum">     213 </span><span class="lineCov">         45 :           if (right.m_type != ListKind) return false;</span>
+<span class="lineNum">     214 </span>            :   }
+<span class="lineNum">     215 </span><span class="lineCov">         45 :   break;</span>
+<span class="lineNum">     216 </span><span class="lineNoCov">          0 :   case ProcedureKind:</span>
+<span class="lineNum">     217 </span>            :   {
+<span class="lineNum">     218 </span><span class="lineNoCov">          0 :           if (right.m_type != ProcedureKind) return false;</span>
+<span class="lineNum">     219 </span>            :   }
+<span class="lineNum">     220 </span><span class="lineNoCov">          0 :   break;</span>
+<span class="lineNum">     221 </span><span class="lineNoCov">          0 :   default:</span>
+<span class="lineNum">     222 </span><span class="lineNoCov">          0 :     return false;</span>
+<span class="lineNum">     223 </span>            :   }
+<span class="lineNum">     224 </span>            : 
+<span class="lineNum">     225 </span><span class="lineCov">        942 :   return true;</span>
+<a name="226"><span class="lineNum">     226 </span>            : }</a>
+<span class="lineNum">     227 </span>            : 
+<span class="lineNum">     228 </span><span class="lineCov">         88 : bool operator!=(const Atom &amp; left, const Atom &amp; right) noexcept{</span>
+<span class="lineNum">     229 </span>            :   
+<span class="lineNum">     230 </span><span class="lineCov">         88 :   return !(left == right);</span>
+<span class="lineNum">     231 </span>            : }
+<a name="232"><span class="lineNum">     232 </span>            : </a>
+<span class="lineNum">     233 </span>            : 
+<span class="lineNum">     234 </span><span class="lineCov">       2318 : std::ostream &amp; operator&lt;&lt;(std::ostream &amp; out, const Atom &amp; a){</span>
+<span class="lineNum">     235 </span>            : 
+<span class="lineNum">     236 </span><span class="lineCov">       2318 :   if(a.isNumber()){</span>
+<span class="lineNum">     237 </span><span class="lineCov">       1472 :     out &lt;&lt; a.asNumber();</span>
+<span class="lineNum">     238 </span>            :   }
+<span class="lineNum">     239 </span><span class="lineCov">       2318 :   if(a.isSymbol()){</span>
+<span class="lineNum">     240 </span><span class="lineCov">        219 :     out &lt;&lt; a.asSymbol();</span>
+<span class="lineNum">     241 </span>            :   }
+<span class="lineNum">     242 </span><span class="lineCov">       2318 :   if (a.isComplex()) {</span>
+<span class="lineNum">     243 </span><span class="lineCov">        352 :           out &lt;&lt; a.asComplex();</span>
+<span class="lineNum">     244 </span>            :   }
+<span class="lineNum">     245 </span><span class="lineCov">       2318 :   return out;</span>
+<span class="lineNum">     246 </span>            : }
 </pre>
       </td>
     </tr>

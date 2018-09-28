@@ -208,6 +208,16 @@ bool Atom::operator==(const Atom & right) const noexcept{
 	  return complexValue == right.complexValue;
   }
   break;
+  case ListKind:
+  {
+	  if (right.m_type != ListKind) return false;
+  }
+  break;
+  case ProcedureKind:
+  {
+	  if (right.m_type != ProcedureKind) return false;
+  }
+  break;
   default:
     return false;
   }

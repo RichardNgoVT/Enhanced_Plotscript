@@ -290,6 +290,7 @@ Expression Expression::handle_lambdaProcedure(Environment & env) {
 			}
 			else
 			{
+				
 				throw SemanticError("Error in call to lambda function, invalid number of arguments inside list for selected procedure");
 			}
 		}
@@ -323,7 +324,7 @@ Expression Expression::handle_apply(Environment & env) {
 	}
 	*/
 	bool procedurecatch;
-	if (m_tail.empty())
+	if (m_tail[0].tailVector().empty())
 	{
 		procedurecatch = false;
 	}
@@ -367,13 +368,6 @@ Expression Expression::handle_map(Environment & env) {
 	if (m_tail.size() != 2) {
 		throw SemanticError("Error call to map function: invalid number of arguments to define");
 	}
-	/*
-	Expression checker = handle_lookup(m_tail[0].head(), env);
-	if (!checker.isHeadProcedure())
-	{
-		throw SemanticError("Error in call to map function: first argument not a procedure");
-	}
-	*/
 	m_head = m_tail[0].head();
 	std::vector<Expression> Results;
 	Expression list = m_tail[1].eval(env);
@@ -389,7 +383,7 @@ Expression Expression::handle_map(Environment & env) {
 		m_tail.clear();
 		
 
-		resultHold = list.tailVector()[i].eval(env);
+		resultHold = list.tailVector()[i];//.eval(env);
 		if (resultHold.isHeadList())
 		{
 			m_tail = resultHold.tailVector();
@@ -421,7 +415,7 @@ Expression Expression::handle_map(Environment & env) {
 
 // this is a simple recursive version. the iterative version is more
 // difficult with the ast data structure used (no parent pointer).
-// this limits the practical depth of our AST
+// this limits the practical depth of our ASTdef
 Expression Expression::eval(Environment & env){
   
   if(m_tail.empty()){

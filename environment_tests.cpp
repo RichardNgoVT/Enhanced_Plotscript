@@ -508,9 +508,8 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
 	  padd = env.get_proc(Atom("list"));
 	  args.emplace_back(2.0);
 	  args.emplace_back(3.0);
-	  //REQUIRE(padd(args) == Etest);
+	  REQUIRE(padd(args) == Etest);
 	 // "((2) (3)) == ((2) (3))"
-	 // don't know why test doesn't pass
 	  
 
 	  INFO("test length")
@@ -543,9 +542,9 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
 	  args.emplace_back(2.0);
 	  args.emplace_back(3.0);
 	  args.emplace_back(4.0);
-	  //REQUIRE(padd(args) == Etest);
+	  REQUIRE(padd(args) == Etest);
 	 // "((1) (2) (3) (4)) == ((1) (2) (3) (4))"
-	 // don't know why test doesn't pass
+
 	  
 
 	  INFO("test join")
@@ -569,8 +568,8 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
 	  args.emplace_back(2.0);
 	  args.emplace_back(3.0);
 	  REQUIRE(padd(args) == Etest);
-	 // "((1) (2) (3) (1) (2) (3)) == ((1) (2) (3) (1) (2) (3))"
-	 // don't know why test doesn't pass
+	 //"((1) (2) (3) (1) (2) (3)) == ((1) (2) (3) (1) (2) (3))"
+
 
 	  INFO("test range")
 		  args.clear();
@@ -591,16 +590,15 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
 	  args.emplace_back(0.77);
 	  args.emplace_back(0.88);
 	  args.emplace_back(0.99);
-	  //REQUIRE(padd(args) == Etest);
+	  REQUIRE(padd(args) == Etest);
 	 // "((0) (0.11) (0.22) (0.33) (0.44) (0.55) (0.66) (0.77) (0.88) (0.99)) == ((0) (0.11) (0.22) (0.33) (0.44) (0.55) (0.66) (0.77) (0.88) (0.99))"
-	 // don't know why test doesn't pass
+	  args.clear();
 	 
 	  Expression Ptest;//procedure
 	  Expression Ltest;//lambda
 	  INFO("test lambda")
 		  Expression Rtest;//Rrrrguments
-	  Rtest.markList();
-	  Rtest.append(Atom("x"));
+	  Rtest = Atom("x");
 	  Rtest.append(Atom("y"));
 
 	 Ptest = Atom("+");
@@ -624,34 +622,37 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
 	 Ftest.append(2.0);
 	 Ftest.append(3.0);
 
-	 //REQUIRE(Ftest.eval(env) == Expression(8.0));
+	 //Expression finallamb;
+	 //finallamb = Ftest.eval(env);
+
+	 REQUIRE(Ftest.eval(env) == Expression(8.0));
 	 //(define f (lambda (x y) (+ 1 2 x y)))
 	 //(f 2 3)
 	 //works in plotscript
 
 	 INFO("test apply")
 		 Expression Litest;
-	 Litest.markList();
+	 Litest = Atom("list");
 	 Litest.append(2);
 	 Litest.append(3);
 	 Expression Aptest = Atom("apply");
 	 Aptest.append(Atom("f"));
 	 Aptest.append(Litest);
-	 //REQUIRE(Aptest.eval(env) == Expression(8.0));
+	 REQUIRE(Aptest.eval(env) == Expression(8.0));
 	 
 	 INFO("test map")
 		 Expression ListMastertest;
-	 ListMastertest.markList();
+	 ListMastertest = Atom("list");
 	 ListMastertest.append(Litest);
 	 ListMastertest.append(Litest);
 	 Expression Matest = Atom("map");
 	 Matest.append(Atom("f"));
 	 Matest.append(ListMastertest);
 	 Expression Finaltester;
-	 Finaltester.markList();
+	 Finaltester = Atom("list");
 	 Finaltester.append(8.0);
 	 Finaltester.append(8.0);
-	// REQUIRE(Matest.eval(env) == Finaltester);
+	 REQUIRE(Matest.eval(env) == Finaltester.eval(env));
 	 //^^ all commented out tests work in plotlab, but not here...
 	 
 	 
