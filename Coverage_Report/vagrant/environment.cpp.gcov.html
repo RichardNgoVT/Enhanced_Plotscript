@@ -31,17 +31,17 @@
             <td class="headerValue">Coverage.combined.cleaned</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">264</td>
-            <td class="headerCovTableEntry">268</td>
-            <td class="headerCovTableEntryHi">98.5 %</td>
+            <td class="headerCovTableEntry">272</td>
+            <td class="headerCovTableEntry">279</td>
+            <td class="headerCovTableEntryHi">97.5 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2018-09-28 06:37:46</td>
+            <td class="headerValue">2018-09-28 07:05:10</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">27</td>
-            <td class="headerCovTableEntry">27</td>
+            <td class="headerCovTableEntry">28</td>
+            <td class="headerCovTableEntry">28</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
@@ -81,8 +81,8 @@
 <span class="lineNum">      19 </span>            : **********************************************************************/
 <a name="20"><span class="lineNum">      20 </span>            : </a>
 <span class="lineNum">      21 </span>            : // predicate, the number of args is nargs
-<span class="lineNum">      22 </span><span class="lineCov">        231 : bool nargs_equal(const std::vector&lt;Expression&gt; &amp; args, unsigned nargs){</span>
-<span class="lineNum">      23 </span><span class="lineCov">        231 :   return args.size() == nargs;</span>
+<span class="lineNum">      22 </span><span class="lineCov">        234 : bool nargs_equal(const std::vector&lt;Expression&gt; &amp; args, unsigned nargs){</span>
+<span class="lineNum">      23 </span><span class="lineCov">        234 :   return args.size() == nargs;</span>
 <span class="lineNum">      24 </span>            : }
 <span class="lineNum">      25 </span>            : 
 <span class="lineNum">      26 </span>            : /*********************************************************************** 
@@ -309,14 +309,14 @@
 <span class="lineNum">     247 </span><span class="lineCov">         87 :   return (result != envmap.end()) &amp;&amp; (result-&gt;second.type == ProcedureType);</span>
 <a name="248"><span class="lineNum">     248 </span>            : }</a>
 <span class="lineNum">     249 </span>            : 
-<span class="lineNum">     250 </span><span class="lineCov">        114 : Procedure Environment::get_proc(const Atom &amp; sym) const{</span>
+<span class="lineNum">     250 </span><span class="lineCov">        123 : Procedure Environment::get_proc(const Atom &amp; sym) const{</span>
 <span class="lineNum">     251 </span>            : 
 <span class="lineNum">     252 </span>            :   //Procedure proc = default_proc;
 <span class="lineNum">     253 </span>            : 
-<span class="lineNum">     254 </span><span class="lineCov">        114 :   if(sym.isSymbol()){</span>
-<span class="lineNum">     255 </span><span class="lineCov">        114 :     auto result = envmap.find(sym.asSymbol());</span>
-<span class="lineNum">     256 </span><span class="lineCov">        114 :     if((result != envmap.end()) &amp;&amp; (result-&gt;second.type == ProcedureType)){</span>
-<span class="lineNum">     257 </span><span class="lineCov">        108 :       return result-&gt;second.proc;</span>
+<span class="lineNum">     254 </span><span class="lineCov">        123 :   if(sym.isSymbol()){</span>
+<span class="lineNum">     255 </span><span class="lineCov">        123 :     auto result = envmap.find(sym.asSymbol());</span>
+<span class="lineNum">     256 </span><span class="lineCov">        123 :     if((result != envmap.end()) &amp;&amp; (result-&gt;second.type == ProcedureType)){</span>
+<span class="lineNum">     257 </span><span class="lineCov">        117 :       return result-&gt;second.proc;</span>
 <span class="lineNum">     258 </span>            :     }
 <span class="lineNum">     259 </span>            :   }
 <span class="lineNum">     260 </span>            : 
@@ -581,14 +581,14 @@
 <span class="lineNum">     519 </span><span class="lineCov">          3 :         return Expression(result);</span>
 <a name="520"><span class="lineNum">     520 </span>            : };</a>
 <span class="lineNum">     521 </span>            : 
-<span class="lineNum">     522 </span><span class="lineCov">          6 : Expression LIST(const std::vector&lt;Expression&gt; &amp; args) {</span>
+<span class="lineNum">     522 </span><span class="lineCov">         11 : Expression LIST(const std::vector&lt;Expression&gt; &amp; args) {</span>
 <span class="lineNum">     523 </span>            : 
-<span class="lineNum">     524 </span><span class="lineCov">          6 :         Expression list;</span>
-<span class="lineNum">     525 </span><span class="lineCov">          6 :         list.markList();</span>
-<span class="lineNum">     526 </span><span class="lineCov">         24 :         for (auto &amp; a : args) {</span>
-<span class="lineNum">     527 </span><span class="lineCov">         18 :                 list.append(a);</span>
+<span class="lineNum">     524 </span><span class="lineCov">         11 :         Expression list;</span>
+<span class="lineNum">     525 </span><span class="lineCov">         11 :         list.markList();</span>
+<span class="lineNum">     526 </span><span class="lineCov">         42 :         for (auto &amp; a : args) {</span>
+<span class="lineNum">     527 </span><span class="lineCov">         31 :                 list.append(a);</span>
 <span class="lineNum">     528 </span>            :         }
-<span class="lineNum">     529 </span><span class="lineCov">          6 :         return list;</span>
+<span class="lineNum">     529 </span><span class="lineCov">         11 :         return list;</span>
 <span class="lineNum">     530 </span>            : 
 <a name="531"><span class="lineNum">     531 </span>            : };</a>
 <span class="lineNum">     532 </span>            : 
@@ -596,8 +596,8 @@
 <span class="lineNum">     534 </span>            : 
 <span class="lineNum">     535 </span><span class="lineCov">          3 :         if (nargs_equal(args, 1))</span>
 <span class="lineNum">     536 </span>            :         {
-<span class="lineNum">     537 </span><span class="lineCov">          1 :                 if (args[0].isHeadList()) {//checks for complex</span>
-<span class="lineNum">     538 </span><span class="lineCov">          2 :                         return args[0].tailVector()[0];</span>
+<span class="lineNum">     537 </span><span class="lineCov">          3 :                 if (args[0].isHeadList()) {//checks for complex</span>
+<span class="lineNum">     538 </span><span class="lineCov">          6 :                         return args[0].tailVector()[0];</span>
 <span class="lineNum">     539 </span>            :                 }
 <span class="lineNum">     540 </span>            :                 else {
 <span class="lineNum">     541 </span><span class="lineNoCov">          0 :                         throw SemanticError(&quot;Error in call to first, argument not a list&quot;);</span>
@@ -605,79 +605,106 @@
 <span class="lineNum">     543 </span>            :         }
 <span class="lineNum">     544 </span>            :         else
 <span class="lineNum">     545 </span>            :         {
-<span class="lineNum">     546 </span><span class="lineCov">          2 :                 throw SemanticError(&quot;Error in call to first: invalid number of arguments.&quot;);</span>
+<span class="lineNum">     546 </span><span class="lineNoCov">          0 :                 throw SemanticError(&quot;Error in call to first: invalid number of arguments.&quot;);</span>
 <span class="lineNum">     547 </span>            :         }
 <span class="lineNum">     548 </span>            : 
 <span class="lineNum">     549 </span>            : 
-<span class="lineNum">     550 </span>            : };
+<a name="550"><span class="lineNum">     550 </span>            : };</a>
 <span class="lineNum">     551 </span>            : 
-<span class="lineNum">     552 </span>            : /*
-<span class="lineNum">     553 </span>            : Reset the environment to the default state. First remove all entries and
-<a name="554"><span class="lineNum">     554 </span>            : then re-add the default ones.</a>
-<span class="lineNum">     555 </span>            :  */
-<span class="lineNum">     556 </span><span class="lineCov">        138 : void Environment::reset(){</span>
-<span class="lineNum">     557 </span>            : 
-<span class="lineNum">     558 </span><span class="lineCov">        138 :   envmap.clear();</span>
-<span class="lineNum">     559 </span>            :   
-<span class="lineNum">     560 </span>            :   // Built-In value of pi
-<span class="lineNum">     561 </span><span class="lineCov">        138 :   envmap.emplace(&quot;pi&quot;, EnvResult(ExpressionType, Expression(PI)));</span>
-<span class="lineNum">     562 </span>            : 
-<span class="lineNum">     563 </span>            :   //Exponential Value
-<span class="lineNum">     564 </span><span class="lineCov">        138 :   envmap.emplace(&quot;e&quot;, EnvResult(ExpressionType, Expression(EXP)));</span>
-<span class="lineNum">     565 </span>            : 
-<span class="lineNum">     566 </span><span class="lineCov">        138 :   envmap.emplace(&quot;I&quot;, EnvResult(ExpressionType, Expression(Im)));</span>
-<span class="lineNum">     567 </span>            : 
-<span class="lineNum">     568 </span>            :   // Procedure: add;
-<span class="lineNum">     569 </span><span class="lineCov">        138 :   envmap.emplace(&quot;+&quot;, EnvResult(ProcedureType, add)); </span>
-<span class="lineNum">     570 </span>            : 
-<span class="lineNum">     571 </span>            :   // Procedure: subneg;
-<span class="lineNum">     572 </span><span class="lineCov">        138 :   envmap.emplace(&quot;-&quot;, EnvResult(ProcedureType, subneg)); </span>
+<span class="lineNum">     552 </span><span class="lineCov">          3 : Expression RestLIST(const std::vector&lt;Expression&gt; &amp; args) {</span>
+<span class="lineNum">     553 </span><span class="lineCov">          3 :         Expression list;</span>
+<span class="lineNum">     554 </span><span class="lineCov">          3 :         list.markList();</span>
+<span class="lineNum">     555 </span><span class="lineCov">          3 :         if (nargs_equal(args, 1))</span>
+<span class="lineNum">     556 </span>            :         {
+<span class="lineNum">     557 </span><span class="lineCov">          3 :                 if (args[0].isHeadList()) {</span>
+<span class="lineNum">     558 </span>            : 
+<span class="lineNum">     559 </span><span class="lineCov">          9 :                         for (int i = 1; i &lt; args[0].tailVector().size(); i++) {</span>
+<span class="lineNum">     560 </span><span class="lineCov">          6 :                                 list.append(args[0].tailVector()[i]);</span>
+<span class="lineNum">     561 </span>            :                         }
+<span class="lineNum">     562 </span><span class="lineCov">          6 :                         return list;</span>
+<span class="lineNum">     563 </span>            :                 }
+<span class="lineNum">     564 </span>            :                 else {
+<span class="lineNum">     565 </span><span class="lineNoCov">          0 :                         throw SemanticError(&quot;Error in call to rest, argument not a list&quot;);</span>
+<span class="lineNum">     566 </span>            :                 }
+<span class="lineNum">     567 </span>            :         }
+<span class="lineNum">     568 </span>            :         else
+<span class="lineNum">     569 </span>            :         {
+<span class="lineNum">     570 </span><span class="lineNoCov">          0 :                 throw SemanticError(&quot;Error in call to rest: invalid number of arguments.&quot;);</span>
+<span class="lineNum">     571 </span>            :         }
+<span class="lineNum">     572 </span>            : 
 <span class="lineNum">     573 </span>            : 
-<span class="lineNum">     574 </span>            :   // Procedure: mul;
-<span class="lineNum">     575 </span><span class="lineCov">        138 :   envmap.emplace(&quot;*&quot;, EnvResult(ProcedureType, mul)); </span>
-<span class="lineNum">     576 </span>            : 
-<span class="lineNum">     577 </span>            :   // Procedure: div;
-<span class="lineNum">     578 </span><span class="lineCov">        138 :   envmap.emplace(&quot;/&quot;, EnvResult(ProcedureType, div)); </span>
-<span class="lineNum">     579 </span>            : 
-<span class="lineNum">     580 </span>            :   //square root
-<span class="lineNum">     581 </span><span class="lineCov">        138 :   envmap.emplace(&quot;sqrt&quot;, EnvResult(ProcedureType, SquareRoot));</span>
-<span class="lineNum">     582 </span>            : 
-<span class="lineNum">     583 </span>            :   //exponent ^
-<span class="lineNum">     584 </span><span class="lineCov">        138 :   envmap.emplace(&quot;^&quot;, EnvResult(ProcedureType, Power));</span>
-<span class="lineNum">     585 </span>            : 
-<span class="lineNum">     586 </span>            :   //Natural Log
-<span class="lineNum">     587 </span><span class="lineCov">        138 :   envmap.emplace(&quot;ln&quot;, EnvResult(ProcedureType, NLog));</span>
-<span class="lineNum">     588 </span>            : 
-<span class="lineNum">     589 </span>            :   //SIN
-<span class="lineNum">     590 </span><span class="lineCov">        138 :   envmap.emplace(&quot;sin&quot;, EnvResult(ProcedureType, SIN));</span>
+<span class="lineNum">     574 </span>            : };
+<span class="lineNum">     575 </span>            : 
+<span class="lineNum">     576 </span>            : /*
+<span class="lineNum">     577 </span>            : Reset the environment to the default state. First remove all entries and
+<a name="578"><span class="lineNum">     578 </span>            : then re-add the default ones.</a>
+<span class="lineNum">     579 </span>            :  */
+<span class="lineNum">     580 </span><span class="lineCov">        138 : void Environment::reset(){</span>
+<span class="lineNum">     581 </span>            : 
+<span class="lineNum">     582 </span><span class="lineCov">        138 :   envmap.clear();</span>
+<span class="lineNum">     583 </span>            :   
+<span class="lineNum">     584 </span>            :   // Built-In value of pi
+<span class="lineNum">     585 </span><span class="lineCov">        138 :   envmap.emplace(&quot;pi&quot;, EnvResult(ExpressionType, Expression(PI)));</span>
+<span class="lineNum">     586 </span>            : 
+<span class="lineNum">     587 </span>            :   //Exponential Value
+<span class="lineNum">     588 </span><span class="lineCov">        138 :   envmap.emplace(&quot;e&quot;, EnvResult(ExpressionType, Expression(EXP)));</span>
+<span class="lineNum">     589 </span>            : 
+<span class="lineNum">     590 </span><span class="lineCov">        138 :   envmap.emplace(&quot;I&quot;, EnvResult(ExpressionType, Expression(Im)));</span>
 <span class="lineNum">     591 </span>            : 
-<span class="lineNum">     592 </span>            :   //COS
-<span class="lineNum">     593 </span><span class="lineCov">        138 :   envmap.emplace(&quot;cos&quot;, EnvResult(ProcedureType, COS));</span>
+<span class="lineNum">     592 </span>            :   // Procedure: add;
+<span class="lineNum">     593 </span><span class="lineCov">        138 :   envmap.emplace(&quot;+&quot;, EnvResult(ProcedureType, add)); </span>
 <span class="lineNum">     594 </span>            : 
-<span class="lineNum">     595 </span>            :   //TAN
-<span class="lineNum">     596 </span><span class="lineCov">        138 :   envmap.emplace(&quot;tan&quot;, EnvResult(ProcedureType, TAN));</span>
+<span class="lineNum">     595 </span>            :   // Procedure: subneg;
+<span class="lineNum">     596 </span><span class="lineCov">        138 :   envmap.emplace(&quot;-&quot;, EnvResult(ProcedureType, subneg)); </span>
 <span class="lineNum">     597 </span>            : 
-<span class="lineNum">     598 </span>            :   //real part of complex
-<span class="lineNum">     599 </span><span class="lineCov">        138 :   envmap.emplace(&quot;real&quot;, EnvResult(ProcedureType, REAL));</span>
+<span class="lineNum">     598 </span>            :   // Procedure: mul;
+<span class="lineNum">     599 </span><span class="lineCov">        138 :   envmap.emplace(&quot;*&quot;, EnvResult(ProcedureType, mul)); </span>
 <span class="lineNum">     600 </span>            : 
-<span class="lineNum">     601 </span>            :   //imag part of complex
-<span class="lineNum">     602 </span><span class="lineCov">        138 :   envmap.emplace(&quot;imag&quot;, EnvResult(ProcedureType, IMAG));</span>
+<span class="lineNum">     601 </span>            :   // Procedure: div;
+<span class="lineNum">     602 </span><span class="lineCov">        138 :   envmap.emplace(&quot;/&quot;, EnvResult(ProcedureType, div)); </span>
 <span class="lineNum">     603 </span>            : 
-<span class="lineNum">     604 </span>            :   //magnitude of complex
-<span class="lineNum">     605 </span><span class="lineCov">        138 :   envmap.emplace(&quot;mag&quot;, EnvResult(ProcedureType, MAG));</span>
+<span class="lineNum">     604 </span>            :   //square root
+<span class="lineNum">     605 </span><span class="lineCov">        138 :   envmap.emplace(&quot;sqrt&quot;, EnvResult(ProcedureType, SquareRoot));</span>
 <span class="lineNum">     606 </span>            : 
-<span class="lineNum">     607 </span>            :   //angle of complex
-<span class="lineNum">     608 </span><span class="lineCov">        138 :   envmap.emplace(&quot;arg&quot;, EnvResult(ProcedureType, ARG));</span>
+<span class="lineNum">     607 </span>            :   //exponent ^
+<span class="lineNum">     608 </span><span class="lineCov">        138 :   envmap.emplace(&quot;^&quot;, EnvResult(ProcedureType, Power));</span>
 <span class="lineNum">     609 </span>            : 
-<span class="lineNum">     610 </span>            :   //conjugate of complex
-<span class="lineNum">     611 </span><span class="lineCov">        138 :   envmap.emplace(&quot;conj&quot;, EnvResult(ProcedureType, CONJ));</span>
+<span class="lineNum">     610 </span>            :   //Natural Log
+<span class="lineNum">     611 </span><span class="lineCov">        138 :   envmap.emplace(&quot;ln&quot;, EnvResult(ProcedureType, NLog));</span>
 <span class="lineNum">     612 </span>            : 
-<span class="lineNum">     613 </span>            :   //creates list
-<span class="lineNum">     614 </span><span class="lineCov">        138 :   envmap.emplace(&quot;list&quot;, EnvResult(ProcedureType, LIST));</span>
+<span class="lineNum">     613 </span>            :   //SIN
+<span class="lineNum">     614 </span><span class="lineCov">        138 :   envmap.emplace(&quot;sin&quot;, EnvResult(ProcedureType, SIN));</span>
 <span class="lineNum">     615 </span>            : 
-<span class="lineNum">     616 </span>            :   //first element in list
-<span class="lineNum">     617 </span><span class="lineCov">        138 :   envmap.emplace(&quot;first&quot;, EnvResult(ProcedureType, FirstLIST));</span>
-<span class="lineNum">     618 </span><span class="lineCov">        138 : }</span>
+<span class="lineNum">     616 </span>            :   //COS
+<span class="lineNum">     617 </span><span class="lineCov">        138 :   envmap.emplace(&quot;cos&quot;, EnvResult(ProcedureType, COS));</span>
+<span class="lineNum">     618 </span>            : 
+<span class="lineNum">     619 </span>            :   //TAN
+<span class="lineNum">     620 </span><span class="lineCov">        138 :   envmap.emplace(&quot;tan&quot;, EnvResult(ProcedureType, TAN));</span>
+<span class="lineNum">     621 </span>            : 
+<span class="lineNum">     622 </span>            :   //real part of complex
+<span class="lineNum">     623 </span><span class="lineCov">        138 :   envmap.emplace(&quot;real&quot;, EnvResult(ProcedureType, REAL));</span>
+<span class="lineNum">     624 </span>            : 
+<span class="lineNum">     625 </span>            :   //imag part of complex
+<span class="lineNum">     626 </span><span class="lineCov">        138 :   envmap.emplace(&quot;imag&quot;, EnvResult(ProcedureType, IMAG));</span>
+<span class="lineNum">     627 </span>            : 
+<span class="lineNum">     628 </span>            :   //magnitude of complex
+<span class="lineNum">     629 </span><span class="lineCov">        138 :   envmap.emplace(&quot;mag&quot;, EnvResult(ProcedureType, MAG));</span>
+<span class="lineNum">     630 </span>            : 
+<span class="lineNum">     631 </span>            :   //angle of complex
+<span class="lineNum">     632 </span><span class="lineCov">        138 :   envmap.emplace(&quot;arg&quot;, EnvResult(ProcedureType, ARG));</span>
+<span class="lineNum">     633 </span>            : 
+<span class="lineNum">     634 </span>            :   //conjugate of complex
+<span class="lineNum">     635 </span><span class="lineCov">        138 :   envmap.emplace(&quot;conj&quot;, EnvResult(ProcedureType, CONJ));</span>
+<span class="lineNum">     636 </span>            : 
+<span class="lineNum">     637 </span>            :   //creates list
+<span class="lineNum">     638 </span><span class="lineCov">        138 :   envmap.emplace(&quot;list&quot;, EnvResult(ProcedureType, LIST));</span>
+<span class="lineNum">     639 </span>            : 
+<span class="lineNum">     640 </span>            :   //first element in list
+<span class="lineNum">     641 </span><span class="lineCov">        138 :   envmap.emplace(&quot;first&quot;, EnvResult(ProcedureType, FirstLIST));</span>
+<span class="lineNum">     642 </span>            : 
+<span class="lineNum">     643 </span>            :   //second and beyond elements in list
+<span class="lineNum">     644 </span><span class="lineCov">        138 :   envmap.emplace(&quot;rest&quot;, EnvResult(ProcedureType, RestLIST));</span>
+<span class="lineNum">     645 </span><span class="lineCov">        138 : }</span>
 </pre>
       </td>
     </tr>
