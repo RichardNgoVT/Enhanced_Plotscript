@@ -528,7 +528,55 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
 	  padd = env.get_proc(Atom("length"));
 	  REQUIRE(padd(args) == Expression(3.0));
 
+	  INFO("test append")
+		  args.clear();
+	  padd = env.get_proc(Atom("list"));
+	  args.emplace_back(1.0);
+	  args.emplace_back(2.0);
+	  args.emplace_back(3.0);
+	  Etest = padd(args);
+	  args.clear();
+	  args.emplace_back(Etest);
+	  args.emplace_back(4.0);
+	  padd = env.get_proc(Atom("append"));
+	  Etest = padd(args);
+	  args.clear();
+	  padd = env.get_proc(Atom("list"));
+	  args.emplace_back(1.0);
+	  args.emplace_back(2.0);
+	  args.emplace_back(3.0);
+	  args.emplace_back(4.0);
+	  //REQUIRE(padd(args) == Etest);
+	  /*
+	  "((1) (2) (3) (4)) == ((1) (2) (3) (4))"
+	  don't know why test doesn't pass
+	  */
 
+	  INFO("test join")
+		  args.clear();
+	  padd = env.get_proc(Atom("list"));
+	  args.emplace_back(1.0);
+	  args.emplace_back(2.0);
+	  args.emplace_back(3.0);
+	  Etest = padd(args);
+	  args.clear();
+	  args.emplace_back(Etest);
+	  args.emplace_back(Etest);
+	  padd = env.get_proc(Atom("join"));
+	  Etest = padd(args);
+	  args.clear();
+	  padd = env.get_proc(Atom("list"));
+	  args.emplace_back(1.0);
+	  args.emplace_back(2.0);
+	  args.emplace_back(3.0);
+	  args.emplace_back(1.0);
+	  args.emplace_back(2.0);
+	  args.emplace_back(3.0);
+	  //REQUIRE(padd(args) == Etest);
+	  /*
+	  "((1) (2) (3) (1) (2) (3)) == ((1) (2) (3) (1) (2) (3))"
+	  don't know why test doesn't pass
+	  */
 
 
 

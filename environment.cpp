@@ -592,6 +592,56 @@ Expression LengthLIST(const std::vector<Expression> & args) {
 
 };
 
+Expression AppendLIST(const std::vector<Expression> & args) {
+	Expression list;
+	list.markList();
+	if (nargs_equal(args, 2))
+	{
+		if (args[0].isHeadList()) {
+
+			for (int i = 0; i < args[0].tailVector().size(); i++) {
+				list.append(args[0].tailVector()[i]);
+			}
+			list.append(args[1]);
+			return list;
+		}
+		else {
+			throw SemanticError("Error in call to append, argument not a list");
+		}
+	}
+	else
+	{
+		throw SemanticError("Error in call to append: invalid number of arguments.");
+	}
+
+};
+
+Expression JoinLIST(const std::vector<Expression> & args) {
+	Expression list;
+	list.markList();
+	if (nargs_equal(args, 2))
+	{
+		if (args[0].isHeadList() && args[1].isHeadList()) {
+
+			for (int i = 0; i < args[0].tailVector().size(); i++) {
+				list.append(args[0].tailVector()[i]);
+			}
+			for (int i = 0; i < args[1].tailVector().size(); i++) {
+				list.append(args[1].tailVector()[i]);
+			}
+			return list;
+		}
+		else {
+			throw SemanticError("Error in call to join, argument/arguments not a list");
+		}
+	}
+	else
+	{
+		throw SemanticError("Error in call to join: invalid number of arguments.");
+	}
+
+};
+
 
 /*
 Reset the environment to the default state. First remove all entries and
@@ -665,4 +715,10 @@ void Environment::reset(){
 
   //number of elements in list
   envmap.emplace("length", EnvResult(ProcedureType, LengthLIST));
+
+  //adds element to a list
+  envmap.emplace("append", EnvResult(ProcedureType, AppendLIST));
+
+  //adds element to a list to another list
+  envmap.emplace("join", EnvResult(ProcedureType, JoinLIST));
 }
