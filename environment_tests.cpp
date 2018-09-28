@@ -221,6 +221,37 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
   REQUIRE_THROWS_AS(padd(args), SemanticError);
   args.clear();
 
+
+  INFO("test sqrt procedure (sqrt normal)")
+	  padd = env.get_proc(Atom("sqrt"));
+  args.emplace_back(4.0);
+  REQUIRE(padd(args) == Expression(2.0));
+
+  INFO("test sqrt procedure (sqrt -normal)")
+	  args.clear();
+  imagTest = -4.0;
+  args.emplace_back(imagTest);
+  imagTest = (2.0 * Imag);
+
+  REQUIRE(padd(args) == Expression(imagTest));
+
+  INFO("test sqrt procedure (sqrt complex)")
+	  args.clear();
+  imagTest = Imag;
+  args.emplace_back(imagTest);
+  imagTest = (sqrt(Imag));
+  REQUIRE(padd(args) == Expression(imagTest));
+
+  INFO("test sqrt errors")
+	  args.clear();
+  args.emplace_back(Atom("invalid"));
+  REQUIRE_THROWS_AS(padd(args), SemanticError);
+  args.clear();
+  args.emplace_back(Atom(1));
+  args.emplace_back(Atom(1));
+  args.emplace_back(Atom(1));
+  REQUIRE_THROWS_AS(padd(args), SemanticError);
+  args.clear();
 }
 
 TEST_CASE( "Test reset", "[environment]" ) {
