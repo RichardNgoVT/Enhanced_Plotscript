@@ -227,8 +227,7 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
 
   INFO("test sqrt procedure (sqrt -normal)")
 	  args.clear();
-  imagTest = -4.0;
-  args.emplace_back(imagTest);
+  args.emplace_back(-4.0);
   imagTest = (2.0 * Imag);
 
   REQUIRE(padd(args) == Expression(imagTest));
@@ -493,6 +492,20 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
 	  padd = env.get_proc(Atom("first"));
 	  REQUIRE(padd(args) == Expression(1.0));
 
+	  INFO("test first errors")
+		  args.clear();
+	  args.emplace_back(Etest);
+	  args.emplace_back(Etest);
+	  REQUIRE_THROWS_AS(padd(args), SemanticError);
+	  args.clear();
+	  Etest = Atom("list");
+	  args.emplace_back(Etest.eval(env));
+	  REQUIRE_THROWS_AS(padd(args), SemanticError);
+	  args.clear();
+	  args.emplace_back(2.0);
+	  REQUIRE_THROWS_AS(padd(args), SemanticError);
+
+
 	  INFO("test rest")
 		  args.clear();
 	  padd = env.get_proc(Atom("list"));
@@ -510,6 +523,25 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
 	  args.emplace_back(3.0);
 	  REQUIRE(padd(args) == Etest);
 	 // "((2) (3)) == ((2) (3))"
+
+	  INFO("test rest errors")
+		  padd = env.get_proc(Atom("list"));
+	  args.emplace_back(1.0);
+	  args.emplace_back(2.0);
+	  args.emplace_back(3.0);
+	  Etest = padd(args);
+	  padd = env.get_proc(Atom("rest"));
+		  args.clear();
+	  args.emplace_back(Etest);
+	  args.emplace_back(Etest);
+	  REQUIRE_THROWS_AS(padd(args), SemanticError);
+
+	  Etest = Atom("list");
+	  args.emplace_back(Etest.eval(env));
+	  REQUIRE_THROWS_AS(padd(args), SemanticError);
+	  args.clear();
+	  args.emplace_back(2.0);
+	  REQUIRE_THROWS_AS(padd(args), SemanticError);
 	  
 
 	  INFO("test length")
@@ -523,6 +555,22 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
 	  args.emplace_back(Etest);
 	  padd = env.get_proc(Atom("length"));
 	  REQUIRE(padd(args) == Expression(3.0));
+
+	  INFO("test length errors")
+		  args.clear();
+	  padd = env.get_proc(Atom("list"));
+	  args.emplace_back(1.0);
+	  args.emplace_back(2.0);
+	  args.emplace_back(3.0);
+	  Etest = padd(args);
+	  padd = env.get_proc(Atom("length"));
+	  args.emplace_back(Etest);
+	  args.emplace_back(Etest);
+	  REQUIRE_THROWS_AS(padd(args), SemanticError);
+	  args.clear();
+
+	  args.emplace_back(2.0);
+	  REQUIRE_THROWS_AS(padd(args), SemanticError);
 
 	  INFO("test append")
 		  args.clear();
@@ -545,7 +593,22 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
 	  REQUIRE(padd(args) == Etest);
 	 // "((1) (2) (3) (4)) == ((1) (2) (3) (4))"
 
-	  
+	  INFO("test append errors")
+		  args.clear();
+	  padd = env.get_proc(Atom("list"));
+	  args.emplace_back(1.0);
+	  args.emplace_back(2.0);
+	  args.emplace_back(3.0);
+	  Etest = padd(args);
+	  padd = env.get_proc(Atom("append"));
+	  args.emplace_back(Etest);
+	  args.emplace_back(Etest);
+	  args.emplace_back(Etest);
+	  REQUIRE_THROWS_AS(padd(args), SemanticError);
+	  args.clear();
+
+	  args.emplace_back(2.0);
+	  REQUIRE_THROWS_AS(padd(args), SemanticError);
 
 	  INFO("test join")
 		  args.clear();
@@ -570,6 +633,22 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
 	  REQUIRE(padd(args) == Etest);
 	 //"((1) (2) (3) (1) (2) (3)) == ((1) (2) (3) (1) (2) (3))"
 
+	  INFO("test join errors")
+		  padd = env.get_proc(Atom("list"));
+	  args.emplace_back(1.0);
+	  args.emplace_back(2.0);
+	  args.emplace_back(3.0);
+	  Etest = padd(args);
+	  padd = env.get_proc(Atom("join"));
+		  args.clear();
+	  args.emplace_back(Etest);
+	  args.emplace_back(Etest);
+	  args.emplace_back(Etest);
+	  REQUIRE_THROWS_AS(padd(args), SemanticError);
+	  args.clear();
+
+	  args.emplace_back(2.0);
+	  REQUIRE_THROWS_AS(padd(args), SemanticError);
 
 	  INFO("test range")
 		  args.clear();
@@ -593,6 +672,9 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
 	  REQUIRE(padd(args) == Etest);
 	 // "((0) (0.11) (0.22) (0.33) (0.44) (0.55) (0.66) (0.77) (0.88) (0.99)) == ((0) (0.11) (0.22) (0.33) (0.44) (0.55) (0.66) (0.77) (0.88) (0.99))"
 	  args.clear();
+
+
+
 	 
 	  Expression Ptest;//procedure
 	  Expression Ltest;//lambda
@@ -622,13 +704,33 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
 	 Ftest.append(2.0);
 	 Ftest.append(3.0);
 
-	 //Expression finallamb;
-	 //finallamb = Ftest.eval(env);
 
 	 REQUIRE(Ftest.eval(env) == Expression(8.0));
 	 //(define f (lambda (x y) (+ 1 2 x y)))
 	 //(f 2 3)
 	 //works in plotscript
+
+	 INFO("test range errors")
+		 padd = env.get_proc(Atom("list"));
+	 args.emplace_back(1.0);
+	 args.emplace_back(2.0);
+	 args.emplace_back(3.0);
+	 Etest = padd(args);
+	 padd = env.get_proc(Atom("range"));
+	 args.clear();
+	 args.emplace_back(3);
+	 args.emplace_back(2);
+	 args.emplace_back(1);
+	 REQUIRE_THROWS_AS(padd(args), SemanticError);
+	 args.clear();
+	 args.emplace_back(1);
+	 args.emplace_back(3);
+	 args.emplace_back(-1);
+	 REQUIRE_THROWS_AS(padd(args), SemanticError);
+	 args.clear();
+
+	 args.emplace_back(2.0);
+	 REQUIRE_THROWS_AS(padd(args), SemanticError);
 
 	 INFO("test apply")
 		 Expression Litest;
@@ -639,6 +741,23 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
 	 Aptest.append(Atom("f"));
 	 Aptest.append(Litest);
 	 REQUIRE(Aptest.eval(env) == Expression(8.0));
+
+	 INFO("test apply errors")
+		 Expression Errorcatch = Atom("+");
+	 Errorcatch.append(1);
+	 Errorcatch.append(2);
+	 Aptest = Atom("apply");
+	 Aptest.append(Errorcatch);
+	 Aptest.append(Litest);
+	 REQUIRE_THROWS_AS(Aptest.eval(env), SemanticError);
+	 Aptest = Atom("apply");
+	 Aptest.append(3.0);
+	 Aptest.append(Litest);
+	 REQUIRE_THROWS_AS(Aptest.eval(env), SemanticError);
+	 Aptest = Atom("apply");
+	 Aptest.append(Atom("+"));
+	 Aptest.append(3.0);
+	 REQUIRE_THROWS_AS(Aptest.eval(env), SemanticError);
 	 
 	 INFO("test map")
 		 Expression ListMastertest;
@@ -654,6 +773,14 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
 	 Finaltester.append(8.0);
 	 REQUIRE(Matest.eval(env) == Finaltester.eval(env));
 	 //^^ all commented out tests work in plotlab, but not here...
+
+	 INFO("test map errors")
+	 Aptest = Atom("map");
+	 Aptest.append(Errorcatch);
+	 Aptest.append(Litest);
+	 Aptest.append(Litest);
+	 Aptest.append(Litest);
+	 REQUIRE_THROWS_AS(Aptest.eval(env), SemanticError);
 	 
 	 
 }
