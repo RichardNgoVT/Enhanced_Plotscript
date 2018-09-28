@@ -549,6 +549,30 @@ Expression FirstLIST(const std::vector<Expression> & args) {
 
 };
 
+Expression RestLIST(const std::vector<Expression> & args) {
+	Expression list;
+	list.markList();
+	if (nargs_equal(args, 1))
+	{
+		if (args[0].isHeadList()) {
+
+			for (int i = 1; i < args[0].tailVector().size(); i++) {
+				list.append(args[0].tailVector()[i]);
+			}
+			return list;
+		}
+		else {
+			throw SemanticError("Error in call to rest, argument not a list");
+		}
+	}
+	else
+	{
+		throw SemanticError("Error in call to rest: invalid number of arguments.");
+	}
+
+
+};
+
 /*
 Reset the environment to the default state. First remove all entries and
 then re-add the default ones.
@@ -615,4 +639,7 @@ void Environment::reset(){
 
   //first element in list
   envmap.emplace("first", EnvResult(ProcedureType, FirstLIST));
+
+  //second and beyond elements in list
+  envmap.emplace("rest", EnvResult(ProcedureType, RestLIST));
 }

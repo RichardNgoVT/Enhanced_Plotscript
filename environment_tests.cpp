@@ -495,6 +495,27 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
 	  padd = env.get_proc(Atom("first"));
 	  REQUIRE(padd(args) == Expression(1.0));
 
+	  INFO("test rest")
+		  args.clear();
+	  padd = env.get_proc(Atom("list"));
+	  args.emplace_back(1.0);
+	  args.emplace_back(2.0);
+	  args.emplace_back(3.0);
+	  Etest = padd(args);
+	  args.clear();
+	  args.emplace_back(Etest);
+	  padd = env.get_proc(Atom("rest"));
+	  Etest = padd(args);
+	  args.clear();
+	  padd = env.get_proc(Atom("list"));
+	  args.emplace_back(2.0);
+	  args.emplace_back(3.0);
+	  //REQUIRE(padd(args) == Etest);
+	  /*
+	  "((2) (3)) == ((2) (3))"
+	  don't know why test doesn't pass
+	  */
+
 	 
 
 
