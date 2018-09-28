@@ -310,7 +310,7 @@ Expression Power(const std::vector<Expression> & args) {
 	{
 		if ((args[0].isHeadNumber() || args[0].isHeadComplex()) && (args[1].isHeadNumber() || args[1].isHeadComplex())) {//if of type real or complex
 
-			if (args[0].isHeadNumber() && args[1].isHeadNumber() && (args[0].head().asNumber() >= 0 || args[1].isHeadNumber() >= 1 || args[1].isHeadNumber() <= -1 || (1/ args[1].isHeadNumber()) % 2 == 1))//checks both numbers are real, or if both negative number and even fraction power exists, (^ (- 1) (/ 1 2)) is essentially sqrt(-1)
+			if (args[0].isHeadNumber() && args[1].isHeadNumber() && (args[0].head().asNumber() >= 0 || args[1].head().asNumber() >= 1 || args[1].head().asNumber() <= -1)) //|| (1.0/ args[1].head().asNumber()) % 2.0 == 1.0))//checks both numbers are real, or if both negative number and even fraction power exists, (^ (- 1) (/ 1 2)) is essentially sqrt(-1)
 			{
 				result = pow(args[0].head().asNumber(), args[1].head().asNumber());
 			}

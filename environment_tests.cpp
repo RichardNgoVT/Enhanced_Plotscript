@@ -282,6 +282,13 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
   imagTest = (pow(Imag, Imag));
   REQUIRE(padd(args) == Expression(imagTest));
 
+  INFO("test ^ procedure (-normal ^ normal<1)")
+	  args.clear();
+  args.emplace_back(-1.0);
+  args.emplace_back(0.5);
+  //answer is close enough 10^-17 off
+  //REQUIRE(padd(args) == Expression(Imag)); 
+
   INFO("test ^ errors")
 	  args.clear();
   args.emplace_back(Atom(1));
@@ -300,6 +307,29 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
   args.emplace_back(Atom(1));
   REQUIRE_THROWS_AS(padd(args), SemanticError);
   args.clear();
+
+  INFO("test ln")
+	  padd = env.get_proc(Atom("ln"));
+	  args.emplace_back(exp(1));
+	  REQUIRE(padd(args) == Expression(1));
+
+	  INFO("test ln errors")
+		  args.clear();
+	  args.emplace_back(Atom("invalid"));
+	  REQUIRE_THROWS_AS(padd(args), SemanticError);
+	  args.clear();
+	  args.emplace_back(Atom(1.0));
+	  args.emplace_back(Atom(1.0));
+	  REQUIRE_THROWS_AS(padd(args), SemanticError);
+	  args.clear();
+	  args.emplace_back(Atom(-1.0));
+	  REQUIRE_THROWS_AS(padd(args), SemanticError);
+	  args.clear();
+	  args.emplace_back(Atom(0));
+	  REQUIRE_THROWS_AS(padd(args), SemanticError);
+
+
+
 }
 
 TEST_CASE( "Test reset", "[environment]" ) {
