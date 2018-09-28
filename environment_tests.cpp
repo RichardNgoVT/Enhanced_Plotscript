@@ -345,6 +345,22 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
 	  args.emplace_back(Atom(1.0));
 	  REQUIRE_THROWS_AS(padd(args), SemanticError);
 
+	  INFO("test cos")
+		  args.clear();
+	  padd = env.get_proc(Atom("cos"));
+	  args.emplace_back(2.0);
+	  number = cos(2.0);
+	  REQUIRE(padd(args) == Expression(number));
+
+	  INFO("test cos errors")
+		  args.clear();
+	  args.emplace_back(Atom("invalid"));
+	  REQUIRE_THROWS_AS(padd(args), SemanticError);
+	  args.clear();
+	  args.emplace_back(Atom(1.0));
+	  args.emplace_back(Atom(1.0));
+	  REQUIRE_THROWS_AS(padd(args), SemanticError);
+
 
 
 
