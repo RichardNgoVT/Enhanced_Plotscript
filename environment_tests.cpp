@@ -602,8 +602,48 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
 	  "((0) (0.11) (0.22) (0.33) (0.44) (0.55) (0.66) (0.77) (0.88) (0.99)) == ((0) (0.11) (0.22) (0.33) (0.44) (0.55) (0.66) (0.77) (0.88) (0.99))"
 	  don't know why test doesn't pass
 	  */
+	  Expression Ptest;//procedure
+	  Expression Ltest;//lambda
+	  INFO("test lambda")
+		  /*
+		  args.clear();
+		  padd = env.get_proc(Atom("list"));
+		  args.emplace_back(Atom("x"));
+	 args.emplace_back(Atom("y"));
+	 Etest = padd(args);//arguments
+	 */
+		  Expression Rtest;//Rrrrguments
+	  Rtest.markList();
+	  Rtest.append(Atom("x"));
+	  Rtest.append(Atom("y"));
 
+	 Ptest = Atom("+");
+		 Ptest.append(1.0);
+	 Ptest.append(2.0);
+	 Ptest.append(Atom("x"));
+	 Ptest.append(Atom("y"));
+	 Ltest = Atom("lambda");
+	 Ltest.append(Rtest);
+	 Ltest.append(Ptest);
 
+	 Expression Dtest;//Define
+	 Dtest = Atom("define");
+	 Dtest.append(Atom("f"));
+	 Dtest.append(Ltest);
+	 Dtest.eval(env);
+
+	 Expression Ftest;//final atom
+	 Ftest = Atom("f");
+
+	 Ftest.append(2.0);
+	 Ftest.append(3.0);
+
+	 //REQUIRE(Ftest.eval(env) == Expression(8.0));
+	 //(define f (lambda (x y) (+ 1 2 x y)))
+	 //(f 2 3)
+	 //works in plotscript
+
+	 
 
 }
 

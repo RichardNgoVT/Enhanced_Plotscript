@@ -55,6 +55,10 @@ Atom::Atom(const Atom & x): Atom(){
   else if (x.isList()) {
 	  setList();
   }
+  else if (x.isProcedure())
+  {
+	  setProcedure();
+  }
 }
 
 Atom & Atom::operator=(const Atom & x){
@@ -74,6 +78,9 @@ Atom & Atom::operator=(const Atom & x){
 	}
 	else if (x.m_type == ListKind) {
 		setList();
+	}
+	else if (x.m_type == ProcedureKind) {
+		setProcedure();
 	}
   }
   return *this;
@@ -107,6 +114,11 @@ bool Atom::isList() const noexcept {
 	return m_type == ListKind;
 }
 
+bool Atom::isProcedure() const noexcept
+{
+	return m_type == ProcedureKind;
+}
+
 
 void Atom::setNumber(double value){
 
@@ -136,6 +148,11 @@ void Atom::setSymbol(const std::string & value){
 void Atom::setList() {
 
 	m_type = ListKind;
+}
+
+void Atom::setProcedure() {
+
+	m_type = ProcedureKind;
 }
 
 double Atom::asNumber() const noexcept{

@@ -77,6 +77,9 @@ public:
   /// checks for list
   bool isHeadList() const noexcept;
 
+  /// checks for procedure
+  bool isHeadProcedure() const noexcept;
+
   /// Evaluate expression using a post-order traversal (recursive)
   Expression eval(Environment & env);
 
@@ -85,6 +88,8 @@ public:
 
   void markList();
   
+  void markProcedure();
+
 private:
 
   // the head of the expression
@@ -101,6 +106,8 @@ private:
   Expression handle_lookup(const Atom & head, const Environment & env);
   Expression handle_define(Environment & env);
   Expression handle_begin(Environment & env);
+  Expression handle_lambda(Environment & env);
+  Expression handle_lambdaProcedure(Environment & env);
 };
 
 /// Render expression to output stream

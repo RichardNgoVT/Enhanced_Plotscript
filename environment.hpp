@@ -68,6 +68,9 @@ public:
    */
   void add_exp(const Atom &sym, const Expression &exp);
 
+  //deletes expression in envmap
+  void delete_exp(const Atom &sym);
+
   /*! Determine if a symbol has been defined as a procedure
     \param sym the symbol to lookup
     \return true if thr symbol maps to a procedure

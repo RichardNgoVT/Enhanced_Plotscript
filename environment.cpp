@@ -224,7 +224,15 @@ Expression Environment::get_exp(const Atom & sym) const{
   return exp;
 }
 
+void Environment::delete_exp(const Atom & sym) {
 
+	if (sym.isSymbol()) {
+		auto result = envmap.find(sym.asSymbol());
+		if ((result != envmap.end()) && (result->second.type == ExpressionType)) {
+			envmap.erase(result);
+		}
+	}
+}
 
 void Environment::add_exp(const Atom & sym, const Expression & exp){
 

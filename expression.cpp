@@ -70,6 +70,10 @@ bool Expression::isHeadList() const noexcept {
 	return m_head.isList();
 }
 
+bool Expression::isHeadProcedure() const noexcept {
+	return m_head.isProcedure();
+}
+
 void Expression::append(const Atom & a){
   m_tail.emplace_back(a);
 }
@@ -184,6 +188,122 @@ Expression Expression::handle_define(Environment & env){
   return result;
 }
 
+Expression Expression::handle_lambda(Environment & env) {
+
+	// tail must have size 3 or error
+	if (m_tail.size() != 2) {
+		throw SemanticError("Error during evaluation: invalid number of arguments to define");
+	}
+
+
+	// but tail[0] must not be a special-form or procedure
+	std::string s = m_tail[0].head().asSymbol();
+	if ((s == "define") || (s == "begin")) {
+		throw SemanticError("Error during evaluation: attempt to use special forms as arguments");
+	}
+
+
+
+	// eval tail[1]
+	//Expression result = m_tail[1].eval(env);
+	Expression result;
+	std::vector<Expression> Variables;
+
+
+	Variables.emplace_back(m_tail[0].head());
+	for (int i = 0; i < m_tail[0].tailVector().size(); i++) {
+		if (m_tail[0].tailVector()[i].isHeadSymbol())
+		{
+			Variables.emplace_back(m_tail[0].tailVector()[i]);
+		}
+		else
+		{
+			throw SemanticError("Error during evaluation: Arguments are not symbols");
+		}
+	}
+
+	// map from symbol to proc
+	Procedure proc = env.get_proc(Atom("list"));
+
+
+
+
+	result.markProcedure();
+
+	// call proc with Variables
+	result.append(proc(Variables));
+	result.append(m_tail[1]);
+
+	return result;
+}
+
+
+Expression Expression::handle_lambdaProcedure(Environment & env) {
+
+	std::vector<Expression> varStorage;
+	Expression result;
+	Expression lambda = handle_lookup(m_head, env);
+
+	//Expression result;
+	if (m_tail.size() > 0)
+	{
+		if (lambda.isHeadProcedure()) {
+			if (lambda.tailVector()[0].tailVector().size() == m_tail.size())
+			{
+				//store old variables
+				for (int i = 0; i < lambda.tailVector()[0].tailVector().size(); i++)
+				{
+					varStorage.emplace_back(env.get_exp(lambda.tailVector()[0].tailVector()[i].head()));
+				}
+				//delete old variables
+				for (int i = 0; i < lambda.tailVector()[0].tailVector().size(); i++)
+				{
+					env.delete_exp(lambda.tailVector()[0].tailVector()[i].head());
+				}
+
+
+				//create new variables
+				for (int i = 0; i < lambda.tailVector()[0].tailVector().size(); i++)
+				{
+					env.add_exp(lambda.tailVector()[0].tailVector()[i].head(), m_tail[i]);
+				}
+
+				result = lambda.tailVector()[1].eval(env);
+
+				//delete new variables
+				for (int i = 0; i < lambda.tailVector()[0].tailVector().size(); i++)
+				{
+					env.delete_exp(lambda.tailVector()[0].tailVector()[i].head());
+				}
+
+				//add back old variables
+				for (int i = 0; i < lambda.tailVector()[0].tailVector().size(); i++)
+				{
+					if (!varStorage[i].head().isNone())
+					{
+						env.add_exp(lambda.tailVector()[0].tailVector()[i].head(), varStorage[i]);
+					}
+				}
+
+				return result;
+
+			}
+			else
+			{
+				throw SemanticError("Error in call to lambda function, invalid number of arguments inside list for selected procedure");
+			}
+		}
+		else {
+
+			throw SemanticError("Error in call to lambda function, argument types are invalid");
+		}
+	}
+	else
+	{
+		throw SemanticError("Error in call to lambda function: no arguments");
+	}
+}
+
 // this is a simple recursive version. the iterative version is more
 // difficult with the ast data structure used (no parent pointer).
 // this limits the practical depth of our AST
@@ -200,12 +320,19 @@ Expression Expression::eval(Environment & env){
   else if(m_head.isSymbol() && m_head.asSymbol() == "define"){
     return handle_define(env);
   }
+  else if (m_head.isSymbol() && m_head.asSymbol() == "lambda") {
+	  return handle_lambda(env);
+  }
   // else attempt to treat as procedure
   else{ 
     std::vector<Expression> results;
     for(Expression::IteratorType it = m_tail.begin(); it != m_tail.end(); ++it){
       results.push_back(it->eval(env));
     }
+	if (!results.empty() && m_head.isSymbol() && env.is_exp(m_head) && handle_lookup(m_head, env).isHeadProcedure()) {
+		m_tail = results;
+		return handle_lambdaProcedure(env);
+	}
     return apply(m_head, results, env);
   }
 }
@@ -220,7 +347,7 @@ std::ostream & operator<<(std::ostream & out, const Expression & exp){
 			out << *e;
 		}
 	}
-	else if (exp.isHeadList())
+	else if (exp.isHeadList() || exp.isHeadProcedure())
 	{
 		out << "(";
 		for (auto e = exp.tailConstBegin(); e != exp.tailConstEnd(); ++e) {
@@ -233,6 +360,17 @@ std::ostream & operator<<(std::ostream & out, const Expression & exp){
 				out << " ";
 				out << *e;
 			}
+		}
+		out << ")";
+
+	}
+	else if (exp.isHeadSymbol())
+	{
+		out << "(";
+		out << exp.head();
+		for (auto e = exp.tailConstBegin(); e != exp.tailConstEnd(); ++e) {
+			out << " ";
+			out << *e;
 		}
 		out << ")";
 
@@ -271,6 +409,11 @@ bool Expression::operator==(const Expression & exp) const noexcept{
 void Expression::markList()
 {
 	m_head.setList();
+}
+
+void Expression::markProcedure()
+{
+	m_head.setProcedure();
 }
 
 bool operator!=(const Expression & left, const Expression & right) noexcept{
