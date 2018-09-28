@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2018-09-28 04:14:57</td>
+            <td class="headerValue">2018-09-28 04:26:34</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">3</td>
@@ -64,90 +64,90 @@
 <span class="lineNum">       2 </span>            : 
 <a name="3"><span class="lineNum">       3 </span>            : #include &lt;stack&gt;</a>
 <span class="lineNum">       4 </span>            : 
-<span class="lineNum">       5 </span><span class="lineCov">        624 : bool setHead(Expression &amp;exp, const Token &amp;token) {</span>
+<span class="lineNum">       5 </span><span class="lineCov">        663 : bool setHead(Expression &amp;exp, const Token &amp;token) {</span>
 <span class="lineNum">       6 </span>            : 
-<span class="lineNum">       7 </span><span class="lineCov">       1248 :   Atom a(token);</span>
+<span class="lineNum">       7 </span><span class="lineCov">       1326 :   Atom a(token);</span>
 <span class="lineNum">       8 </span>            : 
-<span class="lineNum">       9 </span><span class="lineCov">        624 :   exp.head() = a;</span>
+<span class="lineNum">       9 </span><span class="lineCov">        663 :   exp.head() = a;</span>
 <span class="lineNum">      10 </span>            : 
-<span class="lineNum">      11 </span><span class="lineCov">       1248 :   return !a.isNone();</span>
+<span class="lineNum">      11 </span><span class="lineCov">       1326 :   return !a.isNone();</span>
 <a name="12"><span class="lineNum">      12 </span>            : }</a>
 <span class="lineNum">      13 </span>            : 
-<span class="lineNum">      14 </span><span class="lineCov">       1792 : bool append(Expression *exp, const Token &amp;token) {</span>
+<span class="lineNum">      14 </span><span class="lineCov">       1904 : bool append(Expression *exp, const Token &amp;token) {</span>
 <span class="lineNum">      15 </span>            : 
-<span class="lineNum">      16 </span><span class="lineCov">       3584 :   Atom a(token);</span>
+<span class="lineNum">      16 </span><span class="lineCov">       3808 :   Atom a(token);</span>
 <span class="lineNum">      17 </span>            : 
-<span class="lineNum">      18 </span><span class="lineCov">       1792 :   exp-&gt;append(a);</span>
+<span class="lineNum">      18 </span><span class="lineCov">       1904 :   exp-&gt;append(a);</span>
 <span class="lineNum">      19 </span>            : 
-<span class="lineNum">      20 </span><span class="lineCov">       3584 :   return !a.isNone();</span>
+<span class="lineNum">      20 </span><span class="lineCov">       3808 :   return !a.isNone();</span>
 <a name="21"><span class="lineNum">      21 </span>            : }</a>
 <span class="lineNum">      22 </span>            : 
-<span class="lineNum">      23 </span><span class="lineCov">        704 : Expression parse(const TokenSequenceType &amp;tokens) noexcept {</span>
+<span class="lineNum">      23 </span><span class="lineCov">        748 : Expression parse(const TokenSequenceType &amp;tokens) noexcept {</span>
 <span class="lineNum">      24 </span>            : 
-<span class="lineNum">      25 </span><span class="lineCov">       1408 :   Expression ast;</span>
+<span class="lineNum">      25 </span><span class="lineCov">       1496 :   Expression ast;</span>
 <span class="lineNum">      26 </span>            : 
 <span class="lineNum">      27 </span>            :   // cannot parse empty
-<span class="lineNum">      28 </span><span class="lineCov">        704 :   if (tokens.empty())</span>
-<span class="lineNum">      29 </span><span class="lineCov">         16 :     return Expression();</span>
+<span class="lineNum">      28 </span><span class="lineCov">        748 :   if (tokens.empty())</span>
+<span class="lineNum">      29 </span><span class="lineCov">         17 :     return Expression();</span>
 <span class="lineNum">      30 </span>            : 
-<span class="lineNum">      31 </span><span class="lineCov">        688 :   bool athead = false;</span>
+<span class="lineNum">      31 </span><span class="lineCov">        731 :   bool athead = false;</span>
 <span class="lineNum">      32 </span>            : 
 <span class="lineNum">      33 </span>            :   // stack tracks the last node created
-<span class="lineNum">      34 </span><span class="lineCov">       1376 :   std::stack&lt;Expression *&gt; stack;</span>
+<span class="lineNum">      34 </span><span class="lineCov">       1462 :   std::stack&lt;Expression *&gt; stack;</span>
 <span class="lineNum">      35 </span>            : 
-<span class="lineNum">      36 </span><span class="lineCov">        688 :   std::size_t num_tokens_seen = 0;</span>
+<span class="lineNum">      36 </span><span class="lineCov">        731 :   std::size_t num_tokens_seen = 0;</span>
 <span class="lineNum">      37 </span>            : 
-<span class="lineNum">      38 </span><span class="lineCov">       4464 :   for (auto &amp;t : tokens) {</span>
+<span class="lineNum">      38 </span><span class="lineCov">       4743 :   for (auto &amp;t : tokens) {</span>
 <span class="lineNum">      39 </span>            : 
-<span class="lineNum">      40 </span><span class="lineCov">       4432 :     if (t.type() == Token::OPEN) {</span>
-<span class="lineNum">      41 </span><span class="lineCov">       1056 :       athead = true;</span>
-<span class="lineNum">      42 </span><span class="lineCov">       3376 :     } else if (t.type() == Token::CLOSE) {</span>
-<span class="lineNum">      43 </span><span class="lineCov">        928 :       if (stack.empty()) {</span>
-<span class="lineNum">      44 </span><span class="lineCov">        144 :         return Expression();</span>
+<span class="lineNum">      40 </span><span class="lineCov">       4709 :     if (t.type() == Token::OPEN) {</span>
+<span class="lineNum">      41 </span><span class="lineCov">       1122 :       athead = true;</span>
+<span class="lineNum">      42 </span><span class="lineCov">       3587 :     } else if (t.type() == Token::CLOSE) {</span>
+<span class="lineNum">      43 </span><span class="lineCov">        986 :       if (stack.empty()) {</span>
+<span class="lineNum">      44 </span><span class="lineCov">        153 :         return Expression();</span>
 <span class="lineNum">      45 </span>            :       }
-<span class="lineNum">      46 </span><span class="lineCov">        896 :       stack.pop();</span>
+<span class="lineNum">      46 </span><span class="lineCov">        952 :       stack.pop();</span>
 <span class="lineNum">      47 </span>            : 
-<span class="lineNum">      48 </span><span class="lineCov">        896 :       if (stack.empty()) {</span>
-<span class="lineNum">      49 </span><span class="lineCov">        544 :         num_tokens_seen += 1;</span>
-<span class="lineNum">      50 </span><span class="lineCov">        544 :         break;</span>
+<span class="lineNum">      48 </span><span class="lineCov">        952 :       if (stack.empty()) {</span>
+<span class="lineNum">      49 </span><span class="lineCov">        578 :         num_tokens_seen += 1;</span>
+<span class="lineNum">      50 </span><span class="lineCov">        578 :         break;</span>
 <span class="lineNum">      51 </span>            :       }
 <span class="lineNum">      52 </span>            :     } else {
 <span class="lineNum">      53 </span>            : 
-<span class="lineNum">      54 </span><span class="lineCov">       2448 :       if (athead) {</span>
-<span class="lineNum">      55 </span><span class="lineCov">       1008 :         if (stack.empty()) {</span>
-<span class="lineNum">      56 </span><span class="lineCov">        624 :           if (!setHead(ast, t)) {</span>
-<span class="lineNum">      57 </span><span class="lineCov">         16 :             return Expression();</span>
+<span class="lineNum">      54 </span><span class="lineCov">       2601 :       if (athead) {</span>
+<span class="lineNum">      55 </span><span class="lineCov">       1071 :         if (stack.empty()) {</span>
+<span class="lineNum">      56 </span><span class="lineCov">        663 :           if (!setHead(ast, t)) {</span>
+<span class="lineNum">      57 </span><span class="lineCov">         17 :             return Expression();</span>
 <span class="lineNum">      58 </span>            :           }
-<span class="lineNum">      59 </span><span class="lineCov">        608 :           stack.push(&amp;ast);</span>
+<span class="lineNum">      59 </span><span class="lineCov">        646 :           stack.push(&amp;ast);</span>
 <span class="lineNum">      60 </span>            :         } else {
-<span class="lineNum">      61 </span><span class="lineCov">        384 :           if (stack.empty()) {</span>
+<span class="lineNum">      61 </span><span class="lineCov">        408 :           if (stack.empty()) {</span>
 <span class="lineNum">      62 </span><span class="lineNoCov">          0 :             return Expression();</span>
 <span class="lineNum">      63 </span>            :           }
 <span class="lineNum">      64 </span>            : 
-<span class="lineNum">      65 </span><span class="lineCov">        384 :           if (!append(stack.top(), t)) {</span>
+<span class="lineNum">      65 </span><span class="lineCov">        408 :           if (!append(stack.top(), t)) {</span>
 <span class="lineNum">      66 </span><span class="lineNoCov">          0 :             return Expression();</span>
 <span class="lineNum">      67 </span>            :           }
-<span class="lineNum">      68 </span><span class="lineCov">        384 :           stack.push(stack.top()-&gt;tail());</span>
+<span class="lineNum">      68 </span><span class="lineCov">        408 :           stack.push(stack.top()-&gt;tail());</span>
 <span class="lineNum">      69 </span>            :         }
-<span class="lineNum">      70 </span><span class="lineCov">        992 :         athead = false;</span>
+<span class="lineNum">      70 </span><span class="lineCov">       1054 :         athead = false;</span>
 <span class="lineNum">      71 </span>            :       } else {
-<span class="lineNum">      72 </span><span class="lineCov">       1440 :         if (stack.empty()) {</span>
-<span class="lineNum">      73 </span><span class="lineCov">         32 :           return Expression();</span>
+<span class="lineNum">      72 </span><span class="lineCov">       1530 :         if (stack.empty()) {</span>
+<span class="lineNum">      73 </span><span class="lineCov">         34 :           return Expression();</span>
 <span class="lineNum">      74 </span>            :         }
 <span class="lineNum">      75 </span>            : 
-<span class="lineNum">      76 </span><span class="lineCov">       1408 :         if (!append(stack.top(), t)) {</span>
-<span class="lineNum">      77 </span><span class="lineCov">         32 :           return Expression();</span>
+<span class="lineNum">      76 </span><span class="lineCov">       1496 :         if (!append(stack.top(), t)) {</span>
+<span class="lineNum">      77 </span><span class="lineCov">         34 :           return Expression();</span>
 <span class="lineNum">      78 </span>            :         }
 <span class="lineNum">      79 </span>            :       }
 <span class="lineNum">      80 </span>            :     }
-<span class="lineNum">      81 </span><span class="lineCov">       3776 :     num_tokens_seen += 1;</span>
+<span class="lineNum">      81 </span><span class="lineCov">       4012 :     num_tokens_seen += 1;</span>
 <span class="lineNum">      82 </span>            :   }
 <span class="lineNum">      83 </span>            : 
-<span class="lineNum">      84 </span><span class="lineCov">       1120 :   if (stack.empty() &amp;&amp; (num_tokens_seen == tokens.size())) {</span>
-<span class="lineNum">      85 </span><span class="lineCov">        496 :     return ast;</span>
+<span class="lineNum">      84 </span><span class="lineCov">       1190 :   if (stack.empty() &amp;&amp; (num_tokens_seen == tokens.size())) {</span>
+<span class="lineNum">      85 </span><span class="lineCov">        527 :     return ast;</span>
 <span class="lineNum">      86 </span>            :   }
 <span class="lineNum">      87 </span>            : 
-<span class="lineNum">      88 </span><span class="lineCov">         80 :   return Expression();</span>
+<span class="lineNum">      88 </span><span class="lineCov">         85 :   return Expression();</span>
 <span class="lineNum">      89 </span>            : };
 </pre>
       </td>

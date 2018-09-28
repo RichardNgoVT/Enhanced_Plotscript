@@ -252,6 +252,54 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
   args.emplace_back(Atom(1));
   REQUIRE_THROWS_AS(padd(args), SemanticError);
   args.clear();
+
+  INFO("test ^ procedure (normal ^ normal)")
+	  padd = env.get_proc(Atom("^"));
+  args.emplace_back(4.0);
+  args.emplace_back(2.0);
+  REQUIRE(padd(args) == Expression(16.0));
+
+  INFO("test ^ procedure (normal ^ complex)")
+	  args.clear();
+  args.emplace_back(2.0);
+  args.emplace_back(Imag);
+  imagTest = pow(2.0, Imag);
+
+  REQUIRE(padd(args) == Expression(imagTest));
+
+  INFO("test ^ procedure (complex ^ normal)")
+	  args.clear();
+  args.emplace_back(Imag);
+  args.emplace_back(2.0);
+  imagTest = pow(Imag, 2.0);
+
+  REQUIRE(padd(args) == Expression(imagTest));
+
+  INFO("test ^ procedure (complex ^ complex)")
+	  args.clear();
+  args.emplace_back(Imag);
+  args.emplace_back(Imag);
+  imagTest = (pow(Imag, Imag));
+  REQUIRE(padd(args) == Expression(imagTest));
+
+  INFO("test ^ errors")
+	  args.clear();
+  args.emplace_back(Atom(1));
+  args.emplace_back(Atom("invalid"));
+  REQUIRE_THROWS_AS(padd(args), SemanticError);
+  args.clear();
+  args.emplace_back(Atom("invalid"));
+  args.emplace_back(Atom(1));
+  REQUIRE_THROWS_AS(padd(args), SemanticError);
+  args.clear();
+  args.emplace_back(Atom(1));
+  args.emplace_back(Atom(1));
+  args.emplace_back(Atom(1));
+  REQUIRE_THROWS_AS(padd(args), SemanticError);
+  args.clear();
+  args.emplace_back(Atom(1));
+  REQUIRE_THROWS_AS(padd(args), SemanticError);
+  args.clear();
 }
 
 TEST_CASE( "Test reset", "[environment]" ) {
@@ -269,6 +317,8 @@ TEST_CASE( "Test reset", "[environment]" ) {
   REQUIRE(!env.is_known(Atom("hi")));
   REQUIRE(!env.is_exp(Atom("hi")));
   REQUIRE(env.get_exp(Atom("hi")) == Expression());
+
+
 }
 
 TEST_CASE( "Test semeantic errors", "[environment]" ) {
