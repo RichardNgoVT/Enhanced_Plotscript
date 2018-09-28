@@ -415,6 +415,25 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
 	  args.emplace_back(Atom(1.0));
 	  REQUIRE_THROWS_AS(padd(args), SemanticError);
 
+	  INFO("test mag")
+		  args.clear();
+	  padd = env.get_proc(Atom("mag"));
+	  imagTest = 4.0 * Imag + 3.0;
+	  args.emplace_back(imagTest);
+	  REQUIRE(padd(args) == Expression(5.0));
+
+	  INFO("test mag errors")
+		  args.clear();
+	  args.emplace_back(Atom("invalid"));
+	  REQUIRE_THROWS_AS(padd(args), SemanticError);
+	  args.clear();
+	  args.emplace_back(imagTest);
+	  args.emplace_back(imagTest);
+	  REQUIRE_THROWS_AS(padd(args), SemanticError);
+	  args.clear();
+	  args.emplace_back(Atom(1.0));
+	  REQUIRE_THROWS_AS(padd(args), SemanticError);
+
 
 
 
