@@ -201,20 +201,7 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
   imagTest = Imag * (-1.0);
   REQUIRE(padd(args) == Expression(imagTest));
 
-  /*
-  INFO("test div procedure (- normal)")
-	  args.clear();
-  args.emplace_back(5.0);
-  REQUIRE(padd(args) == Expression(-5.0));
 
-  INFO("test div procedure (- complex)")
-	  args.clear();
-  imagTest = 2.0 * Imag;
-  args.emplace_back(imagTest);
-  imagTest = -2.0 * Imag;
-  REQUIRE(padd(args) == Expression(imagTest));
-
-  */
   INFO("test div errors")
 	  args.clear();
   args.emplace_back(Atom(1));
@@ -666,8 +653,8 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
 	 Finaltester.append(8.0);
 	// REQUIRE(Matest.eval(env) == Finaltester);
 	 //^^ all commented out tests work in plotlab, but not here...
-	 */
 	 
+	 */
 }
 
 TEST_CASE( "Test reset", "[environment]" ) {

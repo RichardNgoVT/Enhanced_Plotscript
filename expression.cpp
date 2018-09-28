@@ -391,7 +391,7 @@ Expression Expression::handle_map(Environment & env) {
 		}
 		else
 		{
-			if (env.is_proc(m_head))
+			if (env.is_exp(m_head))
 			{
 				Results.emplace_back(handle_lambdaProcedure(env));
 			}
@@ -426,7 +426,7 @@ Expression Expression::eval(Environment & env){
 	  return handle_lambda(env);
   }
   //handle "procedure" apply
-  /*
+  
   else if (m_head.isSymbol() && m_head.asSymbol() == "apply") {
 	  return handle_apply(env);
   }
@@ -434,7 +434,7 @@ Expression Expression::eval(Environment & env){
   else if (m_head.isSymbol() && m_head.asSymbol() == "map") {
 	  return handle_map(env);
   }
-  */
+  
   // else attempt to treat as procedure
   else{ 
     std::vector<Expression> results;

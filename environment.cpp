@@ -557,11 +557,18 @@ Expression FirstLIST(const std::vector<Expression> & args) {
 
 	if (nargs_equal(args, 1))
 	{
-		if (args[0].isHeadList()) {//checks for complex
-			return args[0].tailVector()[0];
+		if (args[0].isHeadList()) {
+			if (args[0].tailVector().size() > 0)
+			{
+				return args[0].tailVector()[0];
+			}
+			else
+			{
+				throw SemanticError("Error in call to first, argument not a list");
+			}
 		}
 		else {
-			throw SemanticError("Error in call to first, argument not a list");
+			throw SemanticError("Error in call to first, argument is an empty list");
 		}
 	}
 	else
@@ -578,11 +585,17 @@ Expression RestLIST(const std::vector<Expression> & args) {
 	if (nargs_equal(args, 1))
 	{
 		if (args[0].isHeadList()) {
-
-			for (int i = 1; i < args[0].tailVector().size(); i++) {
-				list.append(args[0].tailVector()[i]);
+			if (args[0].tailVector().size() > 0)
+			{
+				for (int i = 1; i < args[0].tailVector().size(); i++) {
+					list.append(args[0].tailVector()[i]);
+				}
+				return list;
 			}
-			return list;
+			else
+			{
+				throw SemanticError("Error in call to rest, argument not a list");
+			}
 		}
 		else {
 			throw SemanticError("Error in call to rest, argument not a list");
@@ -625,7 +638,7 @@ Expression AppendLIST(const std::vector<Expression> & args) {
 			for (int i = 0; i < args[0].tailVector().size(); i++) {
 				list.append(args[0].tailVector()[i]);
 			}
-			list.append(args[1]);
+			list.append(args[1].head());
 			return list;
 		}
 		else {
