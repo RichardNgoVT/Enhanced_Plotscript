@@ -643,6 +643,15 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
 	 //(f 2 3)
 	 //works in plotscript
 
+	 INFO("test lambda")
+		 Expression Litest;//Rrrrguments
+	 Litest.markList();
+	 Litest.append(2);
+	 Litest.append(3);
+	 Expression Aptest = Atom("apply");
+	 Aptest.append(Atom("f"));
+	 Aptest.append(Litest);
+	 //REQUIRE(Aptest.eval(env) == Expression(8.0));
 	 
 
 }

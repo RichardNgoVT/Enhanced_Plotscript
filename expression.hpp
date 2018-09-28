@@ -108,6 +108,7 @@ private:
   Expression handle_begin(Environment & env);
   Expression handle_lambda(Environment & env);
   Expression handle_lambdaProcedure(Environment & env);
+  Expression handle_apply(Environment & env);
 };
 
 /// Render expression to output stream

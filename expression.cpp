@@ -304,6 +304,22 @@ Expression Expression::handle_lambdaProcedure(Environment & env) {
 	}
 }
 
+Expression Expression::handle_apply(Environment & env) {
+	Expression checker = handle_lookup(m_tail[0].head(), env);
+	if (!checker.isHeadProcedure())
+	{
+		throw SemanticError("Error in call to apply function: first argument not a procedure");
+	}
+	m_head = m_tail[0].head();
+	Expression list = m_tail[1].eval(env);
+	if (!list.isHeadList())
+	{
+		throw SemanticError("Error in call to apply function: second argument not a list");
+	}
+	m_tail = list.tailVector();
+	return handle_lambdaProcedure(env);
+}
+
 // this is a simple recursive version. the iterative version is more
 // difficult with the ast data structure used (no parent pointer).
 // this limits the practical depth of our AST
@@ -322,6 +338,10 @@ Expression Expression::eval(Environment & env){
   }
   else if (m_head.isSymbol() && m_head.asSymbol() == "lambda") {
 	  return handle_lambda(env);
+  }
+  //handle "procedure" apply
+  else if (m_head.isSymbol() && m_head.asSymbol() == "apply") {
+	  return handle_apply(env);
   }
   // else attempt to treat as procedure
   else{ 
