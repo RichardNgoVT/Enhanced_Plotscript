@@ -57,9 +57,16 @@ bool Expression::isHeadSymbol() const noexcept{
   return m_head.isSymbol();
 }  
 
+bool Expression::isHeadList() const noexcept {
+	return m_head.isList();
+}
 
 void Expression::append(const Atom & a){
   m_tail.emplace_back(a);
+}
+
+void Expression::append(const Expression & a) {
+	m_tail.emplace_back(a);
 }
 
 
@@ -204,6 +211,15 @@ std::ostream & operator<<(std::ostream & out, const Expression & exp){
 			out << *e;
 		}
 	}
+	else if (exp.isHeadList())
+	{
+		out << "(";
+		for (auto e = exp.tailConstBegin(); e != exp.tailConstEnd(); ++e) {
+			out << *e;
+		}
+		out << ")";
+
+	}
 	else
 	{
 		out << "(";
@@ -233,6 +249,11 @@ bool Expression::operator==(const Expression & exp) const noexcept{
   }
 
   return result;
+}
+
+void Expression::markList()
+{
+	m_head.setList();
 }
 
 bool operator!=(const Expression & left, const Expression & right) noexcept{

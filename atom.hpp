@@ -55,6 +55,9 @@ public:
   /// predicate to determine if an Atom is of type Symbol
   bool isSymbol() const noexcept;
 
+  /// predicate to determine if an Atom is of type List
+  bool isList() const noexcept;
+
   /// value of Atom as a number, return 0 if not a Number
   double asNumber() const noexcept;
 
@@ -67,10 +70,13 @@ public:
   /// equality comparison based on type and value
   bool operator==(const Atom & right) const noexcept;
 
+  // sets up for list
+  void setList();
+
 private:
 
   // internal enum of known types
-  enum Type {NoneKind, NumberKind, SymbolKind, ComplexKind};
+  enum Type {NoneKind, NumberKind, SymbolKind, ComplexKind, ListKind};
 
   // track the type
   Type m_type;

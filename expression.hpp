@@ -47,6 +47,9 @@ public:
   /// append Atom to tail of the expression
   void append(const Atom & a);
 
+  /// appends Expression to the end of atom
+  void append(const Expression & a);
+
   /// return a pointer to the last expression in the tail, or nullptr
   Expression * tail();
 
@@ -65,11 +68,16 @@ public:
   /// convienience member to determine if head atom is a symbol
   bool isHeadSymbol() const noexcept;
 
+  /// checks for list
+  bool isHeadList() const noexcept;
+
   /// Evaluate expression using a post-order traversal (recursive)
   Expression eval(Environment & env);
 
   /// equality comparison for two expressions (recursive)
   bool operator==(const Expression & exp) const noexcept;
+
+  void markList();
   
 private:
 

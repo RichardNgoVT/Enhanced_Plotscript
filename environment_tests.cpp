@@ -474,6 +474,16 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
 	  args.emplace_back(Atom(1.0));
 	  REQUIRE_THROWS_AS(padd(args), SemanticError);
 
+	  INFO("test list")
+		  args.clear();
+	  padd = env.get_proc(Atom("list"));
+	  args.emplace_back(1.0);
+	  args.emplace_back(2.0);
+	  args.emplace_back(3.0);
+	  REQUIRE(padd(args).isHeadList());
+
+	 
+
 
 
 

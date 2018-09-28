@@ -52,6 +52,9 @@ Atom::Atom(const Atom & x): Atom(){
   else if (x.isComplex()) {
 	  setComplex(x.complexValue);
   }
+  else if (x.isList()) {
+	  setList();
+  }
 }
 
 Atom & Atom::operator=(const Atom & x){
@@ -68,6 +71,9 @@ Atom & Atom::operator=(const Atom & x){
     }
 	else if (x.m_type == ComplexKind) {
 		setComplex(x.complexValue);
+	}
+	else if (x.m_type == ListKind) {
+		setList();
 	}
   }
   return *this;
@@ -97,6 +103,10 @@ bool Atom::isSymbol() const noexcept{
   return m_type == SymbolKind;
 }  
 
+bool Atom::isList() const noexcept {
+	return m_type == ListKind;
+}
+
 
 void Atom::setNumber(double value){
 
@@ -121,6 +131,11 @@ void Atom::setSymbol(const std::string & value){
 
   // copy construct in place
   new (&stringValue) std::string(value);
+}
+
+void Atom::setList() {
+
+	m_type = ListKind;
 }
 
 double Atom::asNumber() const noexcept{

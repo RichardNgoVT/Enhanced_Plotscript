@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2018-09-28 05:39:53</td>
+            <td class="headerValue">2018-09-28 06:16:05</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">5</td>
@@ -64,30 +64,30 @@
 <span class="lineNum">       2 </span>            : 
 <a name="3"><span class="lineNum">       3 </span>            : #include &quot;expression.hpp&quot;</a>
 <span class="lineNum">       4 </span>            : 
-<span class="lineNum">       5 </span><span class="lineCov">         68 : TEST_CASE( &quot;Test default expression&quot;, &quot;[expression]&quot; ) {</span>
+<span class="lineNum">       5 </span><span class="lineCov">          2 : TEST_CASE( &quot;Test default expression&quot;, &quot;[expression]&quot; ) {</span>
 <span class="lineNum">       6 </span>            : 
-<span class="lineNum">       7 </span><span class="lineCov">         68 :   Expression exp;</span>
+<span class="lineNum">       7 </span><span class="lineCov">          2 :   Expression exp;</span>
 <span class="lineNum">       8 </span>            : 
-<span class="lineNum">       9 </span><span class="lineCov">         34 :   REQUIRE(!exp.isHeadNumber());</span>
-<span class="lineNum">      10 </span><span class="lineCov">         34 :   REQUIRE(!exp.isHeadSymbol());</span>
-<a name="11"><span class="lineNum">      11 </span><span class="lineCov">         34 : }</span></a>
+<span class="lineNum">       9 </span><span class="lineCov">          1 :   REQUIRE(!exp.isHeadNumber());</span>
+<span class="lineNum">      10 </span><span class="lineCov">          1 :   REQUIRE(!exp.isHeadSymbol());</span>
+<a name="11"><span class="lineNum">      11 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">      12 </span>            : 
-<span class="lineNum">      13 </span><span class="lineCov">         68 : TEST_CASE( &quot;Test double expression&quot;, &quot;[expression]&quot; ) {</span>
+<span class="lineNum">      13 </span><span class="lineCov">          2 : TEST_CASE( &quot;Test double expression&quot;, &quot;[expression]&quot; ) {</span>
 <span class="lineNum">      14 </span>            : 
-<span class="lineNum">      15 </span><span class="lineCov">         68 :   Expression exp(6.023);</span>
+<span class="lineNum">      15 </span><span class="lineCov">          2 :   Expression exp(6.023);</span>
 <span class="lineNum">      16 </span>            : 
-<span class="lineNum">      17 </span><span class="lineCov">         34 :   REQUIRE(exp.isHeadNumber());</span>
-<span class="lineNum">      18 </span><span class="lineCov">         34 :   REQUIRE(!exp.isHeadSymbol());</span>
-<span class="lineNum">      19 </span><span class="lineCov">         34 : }</span>
+<span class="lineNum">      17 </span><span class="lineCov">          1 :   REQUIRE(exp.isHeadNumber());</span>
+<span class="lineNum">      18 </span><span class="lineCov">          1 :   REQUIRE(!exp.isHeadSymbol());</span>
+<span class="lineNum">      19 </span><span class="lineCov">          1 : }</span>
 <a name="20"><span class="lineNum">      20 </span>            : </a>
 <span class="lineNum">      21 </span>            : 
-<span class="lineNum">      22 </span><span class="lineCov">         68 : TEST_CASE( &quot;Test symbol expression&quot;, &quot;[expression]&quot; ) {</span>
+<span class="lineNum">      22 </span><span class="lineCov">          2 : TEST_CASE( &quot;Test symbol expression&quot;, &quot;[expression]&quot; ) {</span>
 <span class="lineNum">      23 </span>            : 
-<span class="lineNum">      24 </span><span class="lineCov">         68 :   Expression exp(Atom(&quot;asymbol&quot;));</span>
+<span class="lineNum">      24 </span><span class="lineCov">          2 :   Expression exp(Atom(&quot;asymbol&quot;));</span>
 <span class="lineNum">      25 </span>            : 
-<a name="26"><span class="lineNum">      26 </span><span class="lineCov">         34 :   REQUIRE(!exp.isHeadNumber());</span></a>
-<span class="lineNum">      27 </span><span class="lineCov">         34 :   REQUIRE(exp.isHeadSymbol());</span>
-<span class="lineNum">      28 </span><span class="lineCov">        136 : }</span>
+<a name="26"><span class="lineNum">      26 </span><span class="lineCov">          1 :   REQUIRE(!exp.isHeadNumber());</span></a>
+<span class="lineNum">      27 </span><span class="lineCov">          1 :   REQUIRE(exp.isHeadSymbol());</span>
+<span class="lineNum">      28 </span><span class="lineCov">          4 : }</span>
 <span class="lineNum">      29 </span>            : 
 </pre>
       </td>

@@ -519,6 +519,17 @@ Expression CONJ(const std::vector<Expression> & args) {
 	return Expression(result);
 };
 
+Expression LIST(const std::vector<Expression> & args) {
+
+	Expression list;
+	list.markList();
+	for (auto & a : args) {
+		list.append(a);
+	}
+	return list;
+
+};
+
 /*
 Reset the environment to the default state. First remove all entries and
 then re-add the default ones.
@@ -579,4 +590,7 @@ void Environment::reset(){
 
   //conjugate of complex
   envmap.emplace("conj", EnvResult(ProcedureType, CONJ));
+
+  //creates list
+  envmap.emplace("list", EnvResult(ProcedureType, LIST));
 }
