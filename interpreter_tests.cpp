@@ -322,3 +322,37 @@ TEST_CASE( "Test using number as procedure", "[interpreter]" ) {
   
   REQUIRE_THROWS_AS(interp.evaluate(), SemanticError);
 }
+///
+///
+
+
+
+TEST_CASE("Test foo string", "[interpreter]") {
+
+	std::string program = "(\"foo\")";
+	Expression result = run(program);
+	REQUIRE(result == Expression("\"foo\""));
+}
+
+TEST_CASE("Test string with spaces", "[interpreter]") {
+
+	std::string program = "(\"a string with spaces\")";
+	Expression result = run(program);
+	REQUIRE(result == Expression("\"a string with spaces\""));
+}
+
+TEST_CASE("Test define with sting", "[interpreter]") {
+
+	std::string program = "(begin (define x (\"foo\")) (x))";
+	INFO(program);
+	Expression result = run(program);
+	REQUIRE(result == Expression("\"foo\""));
+}
+
+TEST_CASE("Test define with sting", "[interpreter]") {
+
+	std::string program = "(begin (define mylist (list \"eggs\" \"bread\" \"milk\" \"bacon\")) (first mylist))";
+	INFO(program);
+	Expression result = run(program);
+	REQUIRE(result == Expression("\"eggs\""));
+}
