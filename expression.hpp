@@ -74,6 +74,8 @@ public:
   /// convienience member to determine if head atom is a symbol
   bool isHeadSymbol() const noexcept;
 
+  bool isHeadPString() const noexcept;
+
   /// checks for list
   bool isHeadList() const noexcept;
 

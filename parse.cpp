@@ -38,12 +38,12 @@ Expression parse(const TokenSequenceType &tokens) noexcept {
   for (auto &t : tokens) {
 
     if (t.type() == Token::OPEN) {
-      athead = true;
+      athead = true;//at (
     } else if (t.type() == Token::CLOSE) {
-      if (stack.empty()) {
+      if (stack.empty()) {//nothing before it, more ) than (
         return Expression();
       }
-      stack.pop();
+      stack.pop();//gets rid of current
 
       if (stack.empty()) {
         num_tokens_seen += 1;
@@ -52,22 +52,22 @@ Expression parse(const TokenSequenceType &tokens) noexcept {
     } else {
 
       if (athead) {
-        if (stack.empty()) {
+        if (stack.empty()) {//nothing inside stack
           if (!setHead(ast, t)) {
-            return Expression();
+            return Expression();//if type none
           }
-          stack.push(&ast);
-        } else {
-          if (stack.empty()) {
+          stack.push(&ast);//
+        } else {//expression within expression
+          if (stack.empty()) {//??
             return Expression();
           }
 
-          if (!append(stack.top(), t)) {
+          if (!append(stack.top(), t)) {//
             return Expression();
           }
-          stack.push(stack.top()->tail());
+          stack.push(stack.top()->tail());//pushes pointer at end of expression vector
         }
-        athead = false;
+        athead = false;//run once
       } else {
         if (stack.empty()) {
           return Expression();
@@ -82,7 +82,7 @@ Expression parse(const TokenSequenceType &tokens) noexcept {
   }
 
   if (stack.empty() && (num_tokens_seen == tokens.size())) {
-    return ast;
+    return ast;//pass case
   }
 
   return Expression();

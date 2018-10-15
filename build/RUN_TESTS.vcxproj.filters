@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\a2ba312a0e34b7a49a905f09fc28e0c8\RUN_TESTS_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{28B1C56A-4033-33A4-B7CF-063527795780}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

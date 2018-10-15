@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\atom_tests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\environment_tests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\expression_tests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\interpreter_tests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\parse_tests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\token_tests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\unit_tests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\unit_tests_autogen\mocs_compilation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\catch.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\semantic_error.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{C59E69BD-926F-3843-9F21-D54A74A9E6E1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{6BE10974-F851-37A7-8830-D2CF7D29841A}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

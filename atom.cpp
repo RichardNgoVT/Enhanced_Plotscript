@@ -29,17 +29,27 @@ Atom::Atom(const Token & token): Atom(){
       setNumber(temp);
     }
   }
-  else{ // else assume symbol
+  else{ // else assume symbol or string
+	  //checks if starts and ends with "
+	  if (token.asString()[0] == '\"'){// && token.asString()[token.asString().length()-1] == '\"') {
+		  setPString(token.asString());
+	  }
     // make sure does not start with number
-    if(!std::isdigit(token.asString()[0])){
+    else if(!std::isdigit(token.asString()[0])){
       setSymbol(token.asString());
     }
   }
 }
 
 Atom::Atom(const std::string & value): Atom() {
-  
-  setSymbol(value);
+	if (value[0] == '\"'){// && value[value.length() - 1] == '\"') {
+		setPString(value);
+	}
+	else
+	{
+		cout << value << endl;
+		setSymbol(value);
+	}
 }
 
 Atom::Atom(const Atom & x): Atom(){
@@ -48,6 +58,10 @@ Atom::Atom(const Atom & x): Atom(){
   }
   else if(x.isSymbol()){
     setSymbol(x.stringValue);
+  }
+  else if (x.isPString())
+  {
+	  setPString(x.stringValue);
   }
   else if (x.isComplex()) {
 	  setComplex(x.complexValue);
@@ -73,6 +87,9 @@ Atom & Atom::operator=(const Atom & x){
     else if(x.m_type == SymbolKind){
       setSymbol(x.stringValue);
     }
+	else if (x.m_type == StringKind) {
+		setPString(x.stringValue);
+	}
 	else if (x.m_type == ComplexKind) {
 		setComplex(x.complexValue);
 	}
@@ -88,8 +105,8 @@ Atom & Atom::operator=(const Atom & x){
   
 Atom::~Atom(){
 
-  // we need to ensure the destructor of the symbol string is called
-  if(m_type == SymbolKind){
+  // we need to ensure the destructor of the symbol or pstring string is called
+  if(m_type == SymbolKind || m_type == StringKind){
     stringValue.~basic_string();
   }
 }
@@ -109,6 +126,11 @@ bool Atom::isComplex() const noexcept {
 bool Atom::isSymbol() const noexcept{
   return m_type == SymbolKind;
 }  
+
+bool Atom::isPString() const noexcept
+{
+	return m_type == StringKind;
+}
 
 bool Atom::isList() const noexcept {
 	return m_type == ListKind;
@@ -145,6 +167,19 @@ void Atom::setSymbol(const std::string & value){
   new (&stringValue) std::string(value);
 }
 
+void Atom::setPString(const std::string & value) {
+
+	// we need to ensure the destructor of the PString string is called
+	if (m_type == StringKind) {
+		stringValue.~basic_string();
+	}
+
+	m_type = StringKind;
+
+	// copy construct in place
+	new (&stringValue) std::string(value);
+}
+
 void Atom::setList() {
 
 	m_type = ListKind;
@@ -176,6 +211,17 @@ std::string Atom::asSymbol() const noexcept{
   return result;
 }
 
+std::string Atom::asPString() const noexcept {
+
+	std::string result;
+
+	if (m_type == StringKind) {
+		result = stringValue;
+	}
+
+	return result;
+}
+
 bool Atom::operator==(const Atom & right) const noexcept{
   
   if(m_type != right.m_type) return false;
@@ -201,6 +247,13 @@ bool Atom::operator==(const Atom & right) const noexcept{
       return stringValue == right.stringValue;
     }
     break;
+  case StringKind:
+  {
+	  if (right.m_type != StringKind) return false;
+
+	  return stringValue == right.stringValue;
+  }
+  break;
   case ComplexKind:
   {
 	  if (right.m_type != ComplexKind) return false;
@@ -238,6 +291,9 @@ std::ostream & operator<<(std::ostream & out, const Atom & a){
   }
   if(a.isSymbol()){
     out << a.asSymbol();
+  }
+  if (a.isPString()) {
+	  out << a.asPString();
   }
   if (a.isComplex()) {
 	  out << a.asComplex();

@@ -8,6 +8,7 @@
 const char OPENCHAR = '(';
 const char CLOSECHAR = ')';
 const char COMMENTCHAR = ';';
+const char STRINGCHAR = '\"';
 
 Token::Token(TokenType t): m_type(t){}
 
@@ -41,32 +42,44 @@ void store_ifnot_empty(std::string & token, TokenSequenceType & seq){
 TokenSequenceType tokenize(std::istream & seq){
   TokenSequenceType tokens;
   std::string token;
-  
+  int strTrack = 0;
   while(true){
     char c = seq.get();
     if(seq.eof()) break;
-    
-    if(c == COMMENTCHAR){
-      // chomp until the end of the line
-      while((!seq.eof()) && (c != '\n')){
-	c = seq.get();
-      }
-      if(seq.eof()) break;
-    }
-    else if(c == OPENCHAR){
-      store_ifnot_empty(token, tokens);
-      tokens.push_back(Token::TokenType::OPEN);
-    }
-    else if(c == CLOSECHAR){
-      store_ifnot_empty(token, tokens);
-      tokens.push_back(Token::TokenType::CLOSE);
-    }
-    else if(isspace(c)){
-      store_ifnot_empty(token, tokens);
-    }
-    else{
-      token.push_back(c);
-    }
+	if (strTrack % 2 == 0)//keeps track of "
+	{
+		if (c == COMMENTCHAR) {
+			// chomp until the end of the line
+			while ((!seq.eof()) && (c != '\n')) {
+				c = seq.get();
+			}
+			if (seq.eof()) break;
+		}
+		else if (c == OPENCHAR) {
+			store_ifnot_empty(token, tokens);
+			tokens.push_back(Token::TokenType::OPEN);
+		}
+		else if (c == CLOSECHAR) {
+			store_ifnot_empty(token, tokens);
+			tokens.push_back(Token::TokenType::CLOSE);
+		}
+		else if (isspace(c)) {
+			store_ifnot_empty(token, tokens);//override this if " is found
+		}
+		else {
+			if (c == STRINGCHAR) {
+				strTrack++;
+			}
+			token.push_back(c);//where token gets filled
+		}
+	}
+	else
+	{
+		if (c == STRINGCHAR) {
+			strTrack++;
+		}
+		token.push_back(c);//where token gets filled
+	}
   }
   store_ifnot_empty(token, tokens);
 

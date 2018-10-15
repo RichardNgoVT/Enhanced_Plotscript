@@ -9,7 +9,10 @@ Defines the Atom type and associated functions.
 #include <cmath>
 #include <complex>
 
+#include <iostream>
+
 using namespace std;
+
 
 /*! \class Atom
 \brief A variant type that may be a Number or Symbol or the default type None.
@@ -28,7 +31,7 @@ public:
   /// Construct an Atom of type Complex Number with value
   Atom(complex<double> value);
 
-  /// Construct an Atom of type Symbol named value
+  /// Construct an Atom of type Symbol or String named value
   Atom(const std::string & value);
 
   /// Construct an Atom directly from a Token
@@ -55,6 +58,9 @@ public:
   /// predicate to determine if an Atom is of type Symbol
   bool isSymbol() const noexcept;
 
+  /// predicate to determine if an Atom is of type String
+  bool isPString() const noexcept;
+
   /// predicate to determine if an Atom is of type List
   bool isList() const noexcept;
 
@@ -64,11 +70,14 @@ public:
   /// value of Atom as a number, return 0 if not a Number
   double asNumber() const noexcept;
 
-  /// value of Atom as a number, return 0 if not a Number
+  /// value of Atom as a ComplexNumber, return 0 if not a ComplexNumber
   complex<double> asComplex() const noexcept;
 
-  /// value of Atom as a number, returns empty-string if not a Symbol
+  /// value of Atom as a symbol, returns empty-string if not a Symbol
   std::string asSymbol() const noexcept;
+
+  /// value of Atom as a string, returns empty-string if not a String
+  std::string asPString() const noexcept;
 
   /// equality comparison based on type and value
   bool operator==(const Atom & right) const noexcept;
@@ -82,7 +91,7 @@ public:
 private:
 
   // internal enum of known types
-  enum Type {NoneKind, NumberKind, SymbolKind, ComplexKind, ListKind, ProcedureKind};
+  enum Type {NoneKind, NumberKind, SymbolKind, ComplexKind, ListKind, ProcedureKind, StringKind};
 
   // track the type
   Type m_type;
@@ -103,6 +112,9 @@ private:
 
   // helper to set type and value of Symbol
   void setSymbol(const std::string & value);
+
+  // helper to set type and value of String
+  void setPString(const std::string & value);
 };
 
 /// inequality comparison for Atom

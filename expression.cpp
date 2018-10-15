@@ -6,6 +6,7 @@
 #include "environment.hpp"
 #include "semantic_error.hpp"
 
+
 Expression::Expression(){}
 
 Expression::Expression(const Atom & a){
@@ -65,6 +66,10 @@ bool Expression::isHeadComplex() const noexcept {
 bool Expression::isHeadSymbol() const noexcept{
   return m_head.isSymbol();
 }  
+
+bool Expression::isHeadPString() const noexcept {
+	return m_head.isPString();
+}
 
 bool Expression::isHeadList() const noexcept {
 	return m_head.isList();
@@ -126,10 +131,11 @@ Expression Expression::handle_lookup(const Atom & head, const Environment & env)
 	return env.get_exp(head);
       }
       else{
+		  cout << head.asSymbol() << endl;
 	throw SemanticError("Error during evaluation: unknown symbol");
       }
     }
-    else if(head.isNumber()){
+    else if(head.isNumber() || head.isPString()){// just (1) or ("one")
       return Expression(head);
     }
     else{
