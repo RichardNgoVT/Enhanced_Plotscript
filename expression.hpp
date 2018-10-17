@@ -74,16 +74,20 @@ public:
   /// convienience member to determine if head atom is a symbol
   bool isHeadSymbol() const noexcept;
 
+  /// checks for string
   bool isHeadPString() const noexcept;
 
   /// checks for list
   bool isHeadList() const noexcept;
 
-  /// checks for procedure
+  /// checks for procedure type
   bool isHeadProcedure() const noexcept;
 
-  /// checks for property
+  /// checks for property type
   bool isHeadProperty() const noexcept;
+
+  /// checks for none type
+  bool isHeadNone() const noexcept;
 
   /// Evaluate expression using a post-order traversal (recursive)
   Expression eval(Environment & env);
@@ -116,7 +120,7 @@ private:
   Expression handle_lambdaProcedure(Environment & env);
   Expression handle_apply(Environment & env);
   Expression handle_map(Environment & env);
-  //Expression handle_getProperty(Environment & env);
+  Expression handle_getProperty(Environment & env);
   Expression handle_setProperty(Environment & env);
 };
 

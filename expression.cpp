@@ -84,6 +84,11 @@ bool Expression::isHeadProperty() const noexcept
 	return m_head.isProperty();
 }
 
+bool Expression::isHeadNone() const noexcept
+{
+	return m_head.isNone();
+}
+
 void Expression::append(const Atom & a){
   m_tail.emplace_back(a);
 }
@@ -461,11 +466,39 @@ Expression Expression::handle_setProperty(Environment & env) {
 	
 }
 
-/*
+
 Expression Expression::handle_getProperty(Environment & env) {
+	if (m_tail.size() != 2)
+	{
+		throw SemanticError("Error in call to get-property function: incorrect number of arguments");
+	}
+	if (!m_tail[0].isHeadPString())
+	{
+		throw SemanticError("Error in call to get-property function: key is not a string");
+	}
+	string key = m_tail[0].head().asPString();
+
+	m_head = m_tail[1].head();
+	m_tail = m_tail[1].tailVector();
+
+	Expression holder = eval(env);//calculate expression
+
+	if (!holder.m_head.isProperty())
+	{
+		throw SemanticError("Error in call to get-property function: property must be gotten from a property list");
+	}
+	for (int i = 1; i < holder.m_tail.size(); i++)
+	{
+		if (key == holder.m_tail[i].head().asPString())
+		{
+			return holder.m_tail[i].tailVector()[0];
+		}
+	}
+	return Expression();
+	
 
 }
-*/
+
 // this is a simple recursive version. the iterative version is more
 // difficult with the ast data structure used (no parent pointer).
 // this limits the practical depth of our ASTdef
@@ -473,15 +506,10 @@ Expression Expression::eval(Environment & env){
   
 	if (m_head.isProperty())
 	{
-		if (m_head.isSymbol() && m_head.asSymbol() == "set-property") {
-			return handle_setProperty(env);
-		}
-		else//uness
-		{
-			m_head = m_tail[0].head();
-			m_tail = m_tail[0].tailVector();
-			return eval(env);
-		}
+		
+		m_head = m_tail[0].head();
+		m_tail = m_tail[0].tailVector();
+		return eval(env);
 
 	}
 	else//unessesary
@@ -515,6 +543,9 @@ Expression Expression::eval(Environment & env){
 		//handle "procedure" set-property
 		else if (m_head.isSymbol() && m_head.asSymbol() == "set-property") {
 			return handle_setProperty(env);
+		}
+		else if (m_head.isSymbol() && m_head.asSymbol() == "get-property") {
+			return handle_getProperty(env);
 		}
 		// else attempt to treat as procedure
 		else {
@@ -572,6 +603,10 @@ std::ostream & operator<<(std::ostream & out, const Expression & exp){
 	else if (exp.isHeadProperty())
 	{
 		out << *exp.tailConstBegin();
+	}
+	else if (exp.isHeadNone())
+	{
+		out << "NONE";
 	}
 	else
 	{
