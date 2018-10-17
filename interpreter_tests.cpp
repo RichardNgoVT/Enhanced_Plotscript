@@ -362,7 +362,7 @@ TEST_CASE("Test list with string", "[interpreter]") {
 	}
 }
 
-TEST_CASE("Tests list with set-property", "[interpreter]") {
+TEST_CASE("Tests with set-property function", "[interpreter]") {
 	{
 		std::string program = "(set-property \"number\" \"three\" (3))";
 		INFO(program);
@@ -388,5 +388,20 @@ TEST_CASE("Tests list with set-property", "[interpreter]") {
 		Expression result2 = run(program2);
 		//REQUIRE(result == result2);
 		//figure out how to get equal operator to work with lambda
+	}
+}
+
+TEST_CASE("Tests with get-property function", "[interpreter]") {
+	{
+		std::string program = "(begin (define a (+ 1 I)) (define b (set-property \"note\" \"a complex number\" a) (get-property \"note\" b))";
+		INFO(program);
+		Expression result = run(program);
+		REQUIRE(result == Expression(Atom("\"a complex number\"")));
+		/*
+		program = "(begin (define a (+ 1 I) ) (define b (set-property \"note\" \"a complex number\" a) (get-property \"foo\" b)";
+		INFO(program);
+		result = run(program);
+		REQUIRE(result == Expression());
+		*/
 	}
 }
