@@ -67,6 +67,9 @@ public:
   /// predicate to determine if an Atom is of type List
   bool isProcedure() const noexcept;
 
+  /// predicate to determine if an Atom is of type List
+  bool isProperty() const noexcept;
+
   /// value of Atom as a number, return 0 if not a Number
   double asNumber() const noexcept;
 
@@ -88,10 +91,13 @@ public:
   // sets up for list
   void setProcedure();
 
+  //sets up for property
+  void setProperty();
+
 private:
 
   // internal enum of known types
-  enum Type {NoneKind, NumberKind, SymbolKind, ComplexKind, ListKind, ProcedureKind, StringKind};
+  enum Type {NoneKind, NumberKind, SymbolKind, ComplexKind, ListKind, ProcedureKind, StringKind, PropertyKind};
 
   // track the type
   Type m_type;

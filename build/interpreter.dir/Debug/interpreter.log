@@ -1,2 +1,9 @@
-﻿  atom.cpp
+﻿  expression.cpp
+C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\expression.cpp(225): warning C4018: '<': signed/unsigned mismatch
+C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\expression.cpp(265): warning C4018: '<': signed/unsigned mismatch
+C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\expression.cpp(270): warning C4018: '<': signed/unsigned mismatch
+C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\expression.cpp(277): warning C4018: '<': signed/unsigned mismatch
+C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\expression.cpp(285): warning C4018: '<': signed/unsigned mismatch
+C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\expression.cpp(291): warning C4018: '<': signed/unsigned mismatch
+C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\expression.cpp(392): warning C4018: '<': signed/unsigned mismatch
   interpreter.vcxproj -> C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\Debug\interpreter.lib

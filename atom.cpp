@@ -73,6 +73,10 @@ Atom::Atom(const Atom & x): Atom(){
   {
 	  setProcedure();
   }
+  else if (x.isProperty())
+  {
+	  setProperty();
+  }
 }
 
 Atom & Atom::operator=(const Atom & x){
@@ -98,6 +102,9 @@ Atom & Atom::operator=(const Atom & x){
 	}
 	else if (x.m_type == ProcedureKind) {
 		setProcedure();
+	}
+	else if (x.m_type == PropertyKind) {
+		setProperty();
 	}
   }
   return *this;
@@ -139,6 +146,11 @@ bool Atom::isList() const noexcept {
 bool Atom::isProcedure() const noexcept
 {
 	return m_type == ProcedureKind;
+}
+
+bool Atom::isProperty() const noexcept
+{
+	return m_type == PropertyKind;
 }
 
 
@@ -188,6 +200,11 @@ void Atom::setList() {
 void Atom::setProcedure() {
 
 	m_type = ProcedureKind;
+}
+
+void Atom::setProperty()
+{
+	m_type = PropertyKind;
 }
 
 double Atom::asNumber() const noexcept{
@@ -269,6 +286,10 @@ bool Atom::operator==(const Atom & right) const noexcept{
   case ProcedureKind:
   {
 	  if (right.m_type != ProcedureKind) return false;
+  }
+  case PropertyKind:
+  {
+	  if (right.m_type != PropertyKind) return false;
   }
   break;
   default:

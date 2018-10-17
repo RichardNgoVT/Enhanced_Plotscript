@@ -31,17 +31,17 @@
             <td class="headerValue">Coverage.combined.cleaned</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">188</td>
-            <td class="headerCovTableEntry">189</td>
+            <td class="headerCovTableEntry">208</td>
+            <td class="headerCovTableEntry">209</td>
             <td class="headerCovTableEntryHi">99.5 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2018-10-15 20:12:38</td>
+            <td class="headerValue">2018-10-17 21:06:05</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">25</td>
-            <td class="headerCovTableEntry">25</td>
+            <td class="headerCovTableEntry">26</td>
+            <td class="headerCovTableEntry">26</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
@@ -71,22 +71,22 @@
 <span class="lineNum">       9 </span>            : #include &quot;interpreter.hpp&quot;
 <a name="10"><span class="lineNum">      10 </span>            : #include &quot;expression.hpp&quot;</a>
 <span class="lineNum">      11 </span>            : 
-<span class="lineNum">      12 </span><span class="lineCov">         22 : Expression run(const std::string &amp; program){</span>
+<span class="lineNum">      12 </span><span class="lineCov">         27 : Expression run(const std::string &amp; program){</span>
 <span class="lineNum">      13 </span>            :   
-<span class="lineNum">      14 </span><span class="lineCov">         44 :   std::istringstream iss(program);</span>
+<span class="lineNum">      14 </span><span class="lineCov">         54 :   std::istringstream iss(program);</span>
 <span class="lineNum">      15 </span>            :     
-<span class="lineNum">      16 </span><span class="lineCov">         44 :   Interpreter interp;</span>
+<span class="lineNum">      16 </span><span class="lineCov">         54 :   Interpreter interp;</span>
 <span class="lineNum">      17 </span>            :     
-<span class="lineNum">      18 </span><span class="lineCov">         22 :   bool ok = interp.parseStream(iss);</span>
-<span class="lineNum">      19 </span><span class="lineCov">         22 :   if(!ok){</span>
+<span class="lineNum">      18 </span><span class="lineCov">         27 :   bool ok = interp.parseStream(iss);</span>
+<span class="lineNum">      19 </span><span class="lineCov">         27 :   if(!ok){</span>
 <span class="lineNum">      20 </span><span class="lineNoCov">          0 :     std::cerr &lt;&lt; &quot;Failed to parse: &quot; &lt;&lt; program &lt;&lt; std::endl; </span>
 <span class="lineNum">      21 </span>            :   }
-<span class="lineNum">      22 </span><span class="lineCov">         22 :   REQUIRE(ok == true);</span>
+<span class="lineNum">      22 </span><span class="lineCov">         27 :   REQUIRE(ok == true);</span>
 <span class="lineNum">      23 </span>            : 
-<span class="lineNum">      24 </span><span class="lineCov">         22 :   Expression result;</span>
-<span class="lineNum">      25 </span><span class="lineCov">         22 :   REQUIRE_NOTHROW(result = interp.evaluate());</span>
+<span class="lineNum">      24 </span><span class="lineCov">         27 :   Expression result;</span>
+<span class="lineNum">      25 </span><span class="lineCov">         27 :   REQUIRE_NOTHROW(result = interp.evaluate());</span>
 <span class="lineNum">      26 </span>            : 
-<span class="lineNum">      27 </span><span class="lineCov">         44 :   return result;</span>
+<span class="lineNum">      27 </span><span class="lineCov">         54 :   return result;</span>
 <a name="28"><span class="lineNum">      28 </span>            : }</a>
 <span class="lineNum">      29 </span>            : 
 <span class="lineNum">      30 </span><span class="lineCov">          2 : TEST_CASE( &quot;Test Interpreter parser with expected input&quot;, &quot;[interpreter]&quot; ) {</span>
@@ -420,9 +420,38 @@
 <span class="lineNum">     358 </span><span class="lineCov">          2 :                 std::string program = &quot;(begin (define mylist (list \&quot;eggs\&quot; \&quot;bread\&quot; \&quot;milk\&quot; \&quot;bacon\&quot;)) (first mylist))&quot;;</span>
 <span class="lineNum">     359 </span><span class="lineCov">          2 :                 INFO(program);</span>
 <span class="lineNum">     360 </span><span class="lineCov">          2 :                 Expression result = run(program);</span>
-<a name="361"><span class="lineNum">     361 </span><span class="lineCov">          1 :                 REQUIRE(result == Expression(Atom(&quot;\&quot;eggs\&quot;&quot;)));</span></a>
+<span class="lineNum">     361 </span><span class="lineCov">          1 :                 REQUIRE(result == Expression(Atom(&quot;\&quot;eggs\&quot;&quot;)));</span>
 <span class="lineNum">     362 </span>            :         }
-<span class="lineNum">     363 </span><span class="lineCov">          4 : }</span>
+<a name="363"><span class="lineNum">     363 </span><span class="lineCov">          1 : }</span></a>
+<span class="lineNum">     364 </span>            : 
+<span class="lineNum">     365 </span><span class="lineCov">          2 : TEST_CASE(&quot;Tests list with set-property&quot;, &quot;[interpreter]&quot;) {</span>
+<span class="lineNum">     366 </span>            :         {
+<span class="lineNum">     367 </span><span class="lineCov">          2 :                 std::string program = &quot;(set-property \&quot;number\&quot; \&quot;three\&quot; (3))&quot;;</span>
+<span class="lineNum">     368 </span><span class="lineCov">          2 :                 INFO(program);</span>
+<span class="lineNum">     369 </span><span class="lineCov">          2 :                 Expression result = run(program);</span>
+<span class="lineNum">     370 </span><span class="lineCov">          1 :                 REQUIRE(result == Expression(3));</span>
+<span class="lineNum">     371 </span>            : 
+<span class="lineNum">     372 </span><span class="lineCov">          1 :                 program = &quot;(set-property \&quot;number\&quot; (3) \&quot;three\&quot;)&quot;;</span>
+<span class="lineNum">     373 </span><span class="lineCov">          2 :                 INFO(program);</span>
+<span class="lineNum">     374 </span><span class="lineCov">          1 :                 result = run(program);</span>
+<span class="lineNum">     375 </span><span class="lineCov">          1 :                 REQUIRE(result == Expression(Atom(&quot;\&quot;three\&quot;&quot;)));</span>
+<span class="lineNum">     376 </span>            : 
+<span class="lineNum">     377 </span><span class="lineCov">          1 :                 program = &quot;(set-property \&quot;number\&quot; (+ 1 2) \&quot;three\&quot;)&quot;;</span>
+<span class="lineNum">     378 </span><span class="lineCov">          2 :                 INFO(program);</span>
+<span class="lineNum">     379 </span><span class="lineCov">          1 :                 result = run(program);</span>
+<span class="lineNum">     380 </span><span class="lineCov">          1 :                 REQUIRE(result == Expression(Atom(&quot;\&quot;three\&quot;&quot;)));</span>
+<span class="lineNum">     381 </span>            : 
+<span class="lineNum">     382 </span><span class="lineCov">          1 :                 program = &quot;(set-property \&quot;label\&quot; \&quot;foo\&quot; (lambda (x) (* 3 (+ 2 x))))&quot;;</span>
+<span class="lineNum">     383 </span><span class="lineCov">          2 :                 INFO(program);</span>
+<span class="lineNum">     384 </span><span class="lineCov">          1 :                 result = run(program);</span>
+<span class="lineNum">     385 </span>            : 
+<span class="lineNum">     386 </span><span class="lineCov">          2 :                 std::string program2 = &quot;(lambda (x) (* 3 (+ 2 x)))&quot;;</span>
+<span class="lineNum">     387 </span><span class="lineCov">          2 :                 INFO(program2);</span>
+<span class="lineNum">     388 </span><span class="lineCov">          1 :                 Expression result2 = run(program2);</span>
+<span class="lineNum">     389 </span>            :                 //REQUIRE(result == result2);
+<a name="390"><span class="lineNum">     390 </span>            :                 //figure out how to get equal operator to work with lambda</a>
+<span class="lineNum">     391 </span>            :         }
+<span class="lineNum">     392 </span><span class="lineCov">          4 : }</span>
 </pre>
       </td>
     </tr>

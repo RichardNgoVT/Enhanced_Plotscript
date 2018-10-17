@@ -79,6 +79,11 @@ bool Expression::isHeadProcedure() const noexcept {
 	return m_head.isProcedure();
 }
 
+bool Expression::isHeadProperty() const noexcept
+{
+	return m_head.isProperty();
+}
+
 void Expression::append(const Atom & a){
   m_tail.emplace_back(a);
 }
@@ -419,51 +424,111 @@ Expression Expression::handle_map(Environment & env) {
 	return proc(Results);
 }
 
+Expression Expression::handle_setProperty(Environment & env) {
+	
+	if (m_tail.size() != 3)
+	{
+		throw SemanticError("Error in call to set-property function: incorrect number of arguments");
+	}
+	if (!m_tail[0].isHeadPString())
+	{
+		throw SemanticError("Error in call to set-property function: key is not a string");
+	}
+
+	Expression newProp;
+	newProp.markProperty();
+	Expression propertyEx(m_tail[0]);//key
+	propertyEx.append(m_tail[1]);//property
+	Expression express(m_tail[2]);//expression
+
+	m_head = m_tail[2].head();
+	m_tail = m_tail[2].tailVector();
+
+	Expression holder = eval(env);//calculate expression
+	
+	if (holder.isHeadProperty())
+	{
+		holder.append(propertyEx);
+		return holder;
+	}
+	else
+	{
+		newProp.append(holder);
+		newProp.append(propertyEx);
+		return newProp;
+	}
+
+	
+}
+
+/*
+Expression Expression::handle_getProperty(Environment & env) {
+
+}
+*/
 // this is a simple recursive version. the iterative version is more
 // difficult with the ast data structure used (no parent pointer).
 // this limits the practical depth of our ASTdef
 Expression Expression::eval(Environment & env){
   
-  if(m_tail.empty()){
-	  if (m_head.asSymbol() == "list")
-	  {
-		  return apply(m_head, m_tail, env);
-	  }
-    return handle_lookup(m_head, env);
-  }
-  // handle begin special-form
-  else if(m_head.isSymbol() && m_head.asSymbol() == "begin"){
-    return handle_begin(env);
-  }
-  // handle define special-form
-  else if(m_head.isSymbol() && m_head.asSymbol() == "define"){
-    return handle_define(env);
-  }
-  else if (m_head.isSymbol() && m_head.asSymbol() == "lambda") {
-	  return handle_lambda(env);
-  }
-  //handle "procedure" apply
-  
-  else if (m_head.isSymbol() && m_head.asSymbol() == "apply") {
-	  return handle_apply(env);
-  }
-  //handle "procedure" map
-  else if (m_head.isSymbol() && m_head.asSymbol() == "map") {
-	  return handle_map(env);
-  }
-  
-  // else attempt to treat as procedure
-  else{ 
-    std::vector<Expression> results;
-    for(Expression::IteratorType it = m_tail.begin(); it != m_tail.end(); ++it){
-      results.push_back(it->eval(env));
-    }
-	if (!results.empty() && m_head.isSymbol() && env.is_exp(m_head) && handle_lookup(m_head, env).isHeadProcedure()) {
-		m_tail = results;
-		return handle_lambdaProcedure(env);
+	if (m_head.isProperty())
+	{
+		if (m_head.isSymbol() && m_head.asSymbol() == "set-property") {
+			return handle_setProperty(env);
+		}
+		else//uness
+		{
+			m_head = m_tail[0].head();
+			m_tail = m_tail[0].tailVector();
+			return eval(env);
+		}
+
 	}
-    return apply(m_head, results, env);
-  }
+	else//unessesary
+	{
+		if (m_tail.empty()) {
+			if (m_head.asSymbol() == "list")//empty list
+			{
+				return apply(m_head, m_tail, env);
+			}
+			return handle_lookup(m_head, env);
+		}
+		// handle begin special-form
+		else if (m_head.isSymbol() && m_head.asSymbol() == "begin") {
+			return handle_begin(env);
+		}
+		// handle define special-form
+		else if (m_head.isSymbol() && m_head.asSymbol() == "define") {
+			return handle_define(env);
+		}
+		else if (m_head.isSymbol() && m_head.asSymbol() == "lambda") {
+			return handle_lambda(env);
+		}
+		//handle "procedure" apply
+		else if (m_head.isSymbol() && m_head.asSymbol() == "apply") {
+			return handle_apply(env);
+		}
+		//handle "procedure" map
+		else if (m_head.isSymbol() && m_head.asSymbol() == "map") {
+			return handle_map(env);
+		}
+		//handle "procedure" set-property
+		else if (m_head.isSymbol() && m_head.asSymbol() == "set-property") {
+			return handle_setProperty(env);
+		}
+		// else attempt to treat as procedure
+		else {
+			std::vector<Expression> results;
+			for (Expression::IteratorType it = m_tail.begin(); it != m_tail.end(); ++it) {
+				results.push_back(it->eval(env));
+			}
+			if (!results.empty() && m_head.isSymbol() && env.is_exp(m_head) && handle_lookup(m_head, env).isHeadProcedure()) {
+				m_tail = results;
+				return handle_lambdaProcedure(env);
+			}
+			return apply(m_head, results, env);
+		}
+	}
 }
 
 
@@ -504,6 +569,10 @@ std::ostream & operator<<(std::ostream & out, const Expression & exp){
 		out << ")";
 
 	}
+	else if (exp.isHeadProperty())
+	{
+		out << *exp.tailConstBegin();
+	}
 	else
 	{
 		out << "(";
@@ -519,6 +588,15 @@ std::ostream & operator<<(std::ostream & out, const Expression & exp){
 }
 
 bool Expression::operator==(const Expression & exp) const noexcept{
+
+	Expression propertyEx;
+	if (m_head.isProperty())
+	{
+		propertyEx.m_head = m_tail[0].head();
+		propertyEx.m_tail = m_tail[0].tailVector();
+		return exp == propertyEx;
+	}
+
 
   bool result = (m_head == exp.m_head);
 
@@ -543,6 +621,11 @@ void Expression::markList()
 void Expression::markProcedure()
 {
 	m_head.setProcedure();
+}
+
+void Expression::markProperty()
+{
+	m_head.setProperty();
 }
 
 bool operator!=(const Expression & left, const Expression & right) noexcept{

@@ -1,1 +1,1 @@
-﻿  plotscript.vcxproj -> C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\Debug\plotscript.exe
+﻿LINK : fatal error LNK1168: cannot open C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\Debug\plotscript.exe for writing

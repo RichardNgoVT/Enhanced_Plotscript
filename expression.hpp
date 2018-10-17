@@ -82,6 +82,9 @@ public:
   /// checks for procedure
   bool isHeadProcedure() const noexcept;
 
+  /// checks for property
+  bool isHeadProperty() const noexcept;
+
   /// Evaluate expression using a post-order traversal (recursive)
   Expression eval(Environment & env);
 
@@ -92,6 +95,7 @@ public:
   
   void markProcedure();
 
+  void markProperty();
 private:
 
   // the head of the expression
@@ -112,6 +116,8 @@ private:
   Expression handle_lambdaProcedure(Environment & env);
   Expression handle_apply(Environment & env);
   Expression handle_map(Environment & env);
+  //Expression handle_getProperty(Environment & env);
+  Expression handle_setProperty(Environment & env);
 };
 
 /// Render expression to output stream
