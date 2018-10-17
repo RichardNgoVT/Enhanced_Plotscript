@@ -382,7 +382,6 @@ TEST_CASE("Tests with set-property function", "[interpreter]") {
 		program = "(set-property \"label\" \"foo\" (lambda (x) (* 3 (+ 2 x))))";
 		INFO(program);
 		result = run(program);
-
 		std::string program2 = "(lambda (x) (* 3 (+ 2 x)))";
 		INFO(program2);
 		Expression result2 = run(program2);
@@ -393,15 +392,15 @@ TEST_CASE("Tests with set-property function", "[interpreter]") {
 
 TEST_CASE("Tests with get-property function", "[interpreter]") {
 	{
-		std::string program = "(begin (define a (+ 1 I)) (define b (set-property \"note\" \"a complex number\" a) (get-property \"note\" b))";
+		std::string program = "(begin (define a (+ 1 I)) (define b (set-property \"note\" \"a complex number\" a)) (get-property \"note\" b))";
 		INFO(program);
 		Expression result = run(program);
 		REQUIRE(result == Expression(Atom("\"a complex number\"")));
-		/*
-		program = "(begin (define a (+ 1 I) ) (define b (set-property \"note\" \"a complex number\" a) (get-property \"foo\" b)";
+		
+		program = "(begin (define a (+ 1 I)) (define b (set-property \"note\" \"a complex number\" a)) (get-property \"foo\" b))";
 		INFO(program);
 		result = run(program);
 		REQUIRE(result == Expression());
-		*/
+		
 	}
 }
