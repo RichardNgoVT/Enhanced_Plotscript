@@ -141,7 +141,6 @@ Expression Expression::handle_lookup(const Atom & head, const Environment & env)
 	return env.get_exp(head);
       }
       else{
-		  cout << head.asSymbol() << endl;
 	throw SemanticError("Error during evaluation: unknown symbol");
       }
     }
@@ -443,22 +442,30 @@ Expression Expression::handle_setProperty(Environment & env) {
 	Expression newProp;
 	newProp.markProperty();
 	Expression propertyEx(m_tail[0]);//key
-	propertyEx.append(m_tail[1]);//property
-	Expression express(m_tail[2]);//expression
-
-	m_head = m_tail[2].head();
-	m_tail = m_tail[2].tailVector();
-
-	Expression holder = eval(env);//calculate expression
-	
-	if (holder.isHeadProperty())
+	Expression express;//expression
+	if (env.is_exp(m_tail[2].head()))
 	{
-		holder.append(propertyEx);
-		return holder;
+		express = env.get_exp(m_tail[2].head());//gets unevaluated property
 	}
 	else
 	{
-		newProp.append(holder);
+		express = m_tail[2];
+	}
+	m_head = m_tail[1].head();
+	m_tail = m_tail[1].tailVector();
+
+	Expression holder = eval(env);//calculate value
+	propertyEx.append(holder);
+
+	
+	if (express.isHeadProperty())
+	{
+		express.append(propertyEx);
+		return express;
+	}
+	else
+	{
+		newProp.append(express);
 		newProp.append(propertyEx);
 		return newProp;
 	}
@@ -478,25 +485,33 @@ Expression Expression::handle_getProperty(Environment & env) {
 	}
 	string key = m_tail[0].head().asPString();
 
-	m_head = m_tail[1].head();
-	m_tail = m_tail[1].tailVector();
-
-	Expression holder = eval(env);//calculate expression
-
-	if (!holder.m_head.isProperty())
+	Expression propList;
+	if (env.is_exp(m_tail[1].head()))
+	{
+		propList = env.get_exp(m_tail[1].head());//gets unevaluated property
+	}
+	else if (m_tail[1].isHeadProperty())
+	{
+		propList = m_tail[1];//in case get and set property are called in the same line
+	}
+	else
 	{
 		throw SemanticError("Error in call to get-property function: property must be gotten from a property list");
 	}
-	for (int i = 1; i < holder.m_tail.size(); i++)
+
+
+	if (!propList.m_head.isProperty())
 	{
-		if (key == holder.m_tail[i].head().asPString())
+		throw SemanticError("Error in call to get-property function: property must be gotten from a property list");
+	}
+	for (int i = 1; i < propList.m_tail.size(); i++)
+	{
+		if (key == propList.m_tail[i].head().asPString())
 		{
-			return holder.m_tail[i].tailVector()[0];
+			return propList.m_tail[i].tailVector()[0];
 		}
 	}
 	return Expression();
-	
-
 }
 
 // this is a simple recursive version. the iterative version is more
@@ -506,14 +521,11 @@ Expression Expression::eval(Environment & env){
   
 	if (m_head.isProperty())
 	{
-		
 		m_head = m_tail[0].head();
 		m_tail = m_tail[0].tailVector();
 		return eval(env);
 
 	}
-	else//unessesary
-	{
 		if (m_tail.empty()) {
 			if (m_head.asSymbol() == "list")//empty list
 			{
@@ -559,7 +571,7 @@ Expression Expression::eval(Environment & env){
 			}
 			return apply(m_head, results, env);
 		}
-	}
+	
 }
 
 

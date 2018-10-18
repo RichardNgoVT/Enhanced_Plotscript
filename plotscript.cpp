@@ -26,9 +26,15 @@ void info(const std::string & err_str){
 }
 
 int eval_from_stream(std::istream & stream){
-
   Interpreter interp;
-  
+  //std::ifstream PREifs("/vagrant/graphicPrimitives.pls");
+  //if (!PREifs) {
+  //  error("Prelambdas could not be established.");
+  // return EXIT_FAILURE;
+  //}
+  //interp.parseStream(PREifs);
+  //interp.evaluate();
+
   if(!interp.parseStream(stream)){
     error("Invalid Program. Could not parse.");
     return EXIT_FAILURE;
@@ -60,7 +66,7 @@ int eval_from_file(std::string filename){
 }
 
 int eval_from_command(std::string argexp){
-
+	
   std::istringstream expression(argexp);
 
   return eval_from_stream(expression);
@@ -69,7 +75,18 @@ int eval_from_command(std::string argexp){
 // A REPL is a repeated read-eval-print loop
 void repl(){
   Interpreter interp;
-    
+ // std::ifstream PREifs("/vagrant/graphicPrimitives.pls");
+ 
+  //if (!PREifs) {
+	//  error("Prelambdas could not be established.");
+	 // return EXIT_FAILURE;
+  //}
+ 
+  //interp.parseStream(PREifs);
+  //interp.evaluate();
+
+  
+
   while(!std::cin.eof()){
     
     prompt();

@@ -47,7 +47,6 @@ Atom::Atom(const std::string & value): Atom() {
 	}
 	else
 	{
-		cout << value << endl;
 		setSymbol(value);
 	}
 }
