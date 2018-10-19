@@ -122,6 +122,8 @@ private:
   Expression handle_map(Environment & env);
   Expression handle_getProperty(Environment & env);
   Expression handle_setProperty(Environment & env);
+  void HexpressVisual(Atom & headman, std::vector<Expression> & tailman, Expression & express, bool mode);
+  void HheadOutputer(Atom & headman);
 };
 
 /// Render expression to output stream

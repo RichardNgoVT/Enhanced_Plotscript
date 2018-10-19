@@ -469,12 +469,12 @@ Expression Expression::handle_setProperty(Environment & env) {
 	}
 	else
 	{
-		express = m_tail[2];
+		express = m_tail[2].eval(env);
 	}
 	m_head = m_tail[1].head();
 	m_tail = m_tail[1].tailVector();
 
-	Expression holder = eval(env);//calculate value
+	Expression holder = eval(env);//calculate value (just do .eval next time)
 	propertyEx.append(holder);
 
 	
@@ -499,6 +499,73 @@ Expression Expression::handle_setProperty(Environment & env) {
 	}
 
 	
+}
+
+void Expression::HexpressVisual(Atom & headman, std::vector<Expression>& tailman, Expression & express, bool mode)//ONLY WORKS IN HOST, helper function for troubleshooting
+{
+	Expression holder;
+	if (mode == true)//start of recursion
+	{
+		holder.m_head = headman;
+		holder.m_tail = tailman;
+	}
+	else
+	{
+		holder = express;
+	}
+	
+	cout << '[';
+	HheadOutputer(holder.head());
+	for (int i = 0; i < holder.m_tail.size(); i++)
+	{
+		cout << ' ';
+		HexpressVisual(Atom(), std::vector<Expression>(), holder.m_tail[i], false);
+	}
+	cout << ']';
+	if (mode == true)
+	{
+		cout << endl;
+	}
+}
+
+void Expression::HheadOutputer(Atom & headman)//helps with HexpressVisual outputting correct type
+{
+	if (headman.isComplex())
+	{
+		cout << "(COMPL):(" << headman.asComplex() << ')';
+	}
+	else if (headman.isList())
+	{
+		cout << "(LIST):()";
+	}
+	else if (headman.isNone())
+	{
+		cout << "(NONE):()";
+	}
+	else if (headman.isNumber())
+	{
+		cout << "(NUMB):(" << headman.asNumber() << ')';
+	}
+	else if (headman.isProcedure())
+	{
+		cout << "(PROC):()";
+	}
+	else if (headman.isProperty())
+	{
+		cout << "(PROP):()";
+	}
+	else if (headman.isPString())
+	{
+		cout << "(STRI):(" << headman.asPString() << ')';
+	}
+	else if (headman.isSymbol())
+	{
+		cout << "(SYMB):(" << headman.asSymbol() << ')';
+	}
+	else
+	{
+		cout << "(unde):()";
+	}
 }
 
 
@@ -597,6 +664,16 @@ Expression Expression::eval(Environment & env){
 				m_tail = results;
 				return handle_lambdaProcedure(env);
 			}
+			/*
+			for (int i = 0; i < results.size(); i++)
+			{
+				if (results[i].head().isProperty())
+				{
+					results[i] = results[i].tailVector()[0].eval(env);//gets rid of properties to be used correctly in procedures
+				}
+			}
+			*/
+			//HexpressVisual(m_head, results, Expression(), true);
 			return apply(m_head, results, env);
 		}
 	
@@ -654,7 +731,7 @@ std::ostream & operator<<(std::ostream & out, const Expression & exp){
 		out << exp.head();
 
 		for (auto e = exp.tailConstBegin(); e != exp.tailConstEnd(); ++e) {
-			out << *e;
+			out << *e;//in case of none, no spaces: ()
 		}
 
 		out << ")";
