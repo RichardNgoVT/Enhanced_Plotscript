@@ -9,7 +9,7 @@ The output was:
 Microsoft (R) Build Engine version 15.5.180.51428 for .NET Framework
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-Build started 10/15/2018 3:37:10 PM.
+Build started 10/18/2018 3:38:08 PM.
 Project "C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\3.10.1\CompilerIdCXX\CompilerIdCXX.vcxproj" on node 1 (default targets).
 PrepareForBuild:
   Creating directory "Debug\".
@@ -35,7 +35,7 @@ Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:02.29
+Time Elapsed 00:00:01.13
 
 
 Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
@@ -47,77 +47,77 @@ The CXX compiler identification is MSVC, found in "C:/Users/richa/Documents/mile
 Determining if the CXX compiler works passed with the following output:
 Change Dir: C:/Users/richa/Documents/milestone0/plotscript-RichardNgoVT/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"D:/VisualBasicStuff/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_53fd0.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Run Build Command:"D:/VisualBasicStuff/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_24553.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
 Microsoft (R) Build Engine version 15.5.180.51428 for .NET Framework
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-Build started 10/15/2018 3:37:13 PM.
-Project "C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\CMakeTmp\cmTC_53fd0.vcxproj" on node 1 (default targets).
+Build started 10/18/2018 3:38:10 PM.
+Project "C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\CMakeTmp\cmTC_24553.vcxproj" on node 1 (default targets).
 PrepareForBuild:
-  Creating directory "cmTC_53fd0.dir\Debug\".
+  Creating directory "cmTC_24553.dir\Debug\".
   Creating directory "C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\CMakeTmp\Debug\".
-  Creating directory "cmTC_53fd0.dir\Debug\cmTC_53fd0.tlog\".
+  Creating directory "cmTC_24553.dir\Debug\cmTC_24553.tlog\".
 InitializeBuildStatus:
-  Creating "cmTC_53fd0.dir\Debug\cmTC_53fd0.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+  Creating "cmTC_24553.dir\Debug\cmTC_24553.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
 ClCompile:
-  D:\VisualBasicStuff\VC\Tools\MSVC\14.12.25827\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_53fd0.dir\Debug\\" /Fd"cmTC_53fd0.dir\Debug\vc141.pdb" /Gd /TP /analyze- /errorReport:queue "C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\CMakeTmp\testCXXCompiler.cxx"
+  D:\VisualBasicStuff\VC\Tools\MSVC\14.12.25827\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_24553.dir\Debug\\" /Fd"cmTC_24553.dir\Debug\vc141.pdb" /Gd /TP /analyze- /errorReport:queue "C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\CMakeTmp\testCXXCompiler.cxx"
   Microsoft (R) C/C++ Optimizing Compiler Version 19.12.25831 for x86
   Copyright (C) Microsoft Corporation.  All rights reserved.
   
-  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_53fd0.dir\Debug\\" /Fd"cmTC_53fd0.dir\Debug\vc141.pdb" /Gd /TP /analyze- /errorReport:queue "C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\CMakeTmp\testCXXCompiler.cxx"
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_24553.dir\Debug\\" /Fd"cmTC_24553.dir\Debug\vc141.pdb" /Gd /TP /analyze- /errorReport:queue "C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\CMakeTmp\testCXXCompiler.cxx"
   testCXXCompiler.cxx
   
 Link:
-  D:\VisualBasicStuff\VC\Tools\MSVC\14.12.25827\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\CMakeTmp\Debug\cmTC_53fd0.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/richa/Documents/milestone0/plotscript-RichardNgoVT/build/CMakeFiles/CMakeTmp/Debug/cmTC_53fd0.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/richa/Documents/milestone0/plotscript-RichardNgoVT/build/CMakeFiles/CMakeTmp/Debug/cmTC_53fd0.lib" /MACHINE:X86 /SAFESEH  /machine:X86 cmTC_53fd0.dir\Debug\testCXXCompiler.obj
-  cmTC_53fd0.vcxproj -> C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\CMakeTmp\Debug\cmTC_53fd0.exe
+  D:\VisualBasicStuff\VC\Tools\MSVC\14.12.25827\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\CMakeTmp\Debug\cmTC_24553.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/richa/Documents/milestone0/plotscript-RichardNgoVT/build/CMakeFiles/CMakeTmp/Debug/cmTC_24553.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/richa/Documents/milestone0/plotscript-RichardNgoVT/build/CMakeFiles/CMakeTmp/Debug/cmTC_24553.lib" /MACHINE:X86 /SAFESEH  /machine:X86 cmTC_24553.dir\Debug\testCXXCompiler.obj
+  cmTC_24553.vcxproj -> C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\CMakeTmp\Debug\cmTC_24553.exe
 FinalizeBuildStatus:
-  Deleting file "cmTC_53fd0.dir\Debug\cmTC_53fd0.tlog\unsuccessfulbuild".
-  Touching "cmTC_53fd0.dir\Debug\cmTC_53fd0.tlog\cmTC_53fd0.lastbuildstate".
-Done Building Project "C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\CMakeTmp\cmTC_53fd0.vcxproj" (default targets).
+  Deleting file "cmTC_24553.dir\Debug\cmTC_24553.tlog\unsuccessfulbuild".
+  Touching "cmTC_24553.dir\Debug\cmTC_24553.tlog\cmTC_24553.lastbuildstate".
+Done Building Project "C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\CMakeTmp\cmTC_24553.vcxproj" (default targets).
 
 Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:01.58
+Time Elapsed 00:00:01.17
 
 
 Detecting CXX compiler ABI info compiled with the following output:
 Change Dir: C:/Users/richa/Documents/milestone0/plotscript-RichardNgoVT/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"D:/VisualBasicStuff/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_1c642.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Run Build Command:"D:/VisualBasicStuff/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_e330d.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
 Microsoft (R) Build Engine version 15.5.180.51428 for .NET Framework
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-Build started 10/15/2018 3:37:15 PM.
-Project "C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\CMakeTmp\cmTC_1c642.vcxproj" on node 1 (default targets).
+Build started 10/18/2018 3:38:11 PM.
+Project "C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\CMakeTmp\cmTC_e330d.vcxproj" on node 1 (default targets).
 PrepareForBuild:
-  Creating directory "cmTC_1c642.dir\Debug\".
+  Creating directory "cmTC_e330d.dir\Debug\".
   Creating directory "C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\CMakeTmp\Debug\".
-  Creating directory "cmTC_1c642.dir\Debug\cmTC_1c642.tlog\".
+  Creating directory "cmTC_e330d.dir\Debug\cmTC_e330d.tlog\".
 InitializeBuildStatus:
-  Creating "cmTC_1c642.dir\Debug\cmTC_1c642.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+  Creating "cmTC_e330d.dir\Debug\cmTC_e330d.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
 ClCompile:
-  D:\VisualBasicStuff\VC\Tools\MSVC\14.12.25827\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_1c642.dir\Debug\\" /Fd"cmTC_1c642.dir\Debug\vc141.pdb" /Gd /TP /analyze- /errorReport:queue "C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCXXCompilerABI.cpp"
+  D:\VisualBasicStuff\VC\Tools\MSVC\14.12.25827\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_e330d.dir\Debug\\" /Fd"cmTC_e330d.dir\Debug\vc141.pdb" /Gd /TP /analyze- /errorReport:queue "C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCXXCompilerABI.cpp"
   Microsoft (R) C/C++ Optimizing Compiler Version 19.12.25831 for x86
   Copyright (C) Microsoft Corporation.  All rights reserved.
   
-  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_1c642.dir\Debug\\" /Fd"cmTC_1c642.dir\Debug\vc141.pdb" /Gd /TP /analyze- /errorReport:queue "C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCXXCompilerABI.cpp"
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_e330d.dir\Debug\\" /Fd"cmTC_e330d.dir\Debug\vc141.pdb" /Gd /TP /analyze- /errorReport:queue "C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCXXCompilerABI.cpp"
   CMakeCXXCompilerABI.cpp
   
 Link:
-  D:\VisualBasicStuff\VC\Tools\MSVC\14.12.25827\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\CMakeTmp\Debug\cmTC_1c642.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/richa/Documents/milestone0/plotscript-RichardNgoVT/build/CMakeFiles/CMakeTmp/Debug/cmTC_1c642.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/richa/Documents/milestone0/plotscript-RichardNgoVT/build/CMakeFiles/CMakeTmp/Debug/cmTC_1c642.lib" /MACHINE:X86 /SAFESEH  /machine:X86 cmTC_1c642.dir\Debug\CMakeCXXCompilerABI.obj
-  cmTC_1c642.vcxproj -> C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\CMakeTmp\Debug\cmTC_1c642.exe
+  D:\VisualBasicStuff\VC\Tools\MSVC\14.12.25827\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\CMakeTmp\Debug\cmTC_e330d.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/richa/Documents/milestone0/plotscript-RichardNgoVT/build/CMakeFiles/CMakeTmp/Debug/cmTC_e330d.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/richa/Documents/milestone0/plotscript-RichardNgoVT/build/CMakeFiles/CMakeTmp/Debug/cmTC_e330d.lib" /MACHINE:X86 /SAFESEH  /machine:X86 cmTC_e330d.dir\Debug\CMakeCXXCompilerABI.obj
+  cmTC_e330d.vcxproj -> C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\CMakeTmp\Debug\cmTC_e330d.exe
 FinalizeBuildStatus:
-  Deleting file "cmTC_1c642.dir\Debug\cmTC_1c642.tlog\unsuccessfulbuild".
-  Touching "cmTC_1c642.dir\Debug\cmTC_1c642.tlog\cmTC_1c642.lastbuildstate".
-Done Building Project "C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\CMakeTmp\cmTC_1c642.vcxproj" (default targets).
+  Deleting file "cmTC_e330d.dir\Debug\cmTC_e330d.tlog\unsuccessfulbuild".
+  Touching "cmTC_e330d.dir\Debug\cmTC_e330d.tlog\cmTC_e330d.lastbuildstate".
+Done Building Project "C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\CMakeTmp\cmTC_e330d.vcxproj" (default targets).
 
 Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:01.20
+Time Elapsed 00:00:01.25
 
 
 
@@ -125,39 +125,39 @@ Time Elapsed 00:00:01.20
 Detecting CXX [] compiler features compiled with the following output:
 Change Dir: C:/Users/richa/Documents/milestone0/plotscript-RichardNgoVT/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"D:/VisualBasicStuff/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_e1a10.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Run Build Command:"D:/VisualBasicStuff/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_5f054.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
 Microsoft (R) Build Engine version 15.5.180.51428 for .NET Framework
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-Build started 10/15/2018 3:37:17 PM.
-Project "C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\CMakeTmp\cmTC_e1a10.vcxproj" on node 1 (default targets).
+Build started 10/18/2018 3:38:13 PM.
+Project "C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\CMakeTmp\cmTC_5f054.vcxproj" on node 1 (default targets).
 PrepareForBuild:
-  Creating directory "cmTC_e1a10.dir\Debug\".
+  Creating directory "cmTC_5f054.dir\Debug\".
   Creating directory "C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\CMakeTmp\Debug\".
-  Creating directory "cmTC_e1a10.dir\Debug\cmTC_e1a10.tlog\".
+  Creating directory "cmTC_5f054.dir\Debug\cmTC_5f054.tlog\".
 InitializeBuildStatus:
-  Creating "cmTC_e1a10.dir\Debug\cmTC_e1a10.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+  Creating "cmTC_5f054.dir\Debug\cmTC_5f054.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
 ClCompile:
-  D:\VisualBasicStuff\VC\Tools\MSVC\14.12.25827\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_e1a10.dir\Debug\\" /Fd"cmTC_e1a10.dir\Debug\vc141.pdb" /Gd /TP /analyze- /errorReport:queue "C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\feature_tests.cxx"
+  D:\VisualBasicStuff\VC\Tools\MSVC\14.12.25827\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_5f054.dir\Debug\\" /Fd"cmTC_5f054.dir\Debug\vc141.pdb" /Gd /TP /analyze- /errorReport:queue "C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\feature_tests.cxx"
   Microsoft (R) C/C++ Optimizing Compiler Version 19.12.25831 for x86
   Copyright (C) Microsoft Corporation.  All rights reserved.
   
-  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_e1a10.dir\Debug\\" /Fd"cmTC_e1a10.dir\Debug\vc141.pdb" /Gd /TP /analyze- /errorReport:queue "C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\feature_tests.cxx"
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_5f054.dir\Debug\\" /Fd"cmTC_5f054.dir\Debug\vc141.pdb" /Gd /TP /analyze- /errorReport:queue "C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\feature_tests.cxx"
   feature_tests.cxx
   
 Link:
-  D:\VisualBasicStuff\VC\Tools\MSVC\14.12.25827\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\CMakeTmp\Debug\cmTC_e1a10.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/richa/Documents/milestone0/plotscript-RichardNgoVT/build/CMakeFiles/CMakeTmp/Debug/cmTC_e1a10.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/richa/Documents/milestone0/plotscript-RichardNgoVT/build/CMakeFiles/CMakeTmp/Debug/cmTC_e1a10.lib" /MACHINE:X86 /SAFESEH  /machine:X86 cmTC_e1a10.dir\Debug\feature_tests.obj
-  cmTC_e1a10.vcxproj -> C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\CMakeTmp\Debug\cmTC_e1a10.exe
+  D:\VisualBasicStuff\VC\Tools\MSVC\14.12.25827\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\CMakeTmp\Debug\cmTC_5f054.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/richa/Documents/milestone0/plotscript-RichardNgoVT/build/CMakeFiles/CMakeTmp/Debug/cmTC_5f054.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/richa/Documents/milestone0/plotscript-RichardNgoVT/build/CMakeFiles/CMakeTmp/Debug/cmTC_5f054.lib" /MACHINE:X86 /SAFESEH  /machine:X86 cmTC_5f054.dir\Debug\feature_tests.obj
+  cmTC_5f054.vcxproj -> C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\CMakeTmp\Debug\cmTC_5f054.exe
 FinalizeBuildStatus:
-  Deleting file "cmTC_e1a10.dir\Debug\cmTC_e1a10.tlog\unsuccessfulbuild".
-  Touching "cmTC_e1a10.dir\Debug\cmTC_e1a10.tlog\cmTC_e1a10.lastbuildstate".
-Done Building Project "C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\CMakeTmp\cmTC_e1a10.vcxproj" (default targets).
+  Deleting file "cmTC_5f054.dir\Debug\cmTC_5f054.tlog\unsuccessfulbuild".
+  Touching "cmTC_5f054.dir\Debug\cmTC_5f054.tlog\cmTC_5f054.lastbuildstate".
+Done Building Project "C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\CMakeFiles\CMakeTmp\cmTC_5f054.vcxproj" (default targets).
 
 Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:01.17
+Time Elapsed 00:00:01.18
 
 
     Feature record: CXX_FEATURE:1cxx_aggregate_default_initializers

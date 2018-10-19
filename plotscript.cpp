@@ -5,7 +5,7 @@
 
 #include "interpreter.hpp"
 #include "semantic_error.hpp"
-
+#include "startup_config.hpp"
 void prompt(){
   std::cout << "\nplotscript> ";
 }
@@ -27,13 +27,13 @@ void info(const std::string & err_str){
 
 int eval_from_stream(std::istream & stream){
   Interpreter interp;
-  //std::ifstream PREifs("/vagrant/graphicPrimitives.pls");
+  std::ifstream PREifs(STARTUP_FILE);
   //if (!PREifs) {
   //  error("Prelambdas could not be established.");
   // return EXIT_FAILURE;
   //}
-  //interp.parseStream(PREifs);
-  //interp.evaluate();
+  interp.parseStream(PREifs);
+  interp.evaluate();
 
   if(!interp.parseStream(stream)){
     error("Invalid Program. Could not parse.");
@@ -75,15 +75,15 @@ int eval_from_command(std::string argexp){
 // A REPL is a repeated read-eval-print loop
 void repl(){
   Interpreter interp;
- // std::ifstream PREifs("/vagrant/graphicPrimitives.pls");
+  std::ifstream PREifs(STARTUP_FILE);
  
   //if (!PREifs) {
 	//  error("Prelambdas could not be established.");
 	 // return EXIT_FAILURE;
   //}
  
-  //interp.parseStream(PREifs);
-  //interp.evaluate();
+  interp.parseStream(PREifs);
+  interp.evaluate();
 
   
 

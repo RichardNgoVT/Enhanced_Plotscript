@@ -189,9 +189,21 @@ Expression Expression::handle_define(Environment & env){
   if(env.is_proc(m_head)){
     throw SemanticError("Error during evaluation: attempt to redefine a built-in procedure");
   }
-	
-  // eval tail[1]
-  Expression result = m_tail[1].eval(env);
+
+ // Expression result = m_tail[1].eval(env);//remove
+  
+  Expression result;
+  if (env.is_exp(m_tail[1].head()) && env.get_exp(m_tail[1].head()).isHeadProperty())
+  {
+	 // cout << "here";
+	  result = env.get_exp(m_tail[1].head());//gets unevaluated to presereve properties
+	  result.m_tail[0] = m_tail[1].eval(env);
+  }
+  else
+  {
+	  result = m_tail[1].eval(env);
+  }
+  
   /*
   if(env.is_exp(m_head)){
     throw SemanticError("Error during evaluation: attempt to redefine a previously defined symbol");
@@ -257,7 +269,15 @@ Expression Expression::handle_lambdaProcedure(Environment & env) {
 
 	std::vector<Expression> varStorage;
 	Expression result;
-	Expression lambda = handle_lookup(m_head, env);
+	Expression lambda;
+	if (handle_lookup(m_head, env).isHeadProperty())
+	{
+		lambda = handle_lookup(m_head, env).tailVector()[0];
+	}
+	else
+	{
+		lambda = handle_lookup(m_head, env);
+	}
 
 	//Expression result;
 	if (m_tail.size() > 0)
@@ -460,6 +480,14 @@ Expression Expression::handle_setProperty(Environment & env) {
 	
 	if (express.isHeadProperty())
 	{
+		for (int i = 1; i < express.m_tail.size(); i++)
+		{
+			if (propertyEx.head().asPString() == express.m_tail[i].head().asPString())
+			{
+				express.m_tail[i] = propertyEx;
+				return express;
+			}
+		}
 		express.append(propertyEx);
 		return express;
 	}
@@ -565,7 +593,7 @@ Expression Expression::eval(Environment & env){
 			for (Expression::IteratorType it = m_tail.begin(); it != m_tail.end(); ++it) {
 				results.push_back(it->eval(env));
 			}
-			if (!results.empty() && m_head.isSymbol() && env.is_exp(m_head) && handle_lookup(m_head, env).isHeadProcedure()) {
+			if (!results.empty() && m_head.isSymbol() && env.is_exp(m_head) && (handle_lookup(m_head, env).isHeadProcedure() || handle_lookup(m_head, env).isHeadProperty())) {//check if lambda
 				m_tail = results;
 				return handle_lambdaProcedure(env);
 			}

@@ -2,6 +2,12 @@ cmake_minimum_required(VERSION 3.5)
 project(PLOTSCRIPT CXX)
 
 # EDIT
+# startup files
+set(STARTUP_FILE ${CMAKE_SOURCE_DIR}/graphicPrimitives.pls)
+configure_file(${CMAKE_SOURCE_DIR}/startup_config.hpp.in ${CMAKE_BINARY_DIR}/startup_config.hpp)
+include_directories(${CMAKE_BINARY_DIR})
+
+# EDIT
 # add any files you create related to the interpreter here
 # excluding unit tests
 set(interpreter_src
