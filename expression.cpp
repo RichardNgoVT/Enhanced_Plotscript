@@ -501,7 +501,7 @@ Expression Expression::handle_setProperty(Environment & env) {
 	
 }
 
-void Expression::HexpressVisual(Atom & headman, std::vector<Expression>& tailman, Expression & express, bool mode)//ONLY WORKS IN HOST, helper function for troubleshooting
+void Expression::HexpressVisual(Atom headman, std::vector<Expression> tailman, Expression express, bool mode)//ONLY WORKS IN HOST, helper function for troubleshooting
 {
 	Expression holder;
 	if (mode == true)//start of recursion
@@ -528,7 +528,7 @@ void Expression::HexpressVisual(Atom & headman, std::vector<Expression>& tailman
 	}
 }
 
-void Expression::HheadOutputer(Atom & headman)//helps with HexpressVisual outputting correct type
+void Expression::HheadOutputer(Atom headman)//helps with HexpressVisual outputting correct type
 {
 	if (headman.isComplex())
 	{

@@ -1,4 +1,9 @@
-﻿  expression.cpp
+﻿  environment.cpp
+C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\environment.cpp(591): warning C4018: '<': signed/unsigned mismatch
+C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\environment.cpp(639): warning C4018: '<': signed/unsigned mismatch
+C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\environment.cpp(663): warning C4018: '<': signed/unsigned mismatch
+C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\environment.cpp(666): warning C4018: '<': signed/unsigned mismatch
+  expression.cpp
 C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\expression.cpp(241): warning C4018: '<': signed/unsigned mismatch
 C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\expression.cpp(289): warning C4018: '<': signed/unsigned mismatch
 C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\expression.cpp(294): warning C4018: '<': signed/unsigned mismatch
@@ -9,4 +14,7 @@ C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\expression.cpp(416):
 C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\expression.cpp(483): warning C4018: '<': signed/unsigned mismatch
 C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\expression.cpp(519): warning C4018: '<': signed/unsigned mismatch
 C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\expression.cpp(602): warning C4018: '<': signed/unsigned mismatch
+  interpreter.cpp
+  parse.cpp
+  Generating Code...
   interpreter.vcxproj -> C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\Debug\interpreter.lib
