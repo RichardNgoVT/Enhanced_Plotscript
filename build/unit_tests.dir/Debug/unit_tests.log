@@ -1,6 +1,0 @@
-﻿  environment_tests.cpp
-  expression_tests.cpp
-  interpreter_tests.cpp
-  parse_tests.cpp
-  Generating Code...
-  unit_tests.vcxproj -> C:\Users\richa\Documents\milestone0\plotscript-RichardNgoVT\build\Debug\unit_tests.exe

@@ -1,9 +1,0 @@
-C:/Users/richa/Documents/milestone0/plotscript-RichardNgoVT/build/CMakeFiles/doc.dir
-C:/Users/richa/Documents/milestone0/plotscript-RichardNgoVT/build/CMakeFiles/notebook_test.dir
-C:/Users/richa/Documents/milestone0/plotscript-RichardNgoVT/build/CMakeFiles/unit_tests.dir
-C:/Users/richa/Documents/milestone0/plotscript-RichardNgoVT/build/CMakeFiles/interpreter.dir
-C:/Users/richa/Documents/milestone0/plotscript-RichardNgoVT/build/CMakeFiles/plotscript.dir
-C:/Users/richa/Documents/milestone0/plotscript-RichardNgoVT/build/CMakeFiles/RUN_TESTS.dir
-C:/Users/richa/Documents/milestone0/plotscript-RichardNgoVT/build/CMakeFiles/notebook.dir
-C:/Users/richa/Documents/milestone0/plotscript-RichardNgoVT/build/CMakeFiles/ALL_BUILD.dir
-C:/Users/richa/Documents/milestone0/plotscript-RichardNgoVT/build/CMakeFiles/ZERO_CHECK.dir

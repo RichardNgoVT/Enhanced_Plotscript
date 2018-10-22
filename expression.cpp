@@ -97,6 +97,74 @@ void Expression::append(const Expression & a) {
 	m_tail.emplace_back(a);
 }
 
+void Expression::HexpressVisual(Atom headman, std::vector<Expression> tailman, Expression express, int layer)//ONLY WORKS IN HOST, helper function for troubleshooting
+{
+	Expression holder;
+	if (layer == 0)//start of recursion
+	{
+		holder.m_head = headman;
+		holder.m_tail = tailman;
+	}
+	else
+	{
+		holder = express;
+	}
+	int deeper = layer + 1;
+	cout << '[' << deeper;
+	HheadOutputer(holder.head());
+	for (int i = 0; i < holder.m_tail.size(); i++)
+	{
+		cout << ' ';
+		HexpressVisual(Atom(), std::vector<Expression>(), holder.m_tail[i], deeper);
+	}
+	cout << ']';
+	if (layer == 0)
+	{
+		cout << endl;
+	}
+}
+
+void Expression::HheadOutputer(Atom headman)//helps with HexpressVisual outputting correct type
+{
+	if (headman.isComplex())
+	{
+		cout << "(COMPL):(" << headman.asComplex() << ')';
+	}
+	else if (headman.isList())
+	{
+		cout << "(LIST):()";
+	}
+	else if (headman.isNone())
+	{
+		cout << "(NONE):()";
+	}
+	else if (headman.isNumber())
+	{
+		cout << "(NUMB):(" << headman.asNumber() << ')';
+	}
+	else if (headman.isProcedure())
+	{
+		cout << "(PROC):()";
+	}
+	else if (headman.isProperty())
+	{
+		cout << "(PROP):()";
+	}
+	else if (headman.isPString())
+	{
+		cout << "(STRI):(" << headman.asPString() << ')';
+	}
+	else if (headman.isSymbol())
+	{
+		cout << "(SYMB):(" << headman.asSymbol() << ')';
+	}
+	else
+	{
+		cout << "(unde):()";
+	}
+}
+
+
 
 Expression * Expression::tail(){
   Expression * ptr = nullptr;
@@ -224,11 +292,12 @@ Expression Expression::handle_lambda(Environment & env) {
 
 
 	// but tail[0] must not be a special-form or procedure
+	/*
 	std::string s = m_tail[0].head().asSymbol();
 	if ((s == "define") || (s == "begin")) {
 		throw SemanticError("Error during evaluation: attempt to use special forms as arguments");
 	}
-
+	*/
 
 
 	// eval tail[1]
@@ -260,7 +329,6 @@ Expression Expression::handle_lambda(Environment & env) {
 	// call proc with Variables
 	result.append(proc(Variables));
 	result.append(m_tail[1]);
-
 	return result;
 }
 
@@ -270,7 +338,7 @@ Expression Expression::handle_lambdaProcedure(Environment & env) {
 	std::vector<Expression> varStorage;
 	Expression result;
 	Expression lambda;
-	if (handle_lookup(m_head, env).isHeadProperty())
+	if (handle_lookup(m_head, env).isHeadProperty())//unessesary, don't think lambdas themselves have properties
 	{
 		lambda = handle_lookup(m_head, env).tailVector()[0];
 	}
@@ -465,7 +533,8 @@ Expression Expression::handle_setProperty(Environment & env) {
 	Expression express;//expression
 	if (env.is_exp(m_tail[2].head()))
 	{
-		express = env.get_exp(m_tail[2].head());//gets unevaluated property
+		//express = env.get_exp(m_tail[2].head());//gets unevaluated property
+		express = m_tail[2].eval(env);
 	}
 	else
 	{
@@ -474,7 +543,7 @@ Expression Expression::handle_setProperty(Environment & env) {
 	m_head = m_tail[1].head();
 	m_tail = m_tail[1].tailVector();
 
-	Expression holder = eval(env);//calculate value (just do .eval next time)
+	Expression holder = eval(env);//calculate value (just do .eval(env) next time)
 	propertyEx.append(holder);
 
 	
@@ -501,72 +570,6 @@ Expression Expression::handle_setProperty(Environment & env) {
 	
 }
 
-void Expression::HexpressVisual(Atom headman, std::vector<Expression> tailman, Expression express, bool mode)//ONLY WORKS IN HOST, helper function for troubleshooting
-{
-	Expression holder;
-	if (mode == true)//start of recursion
-	{
-		holder.m_head = headman;
-		holder.m_tail = tailman;
-	}
-	else
-	{
-		holder = express;
-	}
-	
-	cout << '[';
-	HheadOutputer(holder.head());
-	for (int i = 0; i < holder.m_tail.size(); i++)
-	{
-		cout << ' ';
-		HexpressVisual(Atom(), std::vector<Expression>(), holder.m_tail[i], false);
-	}
-	cout << ']';
-	if (mode == true)
-	{
-		cout << endl;
-	}
-}
-
-void Expression::HheadOutputer(Atom headman)//helps with HexpressVisual outputting correct type
-{
-	if (headman.isComplex())
-	{
-		cout << "(COMPL):(" << headman.asComplex() << ')';
-	}
-	else if (headman.isList())
-	{
-		cout << "(LIST):()";
-	}
-	else if (headman.isNone())
-	{
-		cout << "(NONE):()";
-	}
-	else if (headman.isNumber())
-	{
-		cout << "(NUMB):(" << headman.asNumber() << ')';
-	}
-	else if (headman.isProcedure())
-	{
-		cout << "(PROC):()";
-	}
-	else if (headman.isProperty())
-	{
-		cout << "(PROP):()";
-	}
-	else if (headman.isPString())
-	{
-		cout << "(STRI):(" << headman.asPString() << ')';
-	}
-	else if (headman.isSymbol())
-	{
-		cout << "(SYMB):(" << headman.asSymbol() << ')';
-	}
-	else
-	{
-		cout << "(unde):()";
-	}
-}
 
 
 Expression Expression::handle_getProperty(Environment & env) {
@@ -583,11 +586,12 @@ Expression Expression::handle_getProperty(Environment & env) {
 	Expression propList;
 	if (env.is_exp(m_tail[1].head()))
 	{
-		propList = env.get_exp(m_tail[1].head());//gets unevaluated property
+		//propList = env.get_exp(m_tail[1].head());//gets unevaluated property
+		propList = m_tail[1].eval(env);
 	}
 	else if (m_tail[1].isHeadProperty())
 	{
-		propList = m_tail[1];//in case get and set property are called in the same line
+		propList = m_tail[1];//in case get and set property are called in the same line, maybe not
 	}
 	else
 	{
@@ -613,14 +617,16 @@ Expression Expression::handle_getProperty(Environment & env) {
 // difficult with the ast data structure used (no parent pointer).
 // this limits the practical depth of our ASTdef
 Expression Expression::eval(Environment & env){
-  
-	if (m_head.isProperty())
+	Expression holder;
+	/*
+	if (m_head.isProperty())//if commented out, expressions with property lists can't be used normally by other functions
 	{
 		m_head = m_tail[0].head();
 		m_tail = m_tail[0].tailVector();
 		return eval(env);
 
 	}
+	*/
 		if (m_tail.empty()) {
 			if (m_head.asSymbol() == "list")//empty list
 			{
@@ -660,20 +666,20 @@ Expression Expression::eval(Environment & env){
 			for (Expression::IteratorType it = m_tail.begin(); it != m_tail.end(); ++it) {
 				results.push_back(it->eval(env));
 			}
-			if (!results.empty() && m_head.isSymbol() && env.is_exp(m_head) && (handle_lookup(m_head, env).isHeadProcedure() || handle_lookup(m_head, env).isHeadProperty())) {//check if lambda
+			if (!results.empty() && m_head.isSymbol() && env.is_exp(m_head) && (handle_lookup(m_head, env).isHeadProcedure())){ //|| handle_lookup(m_head, env).isHeadProperty())) {//check if lambda
 				m_tail = results;
 				return handle_lambdaProcedure(env);
 			}
 			/*
 			for (int i = 0; i < results.size(); i++)
 			{
-				if (results[i].head().isProperty())
+				if (results[i].head().isProperty())//extracts expressions from properties
 				{
-					results[i] = results[i].tailVector()[0].eval(env);//gets rid of properties to be used correctly in procedures
+					holder = results[i].m_tail[0];//can't do results[i] = results[i].m_tail[0] directly or tail won't be inherited, not sure why. (probably because argument is type &)
+					results[i] = holder;
 				}
 			}
 			*/
-			//HexpressVisual(m_head, results, Expression(), true);
 			return apply(m_head, results, env);
 		}
 	
