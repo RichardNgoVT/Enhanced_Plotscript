@@ -47,7 +47,7 @@ int OutputWidget::psEnter(QString inputtxt)
 	else {
 		try {//notebookimplmentation
 			Expression exp = interp.evaluate();
-			exp.HexpressVisual(exp.head(), exp.tailVector(), Expression(), 0);
+			//exp.HexpressVisual(exp.head(), exp.tailVector(), Expression(), 0);
 			handle_Expression(exp, false);
 			
 		}
