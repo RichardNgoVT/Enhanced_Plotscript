@@ -1,6 +1,6 @@
 #include "output_widget.hpp"
 
-OutputWidget::OutputWidget(QWidget * parent) : QWidget(parent) {
+output::output(QWidget * parent) : QWidget(parent) {
 	auto layout = new QGridLayout();
 	//auto talk = new QGraphicsTextItem("heyy");
 	//grapher.addItem(talk);
@@ -13,7 +13,7 @@ OutputWidget::OutputWidget(QWidget * parent) : QWidget(parent) {
 
 
 
-int OutputWidget::psEnter(QString inputtxt)
+int output::psEnter(QString inputtxt)
 {
 	std::istringstream stream(inputtxt.toStdString());
 	
@@ -74,7 +74,7 @@ int OutputWidget::psEnter(QString inputtxt)
 	//viewer.show();
 }
 
-int OutputWidget::handle_Expression(Expression exp, bool recurs)
+int output::handle_Expression(Expression exp, bool recurs)
 {
 	std::stringstream Qout;
 	if (recurs == false)

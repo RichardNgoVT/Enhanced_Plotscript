@@ -15,11 +15,11 @@
 #include "semantic_error.hpp"
 #include "startup_config.hpp"
 
-class OutputWidget : public QWidget {
+class output : public QWidget {
 	Q_OBJECT
 
 public:
-	OutputWidget(QWidget * parent = nullptr);
+	output(QWidget * parent = nullptr);
 	
 	public slots :
 		int psEnter(QString inputtxt);

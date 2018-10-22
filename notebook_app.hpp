@@ -11,8 +11,8 @@ class NotebookApp : public QWidget {
 
 public:
 	NotebookApp(QWidget * parent = nullptr);//notebookapp
-	InputWidget *input;
-	OutputWidget *output;
+	input *InputWidget;
+	output *OutputWidget;
 	public slots:
 	void outputApp();
 

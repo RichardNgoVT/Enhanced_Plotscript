@@ -1,6 +1,6 @@
 #include "input_widget.hpp"
 
-void InputWidget::keyPressEvent(QKeyEvent *event)//event from key presses
+void input::keyPressEvent(QKeyEvent *event)//event from key presses
 {
 	if (event->key() == Qt::Key_Shift) {
 		pressed = true;
@@ -17,7 +17,7 @@ void InputWidget::keyPressEvent(QKeyEvent *event)//event from key presses
 
 	
 }
-void InputWidget::keyReleaseEvent(QKeyEvent *event)//event from key release
+void input::keyReleaseEvent(QKeyEvent *event)//event from key release
 {
 	if (event->key() == Qt::Key_Shift) {
 		pressed = false;
