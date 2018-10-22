@@ -29,6 +29,8 @@ public:
 private:
 	QGraphicsView viewer;
 	QGraphicsScene grapher;
+	Interpreter interp;
+	int handle_Expression(Expression exp, bool recurs);
 	
 	
 };
