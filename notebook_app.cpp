@@ -6,11 +6,11 @@
 NotebookApp::NotebookApp(QWidget * parent) : QWidget(parent) {
 
 	// make some check boxes and give them names
-	auto InputWidget = new input();
+	auto input = new InputWidget();
 	//auto input2 = new InputWidget();
-	auto OutputWidget = new output();
+	auto output = new OutputWidget();
 	//OutputWidget output;// = new OutputWidget();
-	QObject::connect(InputWidget, &input::sftent, OutputWidget, &output::psEnter);//connects
+	QObject::connect(input, &InputWidget::sftent, output, &OutputWidget::psEnter);//connects
 	//QObject::connect(input, &InputWidget::sftent, this, &NotebookApp::show);//connects
 	//QGraphicsScene test;
 
@@ -40,8 +40,8 @@ NotebookApp::NotebookApp(QWidget * parent) : QWidget(parent) {
 	
 
 	//layout->addWidget(input);//add input in top half, output in bottem half
-	layout->addWidget(InputWidget);
-	layout->addWidget(OutputWidget);
+	layout->addWidget(input);
+	layout->addWidget(output);
 	
 
 

@@ -5,7 +5,7 @@
 #include <QPlainTextEdit>
 //notebook.cpp
 
-class input : public QPlainTextEdit {
+class InputWidget : public QPlainTextEdit {
 	Q_OBJECT
 
 public:

@@ -23,9 +23,9 @@ int main(int argc, char *argv[])
 
 
 
-  NotebookApp Notebook;
+  NotebookApp Widget;
 
-  Notebook.show();
+  Widget.show();
   /*
   auto input = new InputWidget();
   QGraphicsView viewer;
