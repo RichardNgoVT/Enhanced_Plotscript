@@ -41,7 +41,7 @@ set(tui_src
 # EDIT
 # add source for any GUI modules here
 set(gui_src
-notebook.cpp notebook_app.cpp notebook_app.hpp input_widget.cpp input_widget.hpp output_widget.cpp output_widget.hpp
+  notebook_app.cpp notebook_app.hpp input_widget.cpp input_widget.hpp output_widget.cpp output_widget.hpp
   )
 
 # EDIT
