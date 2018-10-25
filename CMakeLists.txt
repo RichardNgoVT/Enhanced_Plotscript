@@ -41,6 +41,7 @@ set(tui_src
 # EDIT
 # add source for any GUI modules here
 set(gui_src
+notebook.cpp notebook_app.cpp notebook_app.hpp input_widget.cpp input_widget.hpp output_widget.cpp output_widget.hpp
   )
 
 # EDIT
@@ -61,7 +62,7 @@ set(tui_main
 
 # main entry point for GUI interface
 set(gui_main
-  notebook.cpp notebook_app.cpp notebook_app.hpp input_widget.cpp input_widget.hpp output_widget.cpp output_widget.hpp
+  notebook.cpp
 )
 
 # try to prevent accidental in-source builds, these cause lots of problems
