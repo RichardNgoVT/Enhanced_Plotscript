@@ -595,13 +595,13 @@ Expression Expression::handle_getProperty(Environment & env) {
 	}
 	else
 	{
-		throw SemanticError("Error in call to get-property function: property must be gotten from a property list");
+		return Expression();
 	}
 
 
 	if (!propList.m_head.isProperty())
 	{
-		throw SemanticError("Error in call to get-property function: property must be gotten from a property list");
+		return Expression();
 	}
 	for (int i = 1; i < propList.m_tail.size(); i++)
 	{
