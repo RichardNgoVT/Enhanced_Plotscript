@@ -9,6 +9,8 @@ private slots:
   void defaultTest();
   void plotscriptTests();
   void pointTests();
+  void lineTests();
+  //void textTests();
 
   // TODO: implement additional tests here
   
@@ -28,11 +30,10 @@ void NotebookTest::defaultTest() {
 }
 
 
-/* Check location
+/* Check location, check default font
 */
 void NotebookTest::plotscriptTests()
 {
-	//testing (get-property "key" (3))
 	auto inwid = widget.findChild<InputWidget *>("input");
 	auto outwid = widget.findChild<OutputWidget *>("output");
 
@@ -43,6 +44,7 @@ void NotebookTest::plotscriptTests()
 	QTest::keyPress(inwid, Qt::Key_Backspace, Qt::NoModifier, 10);
 	QTest::keyRelease(inwid, Qt::Key_Backspace, Qt::NoModifier, 10);
 
+	//testing (get-property "key" (3))
 	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10);
 	QTest::keyClicks(inwid, "(get-property \"key\" (3))");
 	QTest::keyPress(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
@@ -79,7 +81,12 @@ void NotebookTest::plotscriptTests()
 	text = qgraphicsitem_cast<QGraphicsTextItem *>(viewwid->items()[0]);
 	QCOMPARE(text->toPlainText(), QString("(-1,-1.22465e-16)\n"));
 
-	//testing (begin (define title "The Title") (title))
+	/*
+	(begin
+	(define title "The Title")
+	(title)
+	)
+	*/
 	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10);
 	QTest::keyPress(inwid, Qt::Key_A, Qt::ControlModifier, 10);
 	QTest::keyPress(inwid, Qt::Key_A, Qt::ControlModifier, 10);
@@ -132,7 +139,6 @@ void NotebookTest::plotscriptTests()
 
 void NotebookTest::pointTests()
 {
-	//testing (make-point 0 0)
 	auto inwid = widget.findChild<InputWidget *>("input");
 	auto outwid = widget.findChild<OutputWidget *>("output");
 
@@ -143,6 +149,8 @@ void NotebookTest::pointTests()
 	QTest::keyPress(inwid, Qt::Key_Backspace, Qt::NoModifier, 10);
 	QTest::keyRelease(inwid, Qt::Key_Backspace, Qt::NoModifier, 10);
 
+
+	//testing (make-point 0 0)
 	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10);
 	QTest::keyClicks(inwid, "(make-point 0 0)");
 	QTest::keyPress(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
@@ -157,7 +165,7 @@ void NotebookTest::pointTests()
 	pos.setRect(0.0-(size/2.0), 0.0-(size/2.0), size, size);
 	QCOMPARE(point->rect(), pos);
 
-	//(set-property "size" 20 (make-point 0 0))
+	//testing (set-property "size" 20 (make-point 0 0))
 	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10);
 	QTest::keyPress(inwid, Qt::Key_A, Qt::ControlModifier, 10);
 	QTest::keyPress(inwid, Qt::Key_A, Qt::ControlModifier, 10);
@@ -170,10 +178,19 @@ void NotebookTest::pointTests()
 	point = qgraphicsitem_cast<QGraphicsEllipseItem *>(viewwid->items()[0]);
 	QCOMPARE(point->brush(), Qt::SolidPattern);//check if filled in
 	size = 20;
-	pos.setRect(0.0 - (size / 2.0), 0.0 - (size / 2.0), size, size);
+	pos.setRect(0.0-(size / 2.0), 0.0-(size / 2.0), size, size);
 	QCOMPARE(point->rect(), pos);
 
-	//(list (set-property "size" 1 (make-point 0 0)) (set-property "size" 2 (make-point 4 0)) (set-property "size" 4 (make-point 8 0)) (set-property "size" 8 (make-point 16 0)) (set-property "size" 16 (make-point 32 0)) (set-property "size" 32 (make-point 64 0)))
+	/*
+	(list
+	(set-property "size" 1 (make-point 0 0))
+	(set-property "size" 2 (make-point 4 0))
+	(set-property "size" 4 (make-point 8 0))
+	(set-property "size" 8 (make-point 16 0))
+	(set-property "size" 16 (make-point 32 0))
+	(set-property "size" 32 (make-point 64 0))
+	)
+	*/
 	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10);
 	QTest::keyPress(inwid, Qt::Key_A, Qt::ControlModifier, 10);
 	QTest::keyPress(inwid, Qt::Key_A, Qt::ControlModifier, 10);
@@ -190,16 +207,25 @@ void NotebookTest::pointTests()
 		size = 1.0*(pow(2, i));
 		if (i == 0)//starting point at (0, 0)
 		{
-			pos.setRect(0.0 - (size / 2.0), 0.0 - (size / 2.0), size, size);
+			pos.setRect(0.0-(size / 2.0), 0.0-(size / 2.0), size, size);
 		}
 		else
 		{
-			pos.setRect(1.0*pow(2, i+1) - (size / 2.0), 0.0 - (size / 2.0), size, size);
+			pos.setRect(1.0*pow(2, i+1)-(size / 2.0), 0.0-(size / 2.0), size, size);
 		}
 		QCOMPARE(point->rect(), pos);
 	}
 	
-	//(list (set-property "size" 1 (make-point 0 0)) (set-property "size" 2 (make-point 0 4)) (set-property "size" 4 (make-point 0 8)) (set-property "size" 8 (make-point 0 16)) (set-property "size" 16 (make-point 0 32)) (set-property "size" 32 (make-point 0 64)))
+	/*
+	(list
+	(set-property "size" 1 (make-point 0 0))
+	(set-property "size" 2 (make-point 0 4))
+	(set-property "size" 4 (make-point 0 8))
+	(set-property "size" 8 (make-point 0 16))
+	(set-property "size" 16 (make-point 0 32))
+	(set-property "size" 32 (make-point 0 64))
+	)
+	*/
 	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10);
 	QTest::keyPress(inwid, Qt::Key_A, Qt::ControlModifier, 10);
 	QTest::keyPress(inwid, Qt::Key_A, Qt::ControlModifier, 10);
@@ -211,19 +237,139 @@ void NotebookTest::pointTests()
 	QVERIFY2(viewwid->items().size() == 6, "incorrect number of items in QGraphicsView");
 	for (int i = 0; i < 6; i++)
 	{
-		point = qgraphicsitem_cast<QGraphicsEllipseItem *>(viewwid->items()[(5 - i)]);
+		point = qgraphicsitem_cast<QGraphicsEllipseItem *>(viewwid->items()[(5-i)]);
 		QCOMPARE(point->brush(), Qt::SolidPattern);//check if filled in
 		size = 1.0*(pow(2, i));
 		if (i == 0)//starting point at (0, 0)
 		{
-			pos.setRect(0.0 - (size / 2.0), 0.0 - (size / 2.0), size, size);
+			pos.setRect(0.0-(size / 2.0), 0.0-(size / 2.0), size, size);
 		}
 		else
 		{
-			pos.setRect(0.0 - (size / 2.0), 1.0*pow(2, i + 1) - (size / 2.0), size, size);
+			pos.setRect(0.0-(size / 2.0), 1.0*pow(2, i + 1)-(size / 2.0), size, size);
 		}
 		QCOMPARE(point->rect(), pos);
 	}
 }
+void NotebookTest::lineTests()
+{
+
+	auto inwid = widget.findChild<InputWidget *>("input");
+	auto outwid = widget.findChild<OutputWidget *>("output");
+
+	//clears just in case
+	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10);
+	QTest::keyPress(inwid, Qt::Key_A, Qt::ControlModifier, 10);
+	QTest::keyPress(inwid, Qt::Key_A, Qt::ControlModifier, 10);
+	QTest::keyPress(inwid, Qt::Key_Backspace, Qt::NoModifier, 10);
+	QTest::keyRelease(inwid, Qt::Key_Backspace, Qt::NoModifier, 10);
+
+
+	/*
+	(make-line
+	(make-point 0 0)
+	(make-point 20 20))
+	*/
+	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10);
+	QTest::keyClicks(inwid, "(make-line (make-point 0 0) (make-point 20 20))");
+	QTest::keyPress(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
+	QTest::keyRelease(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
+	auto viewwid = outwid->findChild<QGraphicsView *>();
+	QVERIFY2(viewwid, "Could not find view widget");
+	QVERIFY2(viewwid->items().size() == 1, "incorrect number of items in QGraphicsView");
+	QGraphicsLineItem * line = qgraphicsitem_cast<QGraphicsLineItem *>(viewwid->items()[0]);
+	QLineF testLine;
+	testLine.setLine(0.0, 0.0, 20.0, 20.0);
+	QPen testPen;
+	testPen.setWidth(1);
+	QCOMPARE(line->line(), testLine);
+	QCOMPARE(line->pen(), testPen);
+
+	/*
+	(set-property "thickness" (4)
+	(make-line
+		(make-point 0 0)
+		(make-point 20 20))
+	)
+	*/
+	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10);
+	QTest::keyPress(inwid, Qt::Key_A, Qt::ControlModifier, 10);
+	QTest::keyPress(inwid, Qt::Key_A, Qt::ControlModifier, 10);
+	QTest::keyPress(inwid, Qt::Key_Backspace, Qt::NoModifier, 10);
+	QTest::keyRelease(inwid, Qt::Key_Backspace, Qt::NoModifier, 10);
+	QTest::keyClicks(inwid, "(set-property \"thickness\" (4) (make-line (make-point 0 0) (make-point 20 20)))");
+	QTest::keyPress(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
+	QTest::keyRelease(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
+	QVERIFY2(viewwid->items().size() == 1, "incorrect number of items in QGraphicsView");
+	line = qgraphicsitem_cast<QGraphicsLineItem *>(viewwid->items()[0]);
+	testLine.setLine(0.0, 0.0, 20.0, 20.0);
+	testPen.setWidth(4);
+	QCOMPARE(line->line(), testLine);
+	QCOMPARE(line->pen(), testPen);
+
+	/*
+	(list
+	(make-line
+		(make-point 0 0)
+		(make-point 0 20))
+	(make-line
+		(make-point 10 0)
+		(make-point 10 20))
+	(make-line
+		(make-point 20 0)
+		(make-point 20 20))
+	)
+	*/
+	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10);
+	QTest::keyPress(inwid, Qt::Key_A, Qt::ControlModifier, 10);
+	QTest::keyPress(inwid, Qt::Key_A, Qt::ControlModifier, 10);
+	QTest::keyPress(inwid, Qt::Key_Backspace, Qt::NoModifier, 10);
+	QTest::keyRelease(inwid, Qt::Key_Backspace, Qt::NoModifier, 10);
+	QTest::keyClicks(inwid, "(list (make-line (make-point 0 0) (make-point 0 20)) (make-line (make-point 10 0) (make-point 10 20)) (make-line (make-point 20 0) (make-point 20 20)))");
+	QTest::keyPress(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
+	QTest::keyRelease(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
+	QVERIFY2(viewwid->items().size() == 3, "incorrect number of items in QGraphicsView");
+	for (int i = 0; i < 3; i++)
+	{
+		line = qgraphicsitem_cast<QGraphicsLineItem *>(viewwid->items()[(2-i)]);
+		testLine.setLine(i * 10.0, 0.0, i * 10.0, 20.0);
+		testPen.setWidth(1);
+		QCOMPARE(line->line(), testLine);
+		QCOMPARE(line->pen(), testPen);
+	}
+
+	/*
+	(list
+	(make-line
+		(make-point 0 0)
+		(make-point 20 0))
+	(make-line
+		(make-point 0 10)
+		(make-point 20 10))
+	(make-line
+		(make-point 0 20)
+		(make-point 20 20))
+	)
+	*/
+	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10);
+	QTest::keyPress(inwid, Qt::Key_A, Qt::ControlModifier, 10);
+	QTest::keyPress(inwid, Qt::Key_A, Qt::ControlModifier, 10);
+	QTest::keyPress(inwid, Qt::Key_Backspace, Qt::NoModifier, 10);
+	QTest::keyRelease(inwid, Qt::Key_Backspace, Qt::NoModifier, 10);
+	QTest::keyClicks(inwid, "(list (make-line (make-point 0 0) (make-point 20 0)) (make-line (make-point 0 10) (make-point 20 10)) (make-line (make-point 0 20) (make-point 20 20)))");
+	QTest::keyPress(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
+	QTest::keyRelease(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
+	QVERIFY2(viewwid->items().size() == 3, "incorrect number of items in QGraphicsView");
+	for (int i = 0; i < 3; i++)
+	{
+		line = qgraphicsitem_cast<QGraphicsLineItem *>(viewwid->items()[(2 - i)]);
+		testLine.setLine(0.0, i * 10.0, 20.0, i * 10.0);
+		testPen.setWidth(1);
+		QCOMPARE(line->line(), testLine);
+		QCOMPARE(line->pen(), testPen);
+	}
+	
+}
+
 QTEST_MAIN(NotebookTest)
 #include "notebook_test.moc"
