@@ -7,8 +7,10 @@ NotebookApp::NotebookApp(QWidget * parent) : QWidget(parent) {
 
 	// make some check boxes and give them names
 	auto input = new InputWidget();
+	input->setObjectName("input");
 	//auto input2 = new InputWidget();
 	auto output = new OutputWidget();
+	output->setObjectName("output");
 	//OutputWidget output;// = new OutputWidget();
 	QObject::connect(input, &InputWidget::sftent, output, &OutputWidget::psEnter);//connects
 	//QObject::connect(input, &InputWidget::sftent, this, &NotebookApp::show);//connects
