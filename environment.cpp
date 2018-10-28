@@ -565,11 +565,11 @@ Expression FirstLIST(const std::vector<Expression> & args) {
 			}
 			else
 			{
-				throw SemanticError("Error in call to first, argument not a list");
+				throw SemanticError("Error in call to first, argument is an empty list");
 			}
 		}
 		else {
-			throw SemanticError("Error in call to first, argument is an empty list");
+			throw SemanticError("Error in call to first, argument not a list");
 		}
 	}
 	else

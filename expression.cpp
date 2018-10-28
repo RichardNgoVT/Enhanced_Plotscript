@@ -204,11 +204,14 @@ Expression apply(const Atom & op, const std::vector<Expression> & args, const En
 }
 
 Expression Expression::handle_lookup(const Atom & head, const Environment & env){
+
+	//cout << head.asSymbol() << endl;
     if(head.isSymbol()){ // if symbol is in env return value
       if(env.is_exp(head)){
 	return env.get_exp(head);
       }
       else{
+		 // cout << "error: " << head.asSymbol() << endl;
 	throw SemanticError("Error during evaluation: unknown symbol");
       }
     }
@@ -338,15 +341,18 @@ Expression Expression::handle_lambdaProcedure(Environment & env) {
 	std::vector<Expression> varStorage;
 	Expression result;
 	Expression lambda;
+	//cout << "herebegin" << endl;
+	//cout << m_head.asSymbol() << endl;
 	if (handle_lookup(m_head, env).isHeadProperty())//unessesary, don't think lambdas themselves have properties
 	{
+		//cout << "here why?" << endl;
 		lambda = handle_lookup(m_head, env).tailVector()[0];
 	}
 	else
 	{
+		//cout << m_head.asSymbol()<< endl;
 		lambda = handle_lookup(m_head, env);
 	}
-
 	//Expression result;
 	if (m_tail.size() > 0)
 	{
@@ -368,17 +374,17 @@ Expression Expression::handle_lambdaProcedure(Environment & env) {
 				//create new variables
 				for (int i = 0; i < lambda.tailVector()[0].tailVector().size(); i++)
 				{
+					//cout << lambda.tailVector()[0].tailVector()[i].head().asSymbol() << endl;
 					env.add_exp(lambda.tailVector()[0].tailVector()[i].head(), m_tail[i]);
+					//cout << lambda.tailVector()[0].tailVector()[i].head().asSymbol() << endl;
+					//HexpressVisual(m_tail[i].head(), m_tail[i].tailVector(), Expression(), 0);
 				}
-
 				result = lambda.tailVector()[1].eval(env);
-
 				//delete new variables
 				for (int i = 0; i < lambda.tailVector()[0].tailVector().size(); i++)
 				{
 					env.delete_exp(lambda.tailVector()[0].tailVector()[i].head());
 				}
-
 				//add back old variables
 				for (int i = 0; i < lambda.tailVector()[0].tailVector().size(); i++)
 				{
@@ -387,7 +393,7 @@ Expression Expression::handle_lambdaProcedure(Environment & env) {
 						env.add_exp(lambda.tailVector()[0].tailVector()[i].head(), varStorage[i]);
 					}
 				}
-
+				//cout << "hereend" << endl;
 				return result;
 
 			}
@@ -449,6 +455,7 @@ Expression Expression::handle_apply(Environment & env) {
 		{
 			throw SemanticError("Error in call to apply function: first argument not a procedure");
 		}
+		
 		return apply(m_head, m_tail, env);
 
 
@@ -540,8 +547,9 @@ Expression Expression::handle_setProperty(Environment & env) {
 	{
 		express = m_tail[2].eval(env);
 	}
-	m_head = m_tail[1].head();
-	m_tail = m_tail[1].tailVector();
+	Expression holder2 = m_tail[1];
+	m_head = holder2.head();
+	m_tail = holder2.tailVector();
 
 	Expression holder = eval(env);//calculate value (just do .eval(env) next time)
 	propertyEx.append(holder);
@@ -617,6 +625,9 @@ Expression Expression::handle_getProperty(Environment & env) {
 // difficult with the ast data structure used (no parent pointer).
 // this limits the practical depth of our ASTdef
 Expression Expression::eval(Environment & env){
+	//cout << endl << "EVAL: ";
+	//HexpressVisual(m_head, m_tail, Expression(), 0);
+	//cout << endl;
 	Expression holder;
 	/*
 	if (m_head.isProperty())//if commented out, expressions with property lists can't be used normally by other functions
@@ -632,6 +643,8 @@ Expression Expression::eval(Environment & env){
 			{
 				return apply(m_head, m_tail, env);
 			}
+			//cout << "justincase\n";
+			//HexpressVisual(m_head, m_tail, Expression(), 0);
 			return handle_lookup(m_head, env);
 		}
 		// handle begin special-form
@@ -663,13 +676,25 @@ Expression Expression::eval(Environment & env){
 		// else attempt to treat as procedure
 		else {
 			std::vector<Expression> results;
+			/*
 			for (Expression::IteratorType it = m_tail.begin(); it != m_tail.end(); ++it) {
 				results.push_back(it->eval(env));
 			}
+			*/
+			//cout << "BEGINforloop" << endl;
+			for (int i = 0; i < m_tail.size(); i++)
+			{
+				//cout << m_tail[i].head().asSymbol() << endl;
+				//HexpressVisual(m_tail[i].head(), m_tail[i].tailVector(), Expression(), 0);
+				results.push_back(m_tail[i].eval(env));
+			}
+			//cout << "ENDforloop" << endl;
 			if (!results.empty() && m_head.isSymbol() && env.is_exp(m_head) && (handle_lookup(m_head, env).isHeadProcedure())){ //|| handle_lookup(m_head, env).isHeadProperty())) {//check if lambda
+			//	cout <<"procedure: " << m_head.asSymbol() << endl;
 				m_tail = results;
 				return handle_lambdaProcedure(env);
 			}
+			
 			/*
 			for (int i = 0; i < results.size(); i++)
 			{
