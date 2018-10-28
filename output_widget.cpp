@@ -33,7 +33,7 @@ int OutputWidget::psEnter(QString inputtxt)
 		std::stringstream Qout;
 		Qout.str(std::string());
 		std::streambuf* old = std::cerr.rdbuf(Qout.rdbuf());
-		std::cerr << "Error: Invalid Program. Could not parse." << endl;
+		std::cerr << "Error: Invalid Program. Could not parse.";// << endl;
 
 		grapher.clear();
 		QString qstr = QString::fromStdString(Qout.str());
@@ -56,7 +56,7 @@ int OutputWidget::psEnter(QString inputtxt)
 			std::stringstream Qout;
 			Qout.str(std::string());
 			std::streambuf* old = std::cerr.rdbuf(Qout.rdbuf());
-			std::cerr << ex.what() << std::endl;
+			std::cerr << ex.what();// << std::endl;
 
 			grapher.clear();
 			QString qstr = QString::fromStdString(Qout.str());
@@ -91,7 +91,12 @@ int OutputWidget::handle_Expression(Expression exp, bool recurs)
 		}
 		return EXIT_SUCCESS;
 	}
-	else if (exp.isHeadNone() || exp.isHeadNumber() || exp.isHeadComplex() || exp.isHeadSymbol() || exp.isHeadPString() || exp.isHeadProperty())
+	else if (exp.isHeadProcedure())
+	{
+		return EXIT_SUCCESS;
+		//remove thing from scene if nessesary
+	}
+	else
 	{
 		if (exp.isHeadProperty() && exp.tailVector().size() == 3)
 		{
@@ -114,7 +119,7 @@ int OutputWidget::handle_Expression(Expression exp, bool recurs)
 						{
 							Qout.str(std::string());
 							std::streambuf* old = std::cerr.rdbuf(Qout.rdbuf());
-							std::cerr << "Error in point: point's size can't be negative" << std::endl;
+							std::cerr << "Error in point: point's size can't be negative";// << std::endl;
 
 							grapher.clear();
 							QString qstr = QString::fromStdString(Qout.str());
@@ -147,7 +152,7 @@ int OutputWidget::handle_Expression(Expression exp, bool recurs)
 						{
 							Qout.str(std::string());
 							std::streambuf* old = std::cerr.rdbuf(Qout.rdbuf());
-							std::cerr << "Error in line: line's thickness can't be negative" << std::endl;
+							std::cerr << "Error in line: line's thickness can't be negative";// << std::endl;
 
 							grapher.clear();
 							QString qstr = QString::fromStdString(Qout.str());
@@ -190,7 +195,7 @@ int OutputWidget::handle_Expression(Expression exp, bool recurs)
 							//cout << exp.tailVector()[2].tailVector()[0].tailVector()[1].tailVector()[0].head().asPString() << endl;
 							Qout.str(std::string());
 							std::streambuf* old = std::cerr.rdbuf(Qout.rdbuf());
-							std::cerr << "Error in text: position is not a point" << std::endl;
+							std::cerr << "Error in text: position is not a point";// << std::endl;
 
 							grapher.clear();
 							QString qstr = QString::fromStdString(Qout.str());
@@ -206,21 +211,12 @@ int OutputWidget::handle_Expression(Expression exp, bool recurs)
 				}
 			}
 		}
-		Qout << exp << std::endl;
+		Qout << exp;// << std::endl;
 		QString qstr = QString::fromStdString(Qout.str());
 		auto text = new QGraphicsTextItem(qstr);
 		text->setPos(0, 0);
 		grapher.addItem(text);
 		return EXIT_SUCCESS;
-	}
-	else if (exp.isHeadProcedure())
-	{
-		return EXIT_SUCCESS;
-		//remove thing from scene if nessesary
-	}
-	else
-	{
-
 	}
 
 }
