@@ -30,8 +30,6 @@ private:
 	QGraphicsView viewer;
 	QGraphicsScene grapher;
 	Interpreter interp;
-	QGridLayout * layout;
-	//auto layout = new QGridLayout();
 	int handle_Expression(Expression exp, bool recurs);
 	
 	

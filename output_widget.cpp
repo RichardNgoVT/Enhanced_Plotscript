@@ -1,7 +1,7 @@
 #include "output_widget.hpp"
 
 OutputWidget::OutputWidget(QWidget * parent) : QWidget(parent) {
-	layout = new QGridLayout();
+	auto layout = new QGridLayout();
 	//auto talk = new QGraphicsTextItem("heyy");
 	//grapher.addItem(talk);
 	viewer.setScene(&grapher);
