@@ -13,7 +13,7 @@ Atom::Atom(double value){
 }
 
 
-Atom::Atom(complex<double> value) {
+Atom::Atom(std::complex<double> value) {
 
 	setComplex(value);
 }
@@ -159,7 +159,7 @@ void Atom::setNumber(double value){
   numberValue = value;
 }
 
-void Atom::setComplex(complex<double> value) {
+void Atom::setComplex(std::complex<double> value) {
 
 	m_type = ComplexKind;
 	complexValue = value;
@@ -211,9 +211,9 @@ double Atom::asNumber() const noexcept{
   return (m_type == NumberKind) ? numberValue : 0.0;  
 }
 
-complex<double> Atom::asComplex() const noexcept {
+std::complex<double> Atom::asComplex() const noexcept {
 
-	return (m_type == ComplexKind) ? complexValue : (1i-1i);
+	return (m_type == ComplexKind) ? complexValue : std::complex<double>(0.0,0.0);
 }
 
 std::string Atom::asSymbol() const noexcept{

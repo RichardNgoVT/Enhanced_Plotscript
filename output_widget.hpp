@@ -1,14 +1,7 @@
 #ifndef OUTPUT_WIDGET_H
 #define OUTPUT_WIDGET_H
 
-#include <QWidget>
 #include <QtWidgets>
-#include <QGraphicsView>
-#include <QGraphicsScene>
-//#include <QPen>
-#include <string>
-#include <sstream>
-#include <iostream>
 #include <fstream>
 
 #include "interpreter.hpp"
@@ -20,17 +13,17 @@ class OutputWidget : public QWidget {
 
 public:
 	OutputWidget(QWidget * parent = nullptr);
-	
+	QGraphicsView viewer;
+	QGraphicsScene grapher;
+	Interpreter interp;
+	int handle_Expression(Expression exp, bool recurs);
 	public slots :
 		int psEnter(QString inputtxt);
 
 
 
 private:
-	QGraphicsView viewer;
-	QGraphicsScene grapher;
-	Interpreter interp;
-	int handle_Expression(Expression exp, bool recurs);
+	
 	
 	
 };

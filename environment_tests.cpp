@@ -66,8 +66,8 @@ TEST_CASE( "Test get built-in procedure", "[environment]" ) {
 
   INFO("test add procedure (normal + complex)")
   args.clear();
-  complex<double> Imag(0.0, 1.0);
-  complex<double> imagTest(0.0, 0.0);
+  std::complex<double> Imag(0.0, 1.0);
+  std::complex<double> imagTest(0.0, 0.0);
   imagTest = 2.0 * Imag + 1.0;
   args.emplace_back(imagTest);
   args.emplace_back(3.0);

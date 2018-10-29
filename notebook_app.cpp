@@ -1,7 +1,4 @@
-#include <QApplication>
 #include "notebook_app.hpp"
-#include "input_widget.hpp"
-#include "output_widget.hpp"
 
 NotebookApp::NotebookApp(QWidget * parent) : QWidget(parent) {
 

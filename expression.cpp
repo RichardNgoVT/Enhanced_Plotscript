@@ -110,17 +110,17 @@ void Expression::HexpressVisual(Atom headman, std::vector<Expression> tailman, E
 		holder = express;
 	}
 	int deeper = layer + 1;
-	cout << '[' << deeper;
+	std::cout << '[' << deeper;
 	HheadOutputer(holder.head());
 	for (int i = 0; i < holder.m_tail.size(); i++)
 	{
-		cout << ' ';
+		std::cout << ' ';
 		HexpressVisual(Atom(), std::vector<Expression>(), holder.m_tail[i], deeper);
 	}
-	cout << ']';
+	std::cout << ']';
 	if (layer == 0)
 	{
-		cout << endl;
+		std::cout << std::endl;
 	}
 }
 
@@ -128,39 +128,39 @@ void Expression::HheadOutputer(Atom headman)//helps with HexpressVisual outputti
 {
 	if (headman.isComplex())
 	{
-		cout << "(COMPL):(" << headman.asComplex() << ')';
+		std::cout << "(COMPL):(" << headman.asComplex() << ')';
 	}
 	else if (headman.isList())
 	{
-		cout << "(LIST):()";
+		std::cout << "(LIST):()";
 	}
 	else if (headman.isNone())
 	{
-		cout << "(NONE):()";
+		std::cout << "(NONE):()";
 	}
 	else if (headman.isNumber())
 	{
-		cout << "(NUMB):(" << headman.asNumber() << ')';
+		std::cout << "(NUMB):(" << headman.asNumber() << ')';
 	}
 	else if (headman.isProcedure())
 	{
-		cout << "(PROC):()";
+		std::cout << "(PROC):()";
 	}
 	else if (headman.isProperty())
 	{
-		cout << "(PROP):()";
+		std::cout << "(PROP):()";
 	}
 	else if (headman.isPString())
 	{
-		cout << "(STRI):(" << headman.asPString() << ')';
+		std::cout << "(STRI):(" << headman.asPString() << ')';
 	}
 	else if (headman.isSymbol())
 	{
-		cout << "(SYMB):(" << headman.asSymbol() << ')';
+		std::cout << "(SYMB):(" << headman.asSymbol() << ')';
 	}
 	else
 	{
-		cout << "(unde):()";
+		std::cout << "(unde):()";
 	}
 }
 
@@ -589,7 +589,7 @@ Expression Expression::handle_getProperty(Environment & env) {
 	{
 		throw SemanticError("Error in call to get-property function: key is not a string");
 	}
-	string key = m_tail[0].head().asPString();
+	std::string key = m_tail[0].head().asPString();
 
 	Expression propList;
 	if (env.is_exp(m_tail[1].head()))
@@ -676,35 +676,25 @@ Expression Expression::eval(Environment & env){
 		// else attempt to treat as procedure
 		else {
 			std::vector<Expression> results;
-			/*
+			
 			for (Expression::IteratorType it = m_tail.begin(); it != m_tail.end(); ++it) {
 				results.push_back(it->eval(env));
 			}
-			*/
 			//cout << "BEGINforloop" << endl;
+			/*
 			for (int i = 0; i < m_tail.size(); i++)
 			{
 				//cout << m_tail[i].head().asSymbol() << endl;
 				//HexpressVisual(m_tail[i].head(), m_tail[i].tailVector(), Expression(), 0);
 				results.push_back(m_tail[i].eval(env));
 			}
+			*/
 			//cout << "ENDforloop" << endl;
-			if (!results.empty() && m_head.isSymbol() && env.is_exp(m_head) && (handle_lookup(m_head, env).isHeadProcedure())){ //|| handle_lookup(m_head, env).isHeadProperty())) {//check if lambda
+			if (!results.empty() && m_head.isSymbol() && env.is_exp(m_head) && (handle_lookup(m_head, env).isHeadProcedure())){
 			//	cout <<"procedure: " << m_head.asSymbol() << endl;
 				m_tail = results;
 				return handle_lambdaProcedure(env);
 			}
-			
-			/*
-			for (int i = 0; i < results.size(); i++)
-			{
-				if (results[i].head().isProperty())//extracts expressions from properties
-				{
-					holder = results[i].m_tail[0];//can't do results[i] = results[i].m_tail[0] directly or tail won't be inherited, not sure why. (probably because argument is type &)
-					results[i] = holder;
-				}
-			}
-			*/
 			return apply(m_head, results, env);
 		}
 	

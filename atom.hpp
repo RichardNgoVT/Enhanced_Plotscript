@@ -11,7 +11,7 @@ Defines the Atom type and associated functions.
 
 #include <iostream>
 
-using namespace std;
+//using namespace std;
 
 
 /*! \class Atom
@@ -29,7 +29,7 @@ public:
   Atom(double value);
 
   /// Construct an Atom of type Complex Number with value
-  Atom(complex<double> value);
+  Atom(std::complex<double> value);
 
   /// Construct an Atom of type Symbol or String named value
   Atom(const std::string & value);
@@ -74,7 +74,7 @@ public:
   double asNumber() const noexcept;
 
   /// value of Atom as a ComplexNumber, return 0 if not a ComplexNumber
-  complex<double> asComplex() const noexcept;
+  std::complex<double> asComplex() const noexcept;
 
   /// value of Atom as a symbol, returns empty-string if not a Symbol
   std::string asSymbol() const noexcept;
@@ -107,14 +107,14 @@ private:
   union {
     double numberValue;
     std::string stringValue;
-	complex<double> complexValue;
+	std::complex<double> complexValue;
   };
 
   // helper to set type and value of Number
   void setNumber(double value);
 
   // helper to set type and value of Complex
-  void setComplex(complex<double> value);
+  void setComplex(std::complex<double> value);
 
   // helper to set type and value of Symbol
   void setSymbol(const std::string & value);
