@@ -11,7 +11,7 @@ private slots:
   void plotscriptTests();
   void pointTests();
   void lineTests();
-  //void textTests();
+  void textTests();
 
   // TODO: implement additional tests here
   
@@ -37,6 +37,11 @@ void NotebookTest::plotscriptTests()
 {
 	auto inwid = widget.findChild<InputWidget *>("input");
 	auto outwid = widget.findChild<OutputWidget *>("output");
+	QGraphicsTextItem defaultFontCheck;
+	QPointF defaultPos;
+	defaultPos.setX(0.0);
+	defaultPos.setY(0.0);
+
 
 	//clears just in case
 	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10);
@@ -54,7 +59,10 @@ void NotebookTest::plotscriptTests()
 	QVERIFY2(viewwid, "Could not find view widget");
 	QVERIFY2(viewwid->items().size() == 1, "incorrect number of items in QGraphicsView");
 	QGraphicsTextItem * text = qgraphicsitem_cast<QGraphicsTextItem *>(viewwid->items()[0]);
-	QCOMPARE(text->toPlainText(), QString("NONE\n"));
+	QCOMPARE(text->toPlainText(), QString("NONE"));
+	QCOMPARE(text->pos(), defaultPos);
+	QCOMPARE(text->font(), defaultFontCheck.font());
+	
 
 	//testing (cos pi)
 	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10);
@@ -67,7 +75,9 @@ void NotebookTest::plotscriptTests()
 	QTest::keyRelease(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
 	QVERIFY2(viewwid->items().size() == 1, "incorrect number of items in QGraphicsView");
 	text = qgraphicsitem_cast<QGraphicsTextItem *>(viewwid->items()[0]);
-	QCOMPARE(text->toPlainText(), QString("(-1)\n"));
+	QCOMPARE(text->toPlainText(), QString("(-1)"));
+	QCOMPARE(text->pos(), defaultPos);
+	QCOMPARE(text->font(), defaultFontCheck.font());
 
 	//testing (^ e (- (* I pi)))
 	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10);
@@ -80,7 +90,9 @@ void NotebookTest::plotscriptTests()
 	QTest::keyRelease(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
 	QVERIFY2(viewwid->items().size() == 1, "incorrect number of items in QGraphicsView");
 	text = qgraphicsitem_cast<QGraphicsTextItem *>(viewwid->items()[0]);
-	QCOMPARE(text->toPlainText(), QString("(-1,-1.22465e-16)\n"));
+	QCOMPARE(text->toPlainText(), QString("(-1,-1.22465e-16)"));
+	QCOMPARE(text->pos(), defaultPos);
+	QCOMPARE(text->font(), defaultFontCheck.font());
 
 	/*
 	(begin
@@ -98,7 +110,9 @@ void NotebookTest::plotscriptTests()
 	QTest::keyRelease(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
 	QVERIFY2(viewwid->items().size() == 1, "incorrect number of items in QGraphicsView");
 	text = qgraphicsitem_cast<QGraphicsTextItem *>(viewwid->items()[0]);
-	QCOMPARE(text->toPlainText(), QString("(\"The Title\")\n"));
+	QCOMPARE(text->toPlainText(), QString("(\"The Title\")"));
+	QCOMPARE(text->pos(), defaultPos);
+	QCOMPARE(text->font(), defaultFontCheck.font());
 
 	//testing (define inc (lambda(x) (+ x 1)))
 	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10);
@@ -122,7 +136,9 @@ void NotebookTest::plotscriptTests()
 	QTest::keyRelease(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
 	QVERIFY2(viewwid->items().size() == 1, "incorrect number of items in QGraphicsView");
 	text = qgraphicsitem_cast<QGraphicsTextItem *>(viewwid->items()[0]);
-	QCOMPARE(text->toPlainText(), QString("Error: Invalid Program. Could not parse.\n"));
+	QCOMPARE(text->toPlainText(), QString("Error: Invalid Program. Could not parse."));
+	QCOMPARE(text->pos(), defaultPos);
+	QCOMPARE(text->font(), defaultFontCheck.font());
 
 	//testing (begin (define a I) (first a))
 	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10);
@@ -135,9 +151,11 @@ void NotebookTest::plotscriptTests()
 	QTest::keyRelease(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
 	QVERIFY2(viewwid->items().size() == 1, "incorrect number of items in QGraphicsView");
 	text = qgraphicsitem_cast<QGraphicsTextItem *>(viewwid->items()[0]);
-	QCOMPARE(text->toPlainText(), QString("Error in call to first, argument not a list\n"));
+	QCOMPARE(text->toPlainText(), QString("Error in call to first, argument not a list"));
+	QCOMPARE(text->pos(), defaultPos);
+	QCOMPARE(text->font(), defaultFontCheck.font());
 }
-
+//check if filled in
 void NotebookTest::pointTests()
 {
 	auto inwid = widget.findChild<InputWidget *>("input");
@@ -160,7 +178,9 @@ void NotebookTest::pointTests()
 	QVERIFY2(viewwid, "Could not find view widget");
 	QVERIFY2(viewwid->items().size() == 1, "incorrect number of items in QGraphicsView");
 	QGraphicsEllipseItem * point = qgraphicsitem_cast<QGraphicsEllipseItem *>(viewwid->items()[0]);
-	//QCOMPARE(point->brush(), Qt::SolidPattern);//check if filled in
+	QBrush fillTest;
+	fillTest.setStyle(Qt::SolidPattern);
+	QCOMPARE(point->brush(), fillTest);//check if filled in
 	QRectF pos;
 	double size = 0.0;
 	pos.setRect(0.0-(size/2.0), 0.0-(size/2.0), size, size);
@@ -177,7 +197,7 @@ void NotebookTest::pointTests()
 	QTest::keyRelease(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
 	QVERIFY2(viewwid->items().size() == 1, "incorrect number of items in QGraphicsView");
 	point = qgraphicsitem_cast<QGraphicsEllipseItem *>(viewwid->items()[0]);
-	//QCOMPARE(point->brush(), Qt::SolidPattern);//check if filled in
+	QCOMPARE(point->brush(), fillTest);//check if filled in
 	size = 20;
 	pos.setRect(0.0-(size / 2.0), 0.0-(size / 2.0), size, size);
 	QCOMPARE(point->rect(), pos);
@@ -204,7 +224,7 @@ void NotebookTest::pointTests()
 	for (int i = 0; i < 6; i++)
 	{
 		point = qgraphicsitem_cast<QGraphicsEllipseItem *>(viewwid->items()[(5-i)]);
-		//QCOMPARE(point->brush(), Qt::SolidPattern);//check if filled in
+		QCOMPARE(point->brush(), fillTest);//check if filled in
 		size = 1.0*(pow(2, i));
 		if (i == 0)//starting point at (0, 0)
 		{
@@ -239,7 +259,7 @@ void NotebookTest::pointTests()
 	for (int i = 0; i < 6; i++)
 	{
 		point = qgraphicsitem_cast<QGraphicsEllipseItem *>(viewwid->items()[(5-i)]);
-		//QCOMPARE(point->brush(), Qt::SolidPattern);//check if filled in
+		QCOMPARE(point->brush(), fillTest);//check if filled in
 		size = 1.0*(pow(2, i));
 		if (i == 0)//starting point at (0, 0)
 		{
@@ -252,6 +272,8 @@ void NotebookTest::pointTests()
 		QCOMPARE(point->rect(), pos);
 	}
 }
+
+
 void NotebookTest::lineTests()
 {
 
@@ -372,5 +394,99 @@ void NotebookTest::lineTests()
 	
 }
 
+void NotebookTest::textTests()
+{
+	auto inwid = widget.findChild<InputWidget *>("input");
+	auto outwid = widget.findChild<OutputWidget *>("output");
+	QGraphicsTextItem defaultFontCheck;
+
+	//clears just in case
+	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10);
+	QTest::keyPress(inwid, Qt::Key_A, Qt::ControlModifier, 10);
+	QTest::keyPress(inwid, Qt::Key_A, Qt::ControlModifier, 10);
+	QTest::keyPress(inwid, Qt::Key_Backspace, Qt::NoModifier, 10);
+	QTest::keyRelease(inwid, Qt::Key_Backspace, Qt::NoModifier, 10);
+
+	//testing (make-text "Hello World!")
+	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10);
+	QTest::keyClicks(inwid, "(make-text \"Hello World!\")");
+	QTest::keyPress(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
+	QTest::keyRelease(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
+	auto viewwid = outwid->findChild<QGraphicsView *>();
+	QVERIFY2(viewwid, "Could not find view widget");
+	QVERIFY2(viewwid->items().size() == 1, "incorrect number of items in QGraphicsView");
+	QGraphicsTextItem * text = qgraphicsitem_cast<QGraphicsTextItem *>(viewwid->items()[0]);
+	QPointF posCheck;
+	posCheck.setX(0.0);
+	posCheck.setY(0.0);
+	QCOMPARE(text->toPlainText(), QString("Hello World!"));
+	QCOMPARE(text->pos(), posCheck);
+	QCOMPARE(text->font(), defaultFontCheck.font());
+
+	/*
+	(begin
+	(define xloc 0)
+	(define yloc 0)
+	(list
+	(set-property "position" (make-point (+ xloc 20) yloc) (make-text "Hi"))
+	(set-property "position" (make-point (+ xloc 40) yloc) (make-text "Hi"))
+	(set-property "position" (make-point (+ xloc 60) yloc) (make-text "Hi"))
+	(set-property "position" (make-point (+ xloc 80) yloc) (make-text "Hi"))
+	(set-property "position" (make-point (+ xloc 100) yloc) (make-text "Hi"))
+	)
+	)
+	*/
+	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10);
+	QTest::keyPress(inwid, Qt::Key_A, Qt::ControlModifier, 10);
+	QTest::keyPress(inwid, Qt::Key_A, Qt::ControlModifier, 10);
+	QTest::keyPress(inwid, Qt::Key_Backspace, Qt::NoModifier, 10);
+	QTest::keyRelease(inwid, Qt::Key_Backspace, Qt::NoModifier, 10);
+	QTest::keyClicks(inwid, "(begin (define xloc 0) (define yloc 0) (list (set-property \"position\" (make-point (+ xloc 20) yloc) (make-text \"Hi\")) (set-property \"position\" (make-point (+ xloc 40) yloc) (make-text \"Hi\")) (set-property \"position\" (make-point (+ xloc 60) yloc) (make-text \"Hi\")) (set-property \"position\" (make-point (+ xloc 80) yloc) (make-text \"Hi\")) (set-property \"position\" (make-point (+ xloc 100) yloc) (make-text \"Hi\"))))");
+	QTest::keyPress(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
+	QTest::keyRelease(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
+	QVERIFY2(viewwid->items().size() == 5, "incorrect number of items in QGraphicsView");
+	for (int i = 0; i < 5; i++)
+	{
+		text = qgraphicsitem_cast<QGraphicsTextItem *>(viewwid->items()[(4 - i)]);
+		posCheck.setX((i + 1)*20.0);
+		posCheck.setY(0.0);
+		QCOMPARE(text->toPlainText(), QString("Hi"));
+		QCOMPARE(text->pos(), posCheck);
+		QCOMPARE(text->font(), defaultFontCheck.font());
+	}
+
+	/*
+	(begin
+	(define xloc 0)
+	(define yloc 0)
+	(list
+	(set-property "position" (make-point xloc (+ yloc 20)) (make-text "Hi"))
+	(set-property "position" (make-point xloc (+ yloc 40)) (make-text "Hi"))
+	(set-property "position" (make-point xloc (+ yloc 60)) (make-text "Hi"))
+	(set-property "position" (make-point xloc (+ yloc 80)) (make-text "Hi"))
+	(set-property "position" (make-point xloc (+ yloc 100)) (make-text "Hi"))
+	)
+	)
+	*/
+	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10);
+	QTest::keyPress(inwid, Qt::Key_A, Qt::ControlModifier, 10);
+	QTest::keyPress(inwid, Qt::Key_A, Qt::ControlModifier, 10);
+	QTest::keyPress(inwid, Qt::Key_Backspace, Qt::NoModifier, 10);
+	QTest::keyRelease(inwid, Qt::Key_Backspace, Qt::NoModifier, 10);
+	QTest::keyClicks(inwid, "(begin (define xloc 0) (define yloc 0) (list (set-property \"position\" (make-point xloc (+ yloc 20)) (make-text \"Hi\")) (set-property \"position\" (make-point xloc (+ yloc 40)) (make-text \"Hi\")) (set-property \"position\" (make-point xloc (+ yloc 60)) (make-text \"Hi\")) (set-property \"position\" (make-point xloc (+ yloc 80)) (make-text \"Hi\")) (set-property \"position\" (make-point xloc (+ yloc 100)) (make-text \"Hi\"))))");
+	QTest::keyPress(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
+	QTest::keyRelease(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
+	QVERIFY2(viewwid->items().size() == 5, "incorrect number of items in QGraphicsView");
+	for (int i = 0; i < 5; i++)
+	{
+		text = qgraphicsitem_cast<QGraphicsTextItem *>(viewwid->items()[(4 - i)]);
+		posCheck.setX(0.0);
+		posCheck.setY((i + 1)*20.0);
+		QCOMPARE(text->toPlainText(), QString("Hi"));
+		QCOMPARE(text->pos(), posCheck);
+		QCOMPARE(text->font(), defaultFontCheck.font());
+	}
+
+}
 QTEST_MAIN(NotebookTest)
 #include "notebook_test.moc"
