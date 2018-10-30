@@ -179,6 +179,7 @@ void NotebookTest::pointTests()
 	QVERIFY2(viewwid->items().size() == 1, "incorrect number of items in QGraphicsView");
 	QGraphicsEllipseItem * point = qgraphicsitem_cast<QGraphicsEllipseItem *>(viewwid->items()[0]);
 	QBrush fillTest;
+	fillTest.setColor(Qt::black);
 	fillTest.setStyle(Qt::SolidPattern);
 	QCOMPARE(point->brush(), fillTest);//check if filled in
 	QRectF pos;
@@ -304,6 +305,7 @@ void NotebookTest::lineTests()
 	QLineF testLine;
 	testLine.setLine(0.0, 0.0, 20.0, 20.0);
 	QPen testPen;
+	testPen.setColor(Qt::black);
 	testPen.setWidth(1);
 	QCOMPARE(line->line(), testLine);
 	QCOMPARE(line->pen(), testPen);
