@@ -96,7 +96,7 @@ void Expression::append(const Atom & a){
 void Expression::append(const Expression & a) {
 	m_tail.emplace_back(a);
 }
-
+/*
 void Expression::HexpressVisual(Atom headman, std::vector<Expression> tailman, Expression express, int layer)//ONLY WORKS IN HOST, helper function for troubleshooting
 {
 	Expression holder;
@@ -164,7 +164,7 @@ void Expression::HheadOutputer(Atom headman)//helps with HexpressVisual outputti
 	}
 }
 
-
+*/
 
 Expression * Expression::tail(){
   Expression * ptr = nullptr;
