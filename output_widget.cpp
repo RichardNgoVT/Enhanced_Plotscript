@@ -82,7 +82,7 @@ int OutputWidget::handle_Expression(Expression exp, bool recurs)
 	}
 	if (exp.isHeadList())
 	{
-		for (int i = 0; i < exp.tailVector().size(); i++)
+		for (unsigned int i = 0; i < exp.tailVector().size(); i++)
 		{
 			handle_Expression(exp.tailVector()[i], true);
 		}
@@ -97,7 +97,7 @@ int OutputWidget::handle_Expression(Expression exp, bool recurs)
 	{
 		if (exp.isHeadProperty() && exp.tailVector().size() == 3)
 		{
-			for (int i = 1; i < exp.tailVector().size(); i++)
+			for (unsigned int i = 1; i < exp.tailVector().size(); i++)
 			{
 				if (exp.tailVector()[i].head().asPString() == "\"object-name\"")
 				{

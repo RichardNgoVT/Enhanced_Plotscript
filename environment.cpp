@@ -588,7 +588,7 @@ Expression RestLIST(const std::vector<Expression> & args) {
 		if (args[0].isHeadList()) {
 			if (args[0].tailVector().size() > 0)
 			{
-				for (int i = 1; i < args[0].tailVector().size(); i++) {
+				for (unsigned int i = 1; i < args[0].tailVector().size(); i++) {
 					list.append(args[0].tailVector()[i]);
 				}
 				return list;
@@ -636,7 +636,7 @@ Expression AppendLIST(const std::vector<Expression> & args) {
 	{
 		if (args[0].isHeadList()) {
 
-			for (int i = 0; i < args[0].tailVector().size(); i++) {
+			for (unsigned int i = 0; i < args[0].tailVector().size(); i++) {
 				list.append(args[0].tailVector()[i]);
 			}
 			list.append(args[1].head());
@@ -660,10 +660,10 @@ Expression JoinLIST(const std::vector<Expression> & args) {
 	{
 		if (args[0].isHeadList() && args[1].isHeadList()) {
 
-			for (int i = 0; i < args[0].tailVector().size(); i++) {
+			for (unsigned int i = 0; i < args[0].tailVector().size(); i++) {
 				list.append(args[0].tailVector()[i]);
 			}
-			for (int i = 0; i < args[1].tailVector().size(); i++) {
+			for (unsigned int i = 0; i < args[1].tailVector().size(); i++) {
 				list.append(args[1].tailVector()[i]);
 			}
 			return list;

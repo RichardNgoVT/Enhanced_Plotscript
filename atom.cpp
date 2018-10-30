@@ -19,7 +19,6 @@ Atom::Atom(std::complex<double> value) {
 }
 
 Atom::Atom(const Token & token): Atom(){
-  
   // is token a number?
   double temp;
   std::istringstream iss(token.asString());
@@ -286,6 +285,7 @@ bool Atom::operator==(const Atom & right) const noexcept{
   {
 	  if (right.m_type != ProcedureKind) return false;
   }
+  break;
   case PropertyKind:
   {
 	  if (right.m_type != PropertyKind) return false;

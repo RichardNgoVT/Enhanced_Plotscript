@@ -112,7 +112,7 @@ void Expression::HexpressVisual(Atom headman, std::vector<Expression> tailman, E
 	int deeper = layer + 1;
 	std::cout << '[' << deeper;
 	HheadOutputer(holder.head());
-	for (int i = 0; i < holder.m_tail.size(); i++)
+	for (unsigned int i = 0; i < holder.m_tail.size(); i++)
 	{
 		std::cout << ' ';
 		HexpressVisual(Atom(), std::vector<Expression>(), holder.m_tail[i], deeper);
@@ -310,7 +310,7 @@ Expression Expression::handle_lambda(Environment & env) {
 
 
 	Variables.emplace_back(m_tail[0].head());
-	for (int i = 0; i < m_tail[0].tailVector().size(); i++) {
+	for (unsigned int i = 0; i < m_tail[0].tailVector().size(); i++) {
 		if (m_tail[0].tailVector()[i].isHeadSymbol())
 		{
 			Variables.emplace_back(m_tail[0].tailVector()[i]);
@@ -360,19 +360,19 @@ Expression Expression::handle_lambdaProcedure(Environment & env) {
 			if (lambda.tailVector()[0].tailVector().size() == m_tail.size())
 			{
 				//store old variables
-				for (int i = 0; i < lambda.tailVector()[0].tailVector().size(); i++)
+				for (unsigned int i = 0; i < lambda.tailVector()[0].tailVector().size(); i++)
 				{
 					varStorage.emplace_back(env.get_exp(lambda.tailVector()[0].tailVector()[i].head()));
 				}
 				//delete old variables
-				for (int i = 0; i < lambda.tailVector()[0].tailVector().size(); i++)
+				for (unsigned int i = 0; i < lambda.tailVector()[0].tailVector().size(); i++)
 				{
 					env.delete_exp(lambda.tailVector()[0].tailVector()[i].head());
 				}
 
 
 				//create new variables
-				for (int i = 0; i < lambda.tailVector()[0].tailVector().size(); i++)
+				for (unsigned int i = 0; i < lambda.tailVector()[0].tailVector().size(); i++)
 				{
 					//cout << lambda.tailVector()[0].tailVector()[i].head().asSymbol() << endl;
 					env.add_exp(lambda.tailVector()[0].tailVector()[i].head(), m_tail[i]);
@@ -381,12 +381,12 @@ Expression Expression::handle_lambdaProcedure(Environment & env) {
 				}
 				result = lambda.tailVector()[1].eval(env);
 				//delete new variables
-				for (int i = 0; i < lambda.tailVector()[0].tailVector().size(); i++)
+				for (unsigned int i = 0; i < lambda.tailVector()[0].tailVector().size(); i++)
 				{
 					env.delete_exp(lambda.tailVector()[0].tailVector()[i].head());
 				}
 				//add back old variables
-				for (int i = 0; i < lambda.tailVector()[0].tailVector().size(); i++)
+				for (unsigned int i = 0; i < lambda.tailVector()[0].tailVector().size(); i++)
 				{
 					if (!varStorage[i].head().isNone())
 					{
@@ -488,7 +488,7 @@ Expression Expression::handle_map(Environment & env) {
 	}
 
 	Expression resultHold;
-	for (int i = 0; i < list.tailVector().size(); i++)
+	for (unsigned int i = 0; i < list.tailVector().size(); i++)
 	{
 		m_tail.clear();
 		
@@ -557,7 +557,7 @@ Expression Expression::handle_setProperty(Environment & env) {
 	
 	if (express.isHeadProperty())
 	{
-		for (int i = 1; i < express.m_tail.size(); i++)
+		for (unsigned int i = 1; i < express.m_tail.size(); i++)
 		{
 			if (propertyEx.head().asPString() == express.m_tail[i].head().asPString())
 			{
@@ -611,7 +611,7 @@ Expression Expression::handle_getProperty(Environment & env) {
 	{
 		return Expression();
 	}
-	for (int i = 1; i < propList.m_tail.size(); i++)
+	for (unsigned int i = 1; i < propList.m_tail.size(); i++)
 	{
 		if (key == propList.m_tail[i].head().asPString())
 		{
@@ -682,7 +682,7 @@ Expression Expression::eval(Environment & env){
 			}
 			//cout << "BEGINforloop" << endl;
 			/*
-			for (int i = 0; i < m_tail.size(); i++)
+			for (unsigned int i = 0; i < m_tail.size(); i++)
 			{
 				//cout << m_tail[i].head().asSymbol() << endl;
 				//HexpressVisual(m_tail[i].head(), m_tail[i].tailVector(), Expression(), 0);
