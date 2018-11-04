@@ -1,11 +1,28 @@
 #include "output_widget.hpp"
 
+Expression propFinder(Atom prop, Expression express)
+{
+	for (unsigned int i = 0; i < express.tailVector().size(); i++)
+	{
+		if (prop == express.tailVector()[i].head())
+		{
+			return express.tailVector()[i];
+		}
+	}
+	std::cout << "HERE\n";
+	return Expression();
+
+}
+
 OutputWidget::OutputWidget(QWidget * parent) : QWidget(parent) {
 	auto layout = new QGridLayout();
 	viewer.setScene(&grapher);
+	viewer.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	viewer.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	layout->addWidget(&viewer, 0, 0);
 	setLayout(layout);
 }
+
 
 
 
@@ -95,9 +112,9 @@ int OutputWidget::handle_Expression(Expression exp, bool recurs)
 	}
 	else
 	{
-		if (exp.isHeadProperty() && exp.tailVector().size() == 3)
+		if (exp.isHeadProperty())
 		{
-			for (unsigned int i = 1; i < exp.tailVector().size(); i++)
+			for (unsigned int i = 1; i < exp.tailVector().size(); i++)//might as well just check first property, maybe add helper for loop function later, returns expression
 			{
 				if (exp.tailVector()[i].head().asPString() == "\"object-name\"")
 				{
@@ -157,7 +174,26 @@ int OutputWidget::handle_Expression(Expression exp, bool recurs)
 							std::string slice = exp.tailVector()[0].head().asPString().substr(1, exp.tailVector()[0].head().asPString().length() - 2);
 							QString qstr = QString::fromStdString(slice);
 							auto text = new QGraphicsTextItem(qstr);
-							text->setPos(exp.tailVector()[2].tailVector()[0].tailVector()[0].tailVector()[0].head().asNumber(), exp.tailVector()[2].tailVector()[0].tailVector()[0].tailVector()[1].head().asNumber());
+							if(propFinder(Atom("\"text-scale\""), exp) == Expression() || !propFinder(Atom("\"text-scale\""), exp).tailVector()[0].isHeadNumber() ||  propFinder(Atom("\"text-scale\""), exp).tailVector()[0].head().asNumber() < 0.0)
+							{
+								text->setScale(1.0);
+							}
+							else
+							{
+								text->setScale(propFinder(Atom("\"text-scale\""), exp).tailVector()[0].head().asNumber());
+							}
+							
+
+							if (propFinder(Atom("\"text-rotation\""), exp) == Expression() || !propFinder(Atom("\"text-rotation\""), exp).tailVector()[0].isHeadNumber())
+							{
+								text->setRotation(0.0);
+							}
+							else
+							{
+									text->setRotation(propFinder(Atom("\"text-rotation\""), exp).tailVector()[0].head().asNumber()/(std::atan2(0, -1))*180.0);
+							}
+							//text->boundingRect().width / 2.0;
+							text->setPos(exp.tailVector()[2].tailVector()[0].tailVector()[0].tailVector()[0].head().asNumber()-(text->boundingRect().width() / 2.0), exp.tailVector()[2].tailVector()[0].tailVector()[0].tailVector()[1].head().asNumber()-(text->boundingRect().height() / 2.0));
 							grapher.addItem(text);
 
 							return EXIT_SUCCESS;
@@ -191,3 +227,4 @@ int OutputWidget::handle_Expression(Expression exp, bool recurs)
 	}
 
 }
+
