@@ -9,16 +9,19 @@ Expression propFinder(Atom prop, Expression express)
 			return express.tailVector()[i];
 		}
 	}
-	std::cout << "HERE\n";
+	
 	return Expression();
 
 }
 
 OutputWidget::OutputWidget(QWidget * parent) : QWidget(parent) {
 	auto layout = new QGridLayout();
+
+	//fitInView(grapher.sceneRect(), Qt::KeepAspectRatio);
+
 	viewer.setScene(&grapher);
-	viewer.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	viewer.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	//viewer.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	//viewer.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	layout->addWidget(&viewer, 0, 0);
 	setLayout(layout);
 }
@@ -63,7 +66,7 @@ int OutputWidget::psEnter(QString inputtxt)
 	else {
 		try {//notebookimplmentation
 			Expression exp = interp.evaluate();
-			//exp.HexpressVisual(exp.head(), exp.tailVector(), Expression(), 0);
+			exp.HexpressVisual(exp.head(), exp.tailVector(), Expression(), 0);
 			handle_Expression(exp, false);
 			
 		}
@@ -84,9 +87,16 @@ int OutputWidget::psEnter(QString inputtxt)
 		}
 	}
 
-	
+
+			viewer.fitInView(grapher.sceneRect(), Qt::KeepAspectRatio);
+
 
 	
+	
+	
+
+
+
 	return EXIT_SUCCESS;
 }
 
@@ -183,6 +193,11 @@ int OutputWidget::handle_Expression(Expression exp, bool recurs)
 								text->setScale(propFinder(Atom("\"text-scale\""), exp).tailVector()[0].head().asNumber());
 							}
 							
+							
+							text->setFont(QFont("Courier", 1));
+							text->setPos(exp.tailVector()[2].tailVector()[0].tailVector()[0].tailVector()[0].head().asNumber()-(text->boundingRect().width() / 2.0), exp.tailVector()[2].tailVector()[0].tailVector()[0].tailVector()[1].head().asNumber()-(text->boundingRect().height() / 2.0));
+							
+							
 
 							if (propFinder(Atom("\"text-rotation\""), exp) == Expression() || !propFinder(Atom("\"text-rotation\""), exp).tailVector()[0].isHeadNumber())
 							{
@@ -190,10 +205,14 @@ int OutputWidget::handle_Expression(Expression exp, bool recurs)
 							}
 							else
 							{
-									text->setRotation(propFinder(Atom("\"text-rotation\""), exp).tailVector()[0].head().asNumber()/(std::atan2(0, -1))*180.0);
+								QTransform transform;
+								transform.translate(text->boundingRect().center().x(), text->boundingRect().center().y());
+								transform.rotate((propFinder(Atom("\"text-rotation\""), exp).tailVector()[0].head().asNumber() / (std::atan2(0, -1)))*180.0);
+								transform.translate(-text->boundingRect().center().x(), -text->boundingRect().center().y());
+								text->setTransform(transform);
 							}
-							//text->boundingRect().width / 2.0;
-							text->setPos(exp.tailVector()[2].tailVector()[0].tailVector()[0].tailVector()[0].head().asNumber()-(text->boundingRect().width() / 2.0), exp.tailVector()[2].tailVector()[0].tailVector()[0].tailVector()[1].head().asNumber()-(text->boundingRect().height() / 2.0));
+
+
 							grapher.addItem(text);
 
 							return EXIT_SUCCESS;
