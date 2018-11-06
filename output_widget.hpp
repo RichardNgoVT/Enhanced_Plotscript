@@ -19,7 +19,7 @@ public:
 	int handle_Expression(Expression exp, bool recurs);
 	public slots :
 		int psEnter(QString inputtxt);
-
+		void resizeEvent(QResizeEvent* event);
 
 
 private:

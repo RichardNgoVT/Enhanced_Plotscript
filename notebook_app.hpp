@@ -14,6 +14,7 @@ public:
 	OutputWidget *output;
 	public slots:
 	void outputApp();
+	
 
 private:
 

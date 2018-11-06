@@ -51,6 +51,8 @@ NotebookApp::NotebookApp(QWidget * parent) : QWidget(parent) {
 	
 }
 
+
+
 void NotebookApp::outputApp() {
 
 	this->show();

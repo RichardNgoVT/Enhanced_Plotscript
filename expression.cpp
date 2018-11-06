@@ -2,7 +2,9 @@
 
 #include <sstream>
 #include <list>
-
+#include <iostream>
+#include <iomanip>
+#include <cmath>
 #include "environment.hpp"
 #include "semantic_error.hpp"
 
@@ -936,9 +938,11 @@ Expression Expression::handle_discretePlot(Environment & env) {
 	}
 
 	//graph limits
-	
+	std::stringstream precision;
+	precision << std::setprecision(2) << Ymax;
 	textCreate = Expression(Atom("make-text"));
-	textCreate.append(Atom('\"'+std::to_string(Ymax)+'\"'));
+	textCreate.append(Atom('\"'+precision.str()+'\"'));
+	precision.str(std::string());
 
 	pointCreate = Expression(Atom("make-point"));
 	pointCreate.append(Atom(D));
@@ -955,8 +959,10 @@ Expression Expression::handle_discretePlot(Environment & env) {
 	graphList.append(scaleCreate.eval(env));//evaluate lambda
 
 
+	precision << std::setprecision(2) << Ymin;
 	textCreate = Expression(Atom("make-text"));
-	textCreate.append(Atom('\"' + std::to_string(Ymin) + '\"'));
+	textCreate.append(Atom('\"' + precision.str() + '\"'));
+	precision.str(std::string());
 
 	pointCreate = Expression(Atom("make-point"));
 	pointCreate.append(Atom(D));
@@ -972,8 +978,10 @@ Expression Expression::handle_discretePlot(Environment & env) {
 	scaleCreate.append(propCreate);
 	graphList.append(scaleCreate.eval(env));//evaluate lambda
 
+	precision << std::setprecision(2) << Xmax;
 	textCreate = Expression(Atom("make-text"));
-	textCreate.append(Atom('\"' + std::to_string(Xmax) + '\"'));
+	textCreate.append(Atom('\"' + precision.str() + '\"'));
+	precision.str(std::string());
 
 	pointCreate = Expression(Atom("make-point"));
 	pointCreate.append(Atom(N + B));
@@ -989,8 +997,10 @@ Expression Expression::handle_discretePlot(Environment & env) {
 	scaleCreate.append(propCreate);
 	graphList.append(scaleCreate.eval(env));//evaluate lambda
 
+	precision << std::setprecision(2) << Xmin;
 	textCreate = Expression(Atom("make-text"));
-	textCreate.append(Atom('\"' + std::to_string(Xmin) + '\"'));
+	textCreate.append(Atom('\"' + precision.str() + '\"'));
+	precision.str(std::string());
 
 	pointCreate = Expression(Atom("make-point"));
 	pointCreate.append(Atom(B));

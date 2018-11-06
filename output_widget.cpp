@@ -20,14 +20,17 @@ OutputWidget::OutputWidget(QWidget * parent) : QWidget(parent) {
 	//fitInView(grapher.sceneRect(), Qt::KeepAspectRatio);
 
 	viewer.setScene(&grapher);
-	//viewer.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	//viewer.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	viewer.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	viewer.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	layout->addWidget(&viewer, 0, 0);
 	setLayout(layout);
 }
 
-
-
+void OutputWidget::resizeEvent(QResizeEvent* event)
+{
+	QWidget::resizeEvent(event);
+	viewer.fitInView(grapher.itemsBoundingRect(), Qt::KeepAspectRatio);
+}
 
 
 
@@ -186,6 +189,7 @@ int OutputWidget::handle_Expression(Expression exp, bool recurs)
 							auto text = new QGraphicsTextItem(qstr);
 							if(propFinder(Atom("\"text-scale\""), exp) == Expression() || !propFinder(Atom("\"text-scale\""), exp).tailVector()[0].isHeadNumber() ||  propFinder(Atom("\"text-scale\""), exp).tailVector()[0].head().asNumber() < 0.0)
 							{
+								
 								text->setScale(1.0);
 							}
 							else
