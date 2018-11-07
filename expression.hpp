@@ -129,6 +129,15 @@ private:
   Expression handle_getProperty(Environment & env);
   Expression handle_setProperty(Environment & env);
   Expression handle_discretePlot(Environment & env);
+  Expression handle_continuousPlot(Environment & env);
+
+  const double N = 20.0;
+  const double A = 3.0;
+  const double B = 3.0;
+  const double C = 2.0;
+  const double D = 2.0;
+  const double P = 0.5;
+
 };
 
 /// Render expression to output stream

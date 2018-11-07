@@ -642,12 +642,7 @@ Expression Expression::handle_discretePlot(Environment & env) {
 	double Xmin;
 	double Ymin;
 
-	const double N = 20.0;
-	const double A = 3.0;
-	const double B = 3.0;
-	const double C = 2.0;
-	const double D = 2.0;
-	const double P = 0.5;
+
 
 	Xmax = m_tail[0].tailVector()[0].tailVector()[0].head().asNumber();
 	Ymax = m_tail[0].tailVector()[0].tailVector()[1].head().asNumber();
@@ -1017,13 +1012,452 @@ Expression Expression::handle_discretePlot(Environment & env) {
 	graphList.append(scaleCreate.eval(env));//evaluate lambda
 	
 	return graphList;
-
-
-
-
-
 }
 
+
+Expression Expression::handle_continuousPlot(Environment & env) {
+
+	if (!(m_tail[0].isHeadSymbol() && env.is_exp(m_tail[0].head())))//also check if lambda only has one argument
+	{
+		throw SemanticError("Error in call to continuous-plot function: first argument not a lambda");
+	
+	}
+	if (!m_tail[1].eval(env).isHeadList())//also check if list contains only numbers, if list is of size 2
+	{
+		throw SemanticError("Error in call to continuous-plot function: second argument not a list");
+	}
+	Expression lambda;
+	lambda = m_tail[0].head();
+	lambda.append(Expression(0));//buffer
+	double Xmax;
+	double Xmin;
+	double Ymax;
+	double Ymin;
+
+	Xmax = m_tail[1].eval(env).tailVector()[1].head().asNumber();
+	Xmin = m_tail[1].eval(env).tailVector()[0].head().asNumber();
+
+	std::vector<double> Xplot;
+
+	for (int i = 0; i < 51; i++)//points
+	{
+		Xplot.push_back(i*(Xmax - Xmin) / 50.0 + Xmin);
+	}
+
+	double y1;
+	double y2;
+	double y3;
+	bool iterated = false;
+	for (int j = 0; j < 5; j++)//should be 10
+	{
+		iterated = false;
+		for (int i = 2; i < Xplot.size(); i++)
+		{
+			lambda.tailVector()[0] = Expression(Xplot[i - 2]);//does this work?
+			y1 = lambda.eval(env).head().asNumber();
+
+			lambda.tailVector()[0] = Expression(Xplot[i - 1]);
+			y2 = lambda.eval(env).head().asNumber();
+			if (i == 2)
+			{
+				Ymax = y1;
+				Ymin = y1;
+				if (Ymax < y2)
+				{
+					Ymax = y2;
+				}
+				if (Ymin > y2)
+				{
+					Ymin = y2;
+				}
+			}
+			lambda.tailVector()[0] = Expression(Xplot[i]);
+			y3 = lambda.eval(env).head().asNumber();
+			if (Ymax < y3)
+			{
+				Ymax = y3;
+			}
+			if (Ymin > y3)
+			{
+				Ymin = y3;
+			}
+			//if ((180 - (arcCos((x3-x2)/sqrt((x3-x2)^2 + (y3-y2)^2)) - arcCos((x2-x1)/sqrt((x2-x1)^2 + (y2-y1)^2))) < 175) || (-180 - (arcCos((x3-x2)/sqrt((x3-x2)^2 + (y3-y2)^2)) - arcCos((x2-x1)/sqrt((x2-x1)^2 + (y2-y1)^2))) > -175))
+			if ((180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2.0) + pow((y3 - y2), 2.0))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))) < 175) || (-180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2) + pow((y3 - y2), 2))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))) > -175))
+			{
+				Xplot.insert(Xplot.begin() + i, Xplot[i] - Xplot[i - 1]);
+				i = i + 1;
+				if (iterated == false)
+				{
+					Xplot.insert(Xplot.begin() + i - 1, Xplot[i - 1] - Xplot[i - 2]);
+					iterated = true;
+					i = i + 1;
+				}
+			}
+			else
+			{
+				iterated = false;
+			}
+
+		}
+
+	}
+
+	//graphing
+	Expression graphList;
+	Expression textCreate;
+	Expression propCreate;
+	Expression scaleCreate;
+	Expression pointCreate;
+	Expression lineCreate;
+
+	graphList.markList();
+	double scaleF = 1.0;
+	double XScale;
+	double YScale;
+	
+
+	XScale = N / (Xmax - Xmin);
+	YScale = N / (Ymax - Ymin);
+
+	double Yi;
+
+	pointCreate = Expression(Atom("make-point"));
+	pointCreate.append(Expression());
+	pointCreate.append(Expression());
+
+	lineCreate = Expression(Atom("make-line"));
+	lineCreate.append(Expression());
+	lineCreate.append(Expression());
+
+	propCreate = Expression(Atom("set-property"));
+	propCreate.append(Atom("\"thickness\""));
+	propCreate.append(Atom(0.0));
+	propCreate.append(Expression());
+
+	Expression holder;
+	for (unsigned int i = 0; i < Xplot.size()-1; i++)
+	{
+		lambda.tailVector()[0] = Expression(Xplot[i]);
+		Yi = lambda.eval(env).head().asNumber();
+		//pointCreate = Expression(Atom("make-point"));
+		pointCreate.tailVector()[0] = (Atom((Xplot[i] - Xmin)*XScale + B));
+		pointCreate.tailVector()[1] = (Atom(N + A - (Yi - Ymin)*YScale));
+
+		//lineCreate = Expression(Atom("make-line"));
+		lineCreate.tailVector()[0] = (pointCreate);
+
+		lambda.tailVector()[0] = Expression(Xplot[i+1]);
+		Yi = lambda.eval(env).head().asNumber();
+		//pointCreate = Expression(Atom("make-point"));
+		pointCreate.tailVector()[0] = (Atom((Xplot[i+1] - Xmin)*XScale + B));
+		pointCreate.tailVector()[1] = (Atom(N + A - (Yi - Ymin)*YScale));
+
+		lineCreate.tailVector()[1] = (pointCreate);
+
+		//propCreate = Expression(Atom("set-property"));
+		//propCreate.append(Atom("\"thickness\""));
+		//propCreate.append(Atom(0.0));
+		propCreate.tailVector()[2] = (lineCreate);
+		holder = propCreate;
+		graphList.append(holder.eval(env));
+		//std::cout << "hey";
+	}
+	
+
+	//create graph line boarders (maybe make a helper function?)
+
+	//left
+	lineCreate = Expression(Atom("make-line"));
+
+	pointCreate = Expression(Atom("make-point"));
+	pointCreate.append(Atom(B));
+	pointCreate.append(Atom(A));
+
+	lineCreate.append(pointCreate);
+
+	pointCreate = Expression(Atom("make-point"));
+	pointCreate.append(Atom(B));
+	pointCreate.append(Atom(N + A));
+
+	lineCreate.append(pointCreate);
+
+	propCreate = Expression(Atom("set-property"));
+	propCreate.append(Atom("\"thickness\""));
+	propCreate.append(Atom(0.0));
+	propCreate.append(lineCreate);
+
+	graphList.append(propCreate.eval(env));
+
+	//right
+	lineCreate = Expression(Atom("make-line"));
+
+	pointCreate = Expression(Atom("make-point"));
+	pointCreate.append(Atom(N + B));
+	pointCreate.append(Atom(A));
+
+	lineCreate.append(pointCreate);
+
+	pointCreate = Expression(Atom("make-point"));
+	pointCreate.append(Atom(N + B));
+	pointCreate.append(Atom(N + A));
+
+	lineCreate.append(pointCreate);
+
+	propCreate = Expression(Atom("set-property"));
+	propCreate.append(Atom("\"thickness\""));
+	propCreate.append(Atom(0.0));
+	propCreate.append(lineCreate);
+
+	graphList.append(propCreate.eval(env));
+
+	//top
+	lineCreate = Expression(Atom("make-line"));
+
+	pointCreate = Expression(Atom("make-point"));
+	pointCreate.append(Atom(B));
+	pointCreate.append(Atom(A));
+
+	lineCreate.append(pointCreate);
+
+	pointCreate = Expression(Atom("make-point"));
+	pointCreate.append(Atom(N + B));
+	pointCreate.append(Atom(A));
+
+	lineCreate.append(pointCreate);
+
+	propCreate = Expression(Atom("set-property"));
+	propCreate.append(Atom("\"thickness\""));
+	propCreate.append(Atom(0.0));
+	propCreate.append(lineCreate);
+
+	graphList.append(propCreate.eval(env));
+
+	//bottom
+	lineCreate = Expression(Atom("make-line"));
+
+	pointCreate = Expression(Atom("make-point"));
+	pointCreate.append(Atom(B));
+	pointCreate.append(Atom(N + A));
+
+	lineCreate.append(pointCreate);
+
+	pointCreate = Expression(Atom("make-point"));
+	pointCreate.append(Atom(N + B));
+	pointCreate.append(Atom(N + A));
+
+	lineCreate.append(pointCreate);
+
+	propCreate = Expression(Atom("set-property"));
+	propCreate.append(Atom("\"thickness\""));
+	propCreate.append(Atom(0.0));
+	propCreate.append(lineCreate);
+
+	graphList.append(propCreate.eval(env));
+
+	//X axis
+	if (Ymin < 0.0 && Ymax > 0.0)
+	{
+		lineCreate = Expression(Atom("make-line"));
+
+		pointCreate = Expression(Atom("make-point"));
+		pointCreate.append(Atom(B));
+		pointCreate.append(Atom(N + A + Ymin * YScale));
+
+		lineCreate.append(pointCreate);
+
+		pointCreate = Expression(Atom("make-point"));
+		pointCreate.append(Atom(N + B));
+		pointCreate.append(Atom(N + A + Ymin * YScale));
+
+		lineCreate.append(pointCreate);
+
+		propCreate = Expression(Atom("set-property"));
+		propCreate.append(Atom("\"thickness\""));
+		propCreate.append(Atom(0.0));
+		propCreate.append(lineCreate);
+
+		graphList.append(propCreate.eval(env));
+	}
+
+	//Y axis
+	if (Xmin < 0.0 && Xmax > 0.0)
+	{
+		lineCreate = Expression(Atom("make-line"));
+
+		pointCreate = Expression(Atom("make-point"));
+		pointCreate.append(Atom(B - Xmin * XScale));
+		pointCreate.append(Atom(A));
+
+		lineCreate.append(pointCreate);
+
+		pointCreate = Expression(Atom("make-point"));
+		pointCreate.append(Atom(B - Xmin * XScale));
+		pointCreate.append(Atom(N + A));
+
+		lineCreate.append(pointCreate);
+
+		propCreate = Expression(Atom("set-property"));
+		propCreate.append(Atom("\"thickness\""));
+		propCreate.append(Atom(0.0));
+		propCreate.append(lineCreate);
+
+		graphList.append(propCreate.eval(env));
+	}
+	//
+
+
+	//create graph labels
+	for (unsigned int i = 0; i < m_tail[2].tailVector().size(); i++)
+	{
+		if (m_tail[2].tailVector()[i].tailVector()[0].head().asPString() == "\"text-scale\"")//should be found first
+		{
+			scaleF = m_tail[2].tailVector()[i].tailVector()[1].head().asNumber();
+		}
+	}
+
+	for (unsigned int i = 0; i < m_tail[2].tailVector().size(); i++)
+	{
+
+		if (m_tail[2].tailVector()[i].tailVector()[0].head().asPString() == "\"title\"")//(13, 0)
+		{
+			textCreate = Expression(Atom("make-text"));
+			textCreate.append(m_tail[2].tailVector()[i].tailVector()[1]);
+			//std::cout << m_tail[2].tailVector()[i].tailVector()[1].head().asPString() << std::endl << std::endl;
+			pointCreate = Expression(Atom("make-point"));
+			pointCreate.append(Atom((N + B + B) / 2.0));
+			pointCreate.append(Atom(0.0));
+			propCreate = Expression(Atom("set-property"));
+			propCreate.append(Atom("\"position\""));
+			propCreate.append(pointCreate);
+			propCreate.append(textCreate);
+
+		}
+		else if (m_tail[2].tailVector()[i].tailVector()[0].head().asPString() == "\"abscissa-label\"")//(13, 26)
+		{
+			textCreate = Expression(Atom("make-text"));
+			textCreate.append(m_tail[2].tailVector()[i].tailVector()[1]);
+
+			pointCreate = Expression(Atom("make-point"));
+			pointCreate.append(Atom((N + B + B) / 2.0));
+			pointCreate.append(Atom(N + A + A));
+			propCreate = Expression(Atom("set-property"));
+			propCreate.append(Atom("\"position\""));
+			propCreate.append(pointCreate);
+			propCreate.append(textCreate);
+		}
+		else if (m_tail[2].tailVector()[i].tailVector()[0].head().asPString() == "\"ordinate-label\"")//(0, 13)
+		{
+			textCreate = Expression(Atom("make-text"));
+			textCreate.append(m_tail[2].tailVector()[i].tailVector()[1]);
+			propCreate = Expression(Atom("set-property"));
+			propCreate.append(Atom("\"text-rotation\""));
+			propCreate.append(Atom(std::atan2(0, -1) / -2.0));
+			propCreate.append(textCreate);
+
+			textCreate = propCreate;
+			pointCreate = Expression(Atom("make-point"));
+			pointCreate.append(Atom(0.0));
+			pointCreate.append(Atom((N + A + A) / 2.0));
+			propCreate = Expression(Atom("set-property"));
+			propCreate.append(Atom("\"position\""));
+			propCreate.append(pointCreate);
+			propCreate.append(textCreate);
+		}
+
+		if (!(m_tail[2].tailVector()[i].tailVector()[0].head().asPString() == "\"text-scale\""))//skip
+		{
+			scaleCreate = Expression(Atom("set-property"));
+			scaleCreate.append(Atom("\"text-scale\""));
+			scaleCreate.append(scaleF);
+			scaleCreate.append(propCreate);
+			graphList.append(scaleCreate.eval(env));//evaluate lambda
+		}
+
+
+
+	}
+
+	//graph limits
+	std::stringstream precision;
+	precision << std::setprecision(2) << Ymax;
+	textCreate = Expression(Atom("make-text"));
+	textCreate.append(Atom('\"' + precision.str() + '\"'));
+	precision.str(std::string());
+
+	pointCreate = Expression(Atom("make-point"));
+	pointCreate.append(Atom(D));
+	pointCreate.append(Atom(A));
+	propCreate = Expression(Atom("set-property"));
+	propCreate.append(Atom("\"position\""));
+	propCreate.append(pointCreate);
+	propCreate.append(textCreate);
+
+	scaleCreate = Expression(Atom("set-property"));
+	scaleCreate.append(Atom("\"text-scale\""));
+	scaleCreate.append(scaleF);
+	scaleCreate.append(propCreate);
+	graphList.append(scaleCreate.eval(env));//evaluate lambda
+
+
+	precision << std::setprecision(2) << Ymin;
+	textCreate = Expression(Atom("make-text"));
+	textCreate.append(Atom('\"' + precision.str() + '\"'));
+	precision.str(std::string());
+
+	pointCreate = Expression(Atom("make-point"));
+	pointCreate.append(Atom(D));
+	pointCreate.append(Atom(N + A));
+	propCreate = Expression(Atom("set-property"));
+	propCreate.append(Atom("\"position\""));
+	propCreate.append(pointCreate);
+	propCreate.append(textCreate);
+
+	scaleCreate = Expression(Atom("set-property"));
+	scaleCreate.append(Atom("\"text-scale\""));
+	scaleCreate.append(scaleF);
+	scaleCreate.append(propCreate);
+	graphList.append(scaleCreate.eval(env));//evaluate lambda
+
+	precision << std::setprecision(2) << Xmax;
+	textCreate = Expression(Atom("make-text"));
+	textCreate.append(Atom('\"' + precision.str() + '\"'));
+	precision.str(std::string());
+
+	pointCreate = Expression(Atom("make-point"));
+	pointCreate.append(Atom(N + B));
+	pointCreate.append(Atom(N + A + A - C));
+	propCreate = Expression(Atom("set-property"));
+	propCreate.append(Atom("\"position\""));
+	propCreate.append(pointCreate);
+	propCreate.append(textCreate);
+
+	scaleCreate = Expression(Atom("set-property"));
+	scaleCreate.append(Atom("\"text-scale\""));
+	scaleCreate.append(scaleF);
+	scaleCreate.append(propCreate);
+	graphList.append(scaleCreate.eval(env));//evaluate lambda
+
+	precision << std::setprecision(2) << Xmin;
+	textCreate = Expression(Atom("make-text"));
+	textCreate.append(Atom('\"' + precision.str() + '\"'));
+	precision.str(std::string());
+
+	pointCreate = Expression(Atom("make-point"));
+	pointCreate.append(Atom(B));
+	pointCreate.append(Atom(N + A + A - C));
+	propCreate = Expression(Atom("set-property"));
+	propCreate.append(Atom("\"position\""));
+	propCreate.append(pointCreate);
+	propCreate.append(textCreate);
+
+	scaleCreate = Expression(Atom("set-property"));
+	scaleCreate.append(Atom("\"text-scale\""));
+	scaleCreate.append(scaleF);
+	scaleCreate.append(propCreate);
+	graphList.append(scaleCreate.eval(env));//evaluate lambda
+
+	return graphList;
+}
 
 
 // this is a simple recursive version. the iterative version is more
@@ -1077,6 +1511,9 @@ Expression Expression::eval(Environment & env){
 		}
 		else if (m_head.isSymbol() && m_head.asSymbol() == "get-property") {
 			return handle_getProperty(env);
+		}
+		else if (m_head.isSymbol() && m_head.asSymbol() == "continuous-plot") {
+			return handle_continuousPlot(env);
 		}
 		// else attempt to treat as procedure
 		else {
