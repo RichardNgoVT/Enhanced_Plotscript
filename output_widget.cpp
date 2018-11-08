@@ -149,7 +149,11 @@ int OutputWidget::handle_Expression(Expression exp, bool recurs)
 						}
 						auto point = new QGraphicsEllipseItem;
 						point->setRect(exp.tailVector()[0].tailVector()[0].head().asNumber() - (exp.tailVector()[2].tailVector()[0].head().asNumber() / 2.0), exp.tailVector()[0].tailVector()[1].head().asNumber() - (exp.tailVector()[2].tailVector()[0].head().asNumber() / 2.0), exp.tailVector()[2].tailVector()[0].head().asNumber(), exp.tailVector()[2].tailVector()[0].head().asNumber());
+					//	std::cout << exp.tailVector()[2].tailVector()[0].head().asNumber() << std::endl;
 						point->setBrush(Qt::SolidPattern);
+						auto penMan = new QPen;
+						penMan->setWidth(0.0);
+						point->setPen(*penMan);
 						grapher.addItem(point);
 						return EXIT_SUCCESS;
 					}
@@ -209,11 +213,15 @@ int OutputWidget::handle_Expression(Expression exp, bool recurs)
 							}
 							else
 							{
+								text->setTransformOriginPoint(QPoint(text->boundingRect().center().x(), text->boundingRect().center().y()));
+								text->setRotation((propFinder(Atom("\"text-rotation\""), exp).tailVector()[0].head().asNumber() / (std::atan2(0, -1)))*180.0);
+								/*
 								QTransform transform;
 								transform.translate(text->boundingRect().center().x(), text->boundingRect().center().y());
-								transform.rotate((propFinder(Atom("\"text-rotation\""), exp).tailVector()[0].head().asNumber() / (std::atan2(0, -1)))*180.0);
+								transform.setRotation((propFinder(Atom("\"text-rotation\""), exp).tailVector()[0].head().asNumber() / (std::atan2(0, -1)))*180.0);
 								transform.translate(-text->boundingRect().center().x(), -text->boundingRect().center().y());
 								text->setTransform(transform);
+								*/
 							}
 
 

@@ -633,6 +633,7 @@ Expression Expression::handle_discretePlot(Environment & env) {
 	Expression lineCreate;
 
 
+
 	graphList.markList();
 	double scaleF = 1.0;
 	double XScale;
@@ -673,13 +674,16 @@ Expression Expression::handle_discretePlot(Environment & env) {
 
 	XScale = N / (Xmax - Xmin);
 	YScale = N / (Ymax - Ymin);
+
+	double Xshifter = (N + B + B) / 2;
+	double Yshifter = (N + A + A) / 2;
 	//plot at (point-Xmin+3.0)*XScale
 
 	for (unsigned int i = 0; i < m_tail[0].tailVector().size(); i++)
 	{
 		pointCreate = Expression(Atom("make-point"));
-		pointCreate.append(Atom((m_tail[0].tailVector()[i].tailVector()[0].head().asNumber()-Xmin)*XScale + B));
-		pointCreate.append(Atom(N + A - (m_tail[0].tailVector()[i].tailVector()[0].head().asNumber() - Ymin)*YScale));//make and scale point
+		pointCreate.append(Atom(-Xshifter + (m_tail[0].tailVector()[i].tailVector()[0].head().asNumber()-Xmin)*XScale + B));
+		pointCreate.append(Atom(-Yshifter + N + A - (m_tail[0].tailVector()[i].tailVector()[0].head().asNumber() - Ymin)*YScale));//make and scale point
 
 		propCreate = Expression(Atom("set-property"));//set size
 		propCreate.append(Atom("\"size\""));
@@ -692,18 +696,18 @@ Expression Expression::handle_discretePlot(Environment & env) {
 		lineCreate.append(pointCreate);
 
 		pointCreate = Expression(Atom("make-point"));
-		pointCreate.append(Atom((m_tail[0].tailVector()[i].tailVector()[0].head().asNumber() - Xmin)*XScale + B));
+		pointCreate.append(Atom(-Xshifter + (m_tail[0].tailVector()[i].tailVector()[0].head().asNumber() - Xmin)*XScale + B));
 		if (Ymin > 0)//line to x axis
 		{
-			pointCreate.append(Atom(N + A));
+			pointCreate.append(Atom(-Yshifter + N + A));
 		}
 		else if (Ymax < 0)
 		{
-			pointCreate.append(Atom(A));
+			pointCreate.append(Atom(-Yshifter + A));
 		}
 		else
 		{
-			pointCreate.append(Atom(N + A + (Ymin)*YScale));
+			pointCreate.append(Atom(-Yshifter + N + A + (Ymin)*YScale));
 		}
 		lineCreate.append(pointCreate);
 
@@ -725,14 +729,14 @@ Expression Expression::handle_discretePlot(Environment & env) {
 	lineCreate = Expression(Atom("make-line"));
 
 	pointCreate = Expression(Atom("make-point"));
-	pointCreate.append(Atom(B));
-	pointCreate.append(Atom(A));
+	pointCreate.append(Atom(-Xshifter + B));
+	pointCreate.append(Atom(-Yshifter + A));
 
 	lineCreate.append(pointCreate);
 
 	pointCreate = Expression(Atom("make-point"));
-	pointCreate.append(Atom(B));
-	pointCreate.append(Atom(N + A));
+	pointCreate.append(Atom(-Xshifter + B));
+	pointCreate.append(Atom(-Yshifter + N + A));
 
 	lineCreate.append(pointCreate);
 
@@ -747,14 +751,14 @@ Expression Expression::handle_discretePlot(Environment & env) {
 	lineCreate = Expression(Atom("make-line"));
 
 	pointCreate = Expression(Atom("make-point"));
-	pointCreate.append(Atom(N + B));
-	pointCreate.append(Atom(A));
+	pointCreate.append(Atom(-Xshifter + N + B));
+	pointCreate.append(Atom(-Yshifter + A));
 
 	lineCreate.append(pointCreate);
 
 	pointCreate = Expression(Atom("make-point"));
-	pointCreate.append(Atom(N + B));
-	pointCreate.append(Atom(N + A));
+	pointCreate.append(Atom(-Xshifter + N + B));
+	pointCreate.append(Atom(-Yshifter + N + A));
 
 	lineCreate.append(pointCreate);
 
@@ -769,14 +773,14 @@ Expression Expression::handle_discretePlot(Environment & env) {
 	lineCreate = Expression(Atom("make-line"));
 
 	pointCreate = Expression(Atom("make-point"));
-	pointCreate.append(Atom(B));
-	pointCreate.append(Atom(A));
+	pointCreate.append(Atom(-Xshifter + B));
+	pointCreate.append(Atom(-Yshifter + A));
 
 	lineCreate.append(pointCreate);
 
 	pointCreate = Expression(Atom("make-point"));
-	pointCreate.append(Atom(N + B));
-	pointCreate.append(Atom(A));
+	pointCreate.append(Atom(-Xshifter + N + B));
+	pointCreate.append(Atom(-Yshifter + A));
 
 	lineCreate.append(pointCreate);
 
@@ -791,14 +795,14 @@ Expression Expression::handle_discretePlot(Environment & env) {
 	lineCreate = Expression(Atom("make-line"));
 
 	pointCreate = Expression(Atom("make-point"));
-	pointCreate.append(Atom(B));
-	pointCreate.append(Atom(N + A));
+	pointCreate.append(Atom(-Xshifter + B));
+	pointCreate.append(Atom(-Yshifter + N + A));
 
 	lineCreate.append(pointCreate);
 
 	pointCreate = Expression(Atom("make-point"));
-	pointCreate.append(Atom(N + B));
-	pointCreate.append(Atom(N + A));
+	pointCreate.append(Atom(-Xshifter + N + B));
+	pointCreate.append(Atom(-Yshifter + N + A));
 
 	lineCreate.append(pointCreate);
 
@@ -815,14 +819,14 @@ Expression Expression::handle_discretePlot(Environment & env) {
 		lineCreate = Expression(Atom("make-line"));
 
 		pointCreate = Expression(Atom("make-point"));
-		pointCreate.append(Atom(B));
-		pointCreate.append(Atom(N + A + Ymin * YScale));
+		pointCreate.append(Atom(-Xshifter + B));
+		pointCreate.append(Atom(-Yshifter + N + A + Ymin * YScale));
 
 		lineCreate.append(pointCreate);
 
 		pointCreate = Expression(Atom("make-point"));
-		pointCreate.append(Atom(N + B));
-		pointCreate.append(Atom(N + A + Ymin * YScale));
+		pointCreate.append(Atom(-Xshifter + N + B));
+		pointCreate.append(Atom(-Yshifter + N + A + Ymin * YScale));
 
 		lineCreate.append(pointCreate);
 
@@ -840,14 +844,14 @@ Expression Expression::handle_discretePlot(Environment & env) {
 		lineCreate = Expression(Atom("make-line"));
 
 		pointCreate = Expression(Atom("make-point"));
-		pointCreate.append(Atom(B - Xmin * XScale));
-		pointCreate.append(Atom(A));
+		pointCreate.append(Atom(-Xshifter + B - Xmin * XScale));
+		pointCreate.append(Atom(-Yshifter + A));
 
 		lineCreate.append(pointCreate);
 
 		pointCreate = Expression(Atom("make-point"));
-		pointCreate.append(Atom(B - Xmin * XScale));
-		pointCreate.append(Atom(N + A));
+		pointCreate.append(Atom(-Xshifter + B - Xmin * XScale));
+		pointCreate.append(Atom(-Yshifter + N + A));
 
 		lineCreate.append(pointCreate);
 
@@ -879,8 +883,8 @@ Expression Expression::handle_discretePlot(Environment & env) {
 			textCreate.append(m_tail[1].tailVector()[i].tailVector()[1]);
 			//std::cout << m_tail[1].tailVector()[i].tailVector()[1].head().asPString() << std::endl << std::endl;
 			pointCreate = Expression(Atom("make-point"));
-			pointCreate.append(Atom((N + B + B)/2.0));
-			pointCreate.append(Atom(0.0));
+			pointCreate.append(Atom(-Xshifter + (N + B + B)/2.0));
+			pointCreate.append(Atom(-Yshifter + 0.0));
 			propCreate = Expression(Atom("set-property"));
 			propCreate.append(Atom("\"position\""));
 			propCreate.append(pointCreate);
@@ -893,8 +897,8 @@ Expression Expression::handle_discretePlot(Environment & env) {
 			textCreate.append(m_tail[1].tailVector()[i].tailVector()[1]);
 
 			pointCreate = Expression(Atom("make-point"));
-			pointCreate.append(Atom((N + B + B) / 2.0));
-			pointCreate.append(Atom(N + A + A));
+			pointCreate.append(Atom(-Xshifter + (N + B + B) / 2.0));
+			pointCreate.append(Atom(-Yshifter + N + A + A));
 			propCreate = Expression(Atom("set-property"));
 			propCreate.append(Atom("\"position\""));
 			propCreate.append(pointCreate);
@@ -911,8 +915,8 @@ Expression Expression::handle_discretePlot(Environment & env) {
 
 			textCreate = propCreate;
 			pointCreate = Expression(Atom("make-point"));
-			pointCreate.append(Atom(0.0));
-			pointCreate.append(Atom((N + A + A) / 2.0));
+			pointCreate.append(Atom(-Xshifter + 0.0));
+			pointCreate.append(Atom(-Yshifter + (N + A + A) / 2.0));
 			propCreate = Expression(Atom("set-property"));
 			propCreate.append(Atom("\"position\""));
 			propCreate.append(pointCreate);
@@ -940,8 +944,8 @@ Expression Expression::handle_discretePlot(Environment & env) {
 	precision.str(std::string());
 
 	pointCreate = Expression(Atom("make-point"));
-	pointCreate.append(Atom(D));
-	pointCreate.append(Atom(A));
+	pointCreate.append(Atom(-Xshifter + B - D));
+	pointCreate.append(Atom(-Yshifter + A));
 	propCreate = Expression(Atom("set-property"));
 	propCreate.append(Atom("\"position\""));
 	propCreate.append(pointCreate);
@@ -960,8 +964,8 @@ Expression Expression::handle_discretePlot(Environment & env) {
 	precision.str(std::string());
 
 	pointCreate = Expression(Atom("make-point"));
-	pointCreate.append(Atom(D));
-	pointCreate.append(Atom(N + A));
+	pointCreate.append(Atom(-Xshifter + B - D));
+	pointCreate.append(Atom(-Yshifter + N + A));
 	propCreate = Expression(Atom("set-property"));
 	propCreate.append(Atom("\"position\""));
 	propCreate.append(pointCreate);
@@ -979,8 +983,8 @@ Expression Expression::handle_discretePlot(Environment & env) {
 	precision.str(std::string());
 
 	pointCreate = Expression(Atom("make-point"));
-	pointCreate.append(Atom(N + B));
-	pointCreate.append(Atom(N + A + A - C));
+	pointCreate.append(Atom(-Xshifter + N + B));
+	pointCreate.append(Atom(-Yshifter + N + A + C));
 	propCreate = Expression(Atom("set-property"));
 	propCreate.append(Atom("\"position\""));
 	propCreate.append(pointCreate);
@@ -998,8 +1002,8 @@ Expression Expression::handle_discretePlot(Environment & env) {
 	precision.str(std::string());
 
 	pointCreate = Expression(Atom("make-point"));
-	pointCreate.append(Atom(B));
-	pointCreate.append(Atom(N + A + A - C));
+	pointCreate.append(Atom(-Xshifter + B));
+	pointCreate.append(Atom(-Yshifter + N + A + C));
 	propCreate = Expression(Atom("set-property"));
 	propCreate.append(Atom("\"position\""));
 	propCreate.append(pointCreate);
@@ -1016,7 +1020,6 @@ Expression Expression::handle_discretePlot(Environment & env) {
 
 
 Expression Expression::handle_continuousPlot(Environment & env) {
-
 	if (!(m_tail[0].isHeadSymbol() && env.is_exp(m_tail[0].head())))//also check if lambda only has one argument
 	{
 		throw SemanticError("Error in call to continuous-plot function: first argument not a lambda");
@@ -1034,6 +1037,9 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 	double Ymax;
 	double Ymin;
 
+	double Xshifter = (N + B + B) / 2;
+	double Yshifter = (N + A + A) / 2;
+
 	Xmax = m_tail[1].eval(env).tailVector()[1].head().asNumber();
 	Xmin = m_tail[1].eval(env).tailVector()[0].head().asNumber();
 
@@ -1048,10 +1054,10 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 	double y2;
 	double y3;
 	bool iterated = false;
-	for (int j = 0; j < 5; j++)//should be 10
+	for (int j = 0; j < 10; j++)//should be 10
 	{
 		iterated = false;
-		for (int i = 2; i < Xplot.size(); i++)
+		for (int i = 2; i < Xplot.size(); i+=2)
 		{
 			lambda.tailVector()[0] = Expression(Xplot[i - 2]);//does this work?
 			y1 = lambda.eval(env).head().asNumber();
@@ -1084,14 +1090,10 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 			//if ((180 - (arcCos((x3-x2)/sqrt((x3-x2)^2 + (y3-y2)^2)) - arcCos((x2-x1)/sqrt((x2-x1)^2 + (y2-y1)^2))) < 175) || (-180 - (arcCos((x3-x2)/sqrt((x3-x2)^2 + (y3-y2)^2)) - arcCos((x2-x1)/sqrt((x2-x1)^2 + (y2-y1)^2))) > -175))
 			if ((180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2.0) + pow((y3 - y2), 2.0))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))) < 175) || (-180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2) + pow((y3 - y2), 2))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))) > -175))
 			{
-				Xplot.insert(Xplot.begin() + i, Xplot[i] - Xplot[i - 1]);
-				i = i + 1;
-				if (iterated == false)
-				{
-					Xplot.insert(Xplot.begin() + i - 1, Xplot[i - 1] - Xplot[i - 2]);
-					iterated = true;
-					i = i + 1;
-				}
+				Xplot.insert(Xplot.begin() + i, (Xplot[i] - Xplot[i - 1])/2 + Xplot[i - 1]);
+				Xplot.insert(Xplot.begin() + i - 1, (Xplot[i - 1] - Xplot[i - 2]) / 2 + Xplot[i - 2]);
+				iterated = true;
+				i = i + 2;
 			}
 			else
 			{
@@ -1140,8 +1142,8 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 		lambda.tailVector()[0] = Expression(Xplot[i]);
 		Yi = lambda.eval(env).head().asNumber();
 		//pointCreate = Expression(Atom("make-point"));
-		pointCreate.tailVector()[0] = (Atom((Xplot[i] - Xmin)*XScale + B));
-		pointCreate.tailVector()[1] = (Atom(N + A - (Yi - Ymin)*YScale));
+		pointCreate.tailVector()[0] = (Atom(-Xshifter + (Xplot[i] - Xmin)*XScale + B));
+		pointCreate.tailVector()[1] = (Atom(-Yshifter + N + A - (Yi - Ymin)*YScale));
 
 		//lineCreate = Expression(Atom("make-line"));
 		lineCreate.tailVector()[0] = (pointCreate);
@@ -1149,8 +1151,8 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 		lambda.tailVector()[0] = Expression(Xplot[i+1]);
 		Yi = lambda.eval(env).head().asNumber();
 		//pointCreate = Expression(Atom("make-point"));
-		pointCreate.tailVector()[0] = (Atom((Xplot[i+1] - Xmin)*XScale + B));
-		pointCreate.tailVector()[1] = (Atom(N + A - (Yi - Ymin)*YScale));
+		pointCreate.tailVector()[0] = (Atom(-Xshifter + (Xplot[i+1] - Xmin)*XScale + B));
+		pointCreate.tailVector()[1] = (Atom(-Yshifter + N + A - (Yi - Ymin)*YScale));
 
 		lineCreate.tailVector()[1] = (pointCreate);
 
@@ -1170,14 +1172,14 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 	lineCreate = Expression(Atom("make-line"));
 
 	pointCreate = Expression(Atom("make-point"));
-	pointCreate.append(Atom(B));
-	pointCreate.append(Atom(A));
+	pointCreate.append(Atom(-Xshifter + B));
+	pointCreate.append(Atom(-Yshifter + A));
 
 	lineCreate.append(pointCreate);
 
 	pointCreate = Expression(Atom("make-point"));
-	pointCreate.append(Atom(B));
-	pointCreate.append(Atom(N + A));
+	pointCreate.append(Atom(-Xshifter + B));
+	pointCreate.append(Atom(-Yshifter + N + A));
 
 	lineCreate.append(pointCreate);
 
@@ -1192,14 +1194,14 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 	lineCreate = Expression(Atom("make-line"));
 
 	pointCreate = Expression(Atom("make-point"));
-	pointCreate.append(Atom(N + B));
-	pointCreate.append(Atom(A));
+	pointCreate.append(Atom(-Xshifter + N + B));
+	pointCreate.append(Atom(-Yshifter + A));
 
 	lineCreate.append(pointCreate);
 
 	pointCreate = Expression(Atom("make-point"));
-	pointCreate.append(Atom(N + B));
-	pointCreate.append(Atom(N + A));
+	pointCreate.append(Atom(-Xshifter + N + B));
+	pointCreate.append(Atom(-Yshifter + N + A));
 
 	lineCreate.append(pointCreate);
 
@@ -1214,14 +1216,14 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 	lineCreate = Expression(Atom("make-line"));
 
 	pointCreate = Expression(Atom("make-point"));
-	pointCreate.append(Atom(B));
-	pointCreate.append(Atom(A));
+	pointCreate.append(Atom(-Xshifter + B));
+	pointCreate.append(Atom(-Yshifter + A));
 
 	lineCreate.append(pointCreate);
 
 	pointCreate = Expression(Atom("make-point"));
-	pointCreate.append(Atom(N + B));
-	pointCreate.append(Atom(A));
+	pointCreate.append(Atom(-Xshifter + N + B));
+	pointCreate.append(Atom(-Yshifter + A));
 
 	lineCreate.append(pointCreate);
 
@@ -1236,14 +1238,14 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 	lineCreate = Expression(Atom("make-line"));
 
 	pointCreate = Expression(Atom("make-point"));
-	pointCreate.append(Atom(B));
-	pointCreate.append(Atom(N + A));
+	pointCreate.append(Atom(-Xshifter + B));
+	pointCreate.append(Atom(-Yshifter + N + A));
 
 	lineCreate.append(pointCreate);
 
 	pointCreate = Expression(Atom("make-point"));
-	pointCreate.append(Atom(N + B));
-	pointCreate.append(Atom(N + A));
+	pointCreate.append(Atom(-Xshifter + N + B));
+	pointCreate.append(Atom(-Yshifter + N + A));
 
 	lineCreate.append(pointCreate);
 
@@ -1260,14 +1262,14 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 		lineCreate = Expression(Atom("make-line"));
 
 		pointCreate = Expression(Atom("make-point"));
-		pointCreate.append(Atom(B));
-		pointCreate.append(Atom(N + A + Ymin * YScale));
+		pointCreate.append(Atom(-Xshifter + B));
+		pointCreate.append(Atom(-Yshifter + N + A + Ymin * YScale));
 
 		lineCreate.append(pointCreate);
 
 		pointCreate = Expression(Atom("make-point"));
-		pointCreate.append(Atom(N + B));
-		pointCreate.append(Atom(N + A + Ymin * YScale));
+		pointCreate.append(Atom(-Xshifter + N + B));
+		pointCreate.append(Atom(-Yshifter + N + A + Ymin * YScale));
 
 		lineCreate.append(pointCreate);
 
@@ -1285,14 +1287,14 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 		lineCreate = Expression(Atom("make-line"));
 
 		pointCreate = Expression(Atom("make-point"));
-		pointCreate.append(Atom(B - Xmin * XScale));
-		pointCreate.append(Atom(A));
+		pointCreate.append(Atom(-Xshifter + B - Xmin * XScale));
+		pointCreate.append(Atom(-Yshifter + A));
 
 		lineCreate.append(pointCreate);
 
 		pointCreate = Expression(Atom("make-point"));
-		pointCreate.append(Atom(B - Xmin * XScale));
-		pointCreate.append(Atom(N + A));
+		pointCreate.append(Atom(-Xshifter + B - Xmin * XScale));
+		pointCreate.append(Atom(-Yshifter + N + A));
 
 		lineCreate.append(pointCreate);
 
@@ -1324,8 +1326,8 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 			textCreate.append(m_tail[2].tailVector()[i].tailVector()[1]);
 			//std::cout << m_tail[2].tailVector()[i].tailVector()[1].head().asPString() << std::endl << std::endl;
 			pointCreate = Expression(Atom("make-point"));
-			pointCreate.append(Atom((N + B + B) / 2.0));
-			pointCreate.append(Atom(0.0));
+			pointCreate.append(Atom(-Xshifter + (N + B + B) / 2.0));
+			pointCreate.append(Atom(-Yshifter + 0.0));
 			propCreate = Expression(Atom("set-property"));
 			propCreate.append(Atom("\"position\""));
 			propCreate.append(pointCreate);
@@ -1338,8 +1340,8 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 			textCreate.append(m_tail[2].tailVector()[i].tailVector()[1]);
 
 			pointCreate = Expression(Atom("make-point"));
-			pointCreate.append(Atom((N + B + B) / 2.0));
-			pointCreate.append(Atom(N + A + A));
+			pointCreate.append(Atom(-Xshifter + (N + B + B) / 2.0));
+			pointCreate.append(Atom(-Yshifter + N + A + A));
 			propCreate = Expression(Atom("set-property"));
 			propCreate.append(Atom("\"position\""));
 			propCreate.append(pointCreate);
@@ -1356,8 +1358,8 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 
 			textCreate = propCreate;
 			pointCreate = Expression(Atom("make-point"));
-			pointCreate.append(Atom(0.0));
-			pointCreate.append(Atom((N + A + A) / 2.0));
+			pointCreate.append(Atom(-Xshifter + 0.0));
+			pointCreate.append(Atom(-Yshifter + (N + A + A) / 2.0));
 			propCreate = Expression(Atom("set-property"));
 			propCreate.append(Atom("\"position\""));
 			propCreate.append(pointCreate);
@@ -1385,8 +1387,8 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 	precision.str(std::string());
 
 	pointCreate = Expression(Atom("make-point"));
-	pointCreate.append(Atom(D));
-	pointCreate.append(Atom(A));
+	pointCreate.append(Atom(-Xshifter + B - D));
+	pointCreate.append(Atom(-Yshifter + A));
 	propCreate = Expression(Atom("set-property"));
 	propCreate.append(Atom("\"position\""));
 	propCreate.append(pointCreate);
@@ -1405,8 +1407,8 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 	precision.str(std::string());
 
 	pointCreate = Expression(Atom("make-point"));
-	pointCreate.append(Atom(D));
-	pointCreate.append(Atom(N + A));
+	pointCreate.append(Atom(-Xshifter + B - D));
+	pointCreate.append(Atom(-Yshifter + N + A));
 	propCreate = Expression(Atom("set-property"));
 	propCreate.append(Atom("\"position\""));
 	propCreate.append(pointCreate);
@@ -1424,8 +1426,8 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 	precision.str(std::string());
 
 	pointCreate = Expression(Atom("make-point"));
-	pointCreate.append(Atom(N + B));
-	pointCreate.append(Atom(N + A + A - C));
+	pointCreate.append(Atom(-Xshifter + N + B));
+	pointCreate.append(Atom(-Yshifter + N + A + C));
 	propCreate = Expression(Atom("set-property"));
 	propCreate.append(Atom("\"position\""));
 	propCreate.append(pointCreate);
@@ -1443,8 +1445,8 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 	precision.str(std::string());
 
 	pointCreate = Expression(Atom("make-point"));
-	pointCreate.append(Atom(B));
-	pointCreate.append(Atom(N + A + A - C));
+	pointCreate.append(Atom(-Xshifter + B));
+	pointCreate.append(Atom(-Yshifter + N + A + C));
 	propCreate = Expression(Atom("set-property"));
 	propCreate.append(Atom("\"position\""));
 	propCreate.append(pointCreate);
