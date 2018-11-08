@@ -654,7 +654,15 @@ void NotebookTest::graphTests()
 	//testing (get-property "key" (3))
 	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10);
 	std::string program = R"(
-(begin (define f (lambda (x) (list x (+ (* 2 x) 1)))) (discrete-plot (map f (range -2 2 0.5))))
+(begin
+    (define f (lambda (x) 
+        (list x (+ (* 2 x) 1))))
+    (discrete-plot (map f (range 3 5 0.5))
+       (list
+       (list "title" "The Data")
+       (list "abscissa-label" "X Label")
+       (list "ordinate-label" "Y Label")
+       (list "text-scale" 1))))
 )";
 	inwid->setPlainText(QString::fromStdString(program));
 	QTest::keyClick(inwid, Qt::Key_Return, Qt::ShiftModifier);
@@ -681,7 +689,7 @@ void NotebookTest::graphTests()
 		}
 		//qDebug() << viewwid->items()[0]->scale() << endl;
 	}
-	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 100000);
+	//QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 100000);
 	//QVERIFY2(viewwid->items().size() == 31, "incorrect number of items in QGraphicsView");
 	// * text = qgraphicsitem_cast<QGraphicsTextItem *>(viewwid->items()[0]);
 	//QCOMPARE(text->toPlainText(), QString("NONE"));
@@ -731,7 +739,7 @@ void NotebookTest::testDiscretePlotLayout()
 		}
 		//qDebug() << view->items()[0]->scale() << endl;
 	}
-	QTest::mouseClick(inputWidget, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10000);
+	//QTest::mouseClick(inputWidget, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10000);
 	// first check total number of items
 	// 8 lines + 2 points + 7 text = 17
 	auto items = scene->items();

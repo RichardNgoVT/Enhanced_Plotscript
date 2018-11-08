@@ -683,7 +683,7 @@ Expression Expression::handle_discretePlot(Environment & env) {
 	{
 		pointCreate = Expression(Atom("make-point"));
 		pointCreate.append(Atom(-Xshifter + (m_tail[0].tailVector()[i].tailVector()[0].head().asNumber()-Xmin)*XScale + B));
-		pointCreate.append(Atom(-Yshifter + N + A - (m_tail[0].tailVector()[i].tailVector()[0].head().asNumber() - Ymin)*YScale));//make and scale point
+		pointCreate.append(Atom(-Yshifter + N + A - (m_tail[0].tailVector()[i].tailVector()[1].head().asNumber() - Ymin)*YScale));//make and scale point
 
 		propCreate = Expression(Atom("set-property"));//set size
 		propCreate.append(Atom("\"size\""));
