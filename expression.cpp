@@ -866,76 +866,78 @@ Expression Expression::handle_discretePlot(Environment & env) {
 
 
 	//create graph labels
-	for (unsigned int i = 0; i < m_tail[1].tailVector().size(); i++)
+	if (m_tail.size() == 2)
 	{
-		if (m_tail[1].tailVector()[i].tailVector()[0].head().asPString() == "\"text-scale\"")//should be found first
+		for (unsigned int i = 0; i < m_tail[1].tailVector().size(); i++)
 		{
-			scaleF = m_tail[1].tailVector()[i].tailVector()[1].head().asNumber();
+			if (m_tail[1].tailVector()[i].tailVector()[0].head().asPString() == "\"text-scale\"")//should be found first
+			{
+				scaleF = m_tail[1].tailVector()[i].tailVector()[1].head().asNumber();
+			}
+		}
+
+		for (unsigned int i = 0; i < m_tail[1].tailVector().size(); i++)
+		{
+
+			if (m_tail[1].tailVector()[i].tailVector()[0].head().asPString() == "\"title\"")//(13, 0)
+			{
+				textCreate = Expression(Atom("make-text"));
+				textCreate.append(m_tail[1].tailVector()[i].tailVector()[1]);
+				//std::cout << m_tail[1].tailVector()[i].tailVector()[1].head().asPString() << std::endl << std::endl;
+				pointCreate = Expression(Atom("make-point"));
+				pointCreate.append(Atom(-Xshifter + (N + B + B) / 2.0));
+				pointCreate.append(Atom(-Yshifter + 0.0));
+				propCreate = Expression(Atom("set-property"));
+				propCreate.append(Atom("\"position\""));
+				propCreate.append(pointCreate);
+				propCreate.append(textCreate);
+
+			}
+			else if (m_tail[1].tailVector()[i].tailVector()[0].head().asPString() == "\"abscissa-label\"")//(13, 26)
+			{
+				textCreate = Expression(Atom("make-text"));
+				textCreate.append(m_tail[1].tailVector()[i].tailVector()[1]);
+
+				pointCreate = Expression(Atom("make-point"));
+				pointCreate.append(Atom(-Xshifter + (N + B + B) / 2.0));
+				pointCreate.append(Atom(-Yshifter + N + A + A));
+				propCreate = Expression(Atom("set-property"));
+				propCreate.append(Atom("\"position\""));
+				propCreate.append(pointCreate);
+				propCreate.append(textCreate);
+			}
+			else if (m_tail[1].tailVector()[i].tailVector()[0].head().asPString() == "\"ordinate-label\"")//(0, 13)
+			{
+				textCreate = Expression(Atom("make-text"));
+				textCreate.append(m_tail[1].tailVector()[i].tailVector()[1]);
+				propCreate = Expression(Atom("set-property"));
+				propCreate.append(Atom("\"text-rotation\""));
+				propCreate.append(Atom(std::atan2(0, -1) / -2.0));
+				propCreate.append(textCreate);
+
+				textCreate = propCreate;
+				pointCreate = Expression(Atom("make-point"));
+				pointCreate.append(Atom(-Xshifter + 0.0));
+				pointCreate.append(Atom(-Yshifter + (N + A + A) / 2.0));
+				propCreate = Expression(Atom("set-property"));
+				propCreate.append(Atom("\"position\""));
+				propCreate.append(pointCreate);
+				propCreate.append(textCreate);
+			}
+
+			if (!(m_tail[1].tailVector()[i].tailVector()[0].head().asPString() == "\"text-scale\""))//skip
+			{
+				scaleCreate = Expression(Atom("set-property"));
+				scaleCreate.append(Atom("\"text-scale\""));
+				scaleCreate.append(scaleF);
+				scaleCreate.append(propCreate);
+				graphList.append(scaleCreate.eval(env));//evaluate lambda
+			}
+
+
+
 		}
 	}
-
-	for (unsigned int i = 0; i < m_tail[1].tailVector().size(); i++)
-	{
-		
-		if (m_tail[1].tailVector()[i].tailVector()[0].head().asPString() == "\"title\"")//(13, 0)
-		{
-			textCreate = Expression(Atom("make-text"));
-			textCreate.append(m_tail[1].tailVector()[i].tailVector()[1]);
-			//std::cout << m_tail[1].tailVector()[i].tailVector()[1].head().asPString() << std::endl << std::endl;
-			pointCreate = Expression(Atom("make-point"));
-			pointCreate.append(Atom(-Xshifter + (N + B + B)/2.0));
-			pointCreate.append(Atom(-Yshifter + 0.0));
-			propCreate = Expression(Atom("set-property"));
-			propCreate.append(Atom("\"position\""));
-			propCreate.append(pointCreate);
-			propCreate.append(textCreate);
-
-		}
-		else if (m_tail[1].tailVector()[i].tailVector()[0].head().asPString() == "\"abscissa-label\"")//(13, 26)
-		{
-			textCreate = Expression(Atom("make-text"));
-			textCreate.append(m_tail[1].tailVector()[i].tailVector()[1]);
-
-			pointCreate = Expression(Atom("make-point"));
-			pointCreate.append(Atom(-Xshifter + (N + B + B) / 2.0));
-			pointCreate.append(Atom(-Yshifter + N + A + A));
-			propCreate = Expression(Atom("set-property"));
-			propCreate.append(Atom("\"position\""));
-			propCreate.append(pointCreate);
-			propCreate.append(textCreate);
-		}
-		else if (m_tail[1].tailVector()[i].tailVector()[0].head().asPString() == "\"ordinate-label\"")//(0, 13)
-		{
-			textCreate = Expression(Atom("make-text"));
-			textCreate.append(m_tail[1].tailVector()[i].tailVector()[1]);
-			propCreate = Expression(Atom("set-property"));
-			propCreate.append(Atom("\"text-rotation\""));
-			propCreate.append(Atom(std::atan2(0, -1) / -2.0));
-			propCreate.append(textCreate);
-
-			textCreate = propCreate;
-			pointCreate = Expression(Atom("make-point"));
-			pointCreate.append(Atom(-Xshifter + 0.0));
-			pointCreate.append(Atom(-Yshifter + (N + A + A) / 2.0));
-			propCreate = Expression(Atom("set-property"));
-			propCreate.append(Atom("\"position\""));
-			propCreate.append(pointCreate);
-			propCreate.append(textCreate);
-		}
-		
-		if (!(m_tail[1].tailVector()[i].tailVector()[0].head().asPString() == "\"text-scale\""))//skip
-		{
-			scaleCreate = Expression(Atom("set-property"));
-			scaleCreate.append(Atom("\"text-scale\""));
-			scaleCreate.append(scaleF);
-			scaleCreate.append(propCreate);
-			graphList.append(scaleCreate.eval(env));//evaluate lambda
-		}
-
-
-		
-	}
-
 	//graph limits
 	std::stringstream precision;
 	precision << std::setprecision(2) << Ymax;
@@ -1053,11 +1055,11 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 	double y1;
 	double y2;
 	double y3;
-	bool iterated = false;
+	//bool iterated = false;
 	for (int j = 0; j < 10; j++)//should be 10
 	{
-		iterated = false;
-		for (int i = 2; i < Xplot.size(); i+=2)
+		//iterated = false;
+		for (unsigned int i = 2; i < Xplot.size(); i+=2)
 		{
 			lambda.tailVector()[0] = Expression(Xplot[i - 2]);//does this work?
 			y1 = lambda.eval(env).head().asNumber();
@@ -1090,14 +1092,9 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 			//if ((180 - (arcCos((x3-x2)/sqrt((x3-x2)^2 + (y3-y2)^2)) - arcCos((x2-x1)/sqrt((x2-x1)^2 + (y2-y1)^2))) < 175) || (-180 - (arcCos((x3-x2)/sqrt((x3-x2)^2 + (y3-y2)^2)) - arcCos((x2-x1)/sqrt((x2-x1)^2 + (y2-y1)^2))) > -175))
 			if ((180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2.0) + pow((y3 - y2), 2.0))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))) < 175) || (-180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2) + pow((y3 - y2), 2))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))) > -175))
 			{
-				Xplot.insert(Xplot.begin() + i, (Xplot[i] - Xplot[i - 1])/2 + Xplot[i - 1]);
+				Xplot.insert(Xplot.begin() + i, (Xplot[i] - Xplot[i - 1]) / 2 + Xplot[i - 1]);
 				Xplot.insert(Xplot.begin() + i - 1, (Xplot[i - 1] - Xplot[i - 2]) / 2 + Xplot[i - 2]);
-				iterated = true;
 				i = i + 2;
-			}
-			else
-			{
-				iterated = false;
 			}
 
 		}
@@ -1309,76 +1306,78 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 
 
 	//create graph labels
-	for (unsigned int i = 0; i < m_tail[2].tailVector().size(); i++)
+	if (m_tail.size() == 3)
 	{
-		if (m_tail[2].tailVector()[i].tailVector()[0].head().asPString() == "\"text-scale\"")//should be found first
+		for (unsigned int i = 0; i < m_tail[2].tailVector().size(); i++)
 		{
-			scaleF = m_tail[2].tailVector()[i].tailVector()[1].head().asNumber();
+			if (m_tail[2].tailVector()[i].tailVector()[0].head().asPString() == "\"text-scale\"")//should be found first
+			{
+				scaleF = m_tail[2].tailVector()[i].tailVector()[1].head().asNumber();
+			}
+		}
+
+		for (unsigned int i = 0; i < m_tail[2].tailVector().size(); i++)
+		{
+
+			if (m_tail[2].tailVector()[i].tailVector()[0].head().asPString() == "\"title\"")//(13, 0)
+			{
+				textCreate = Expression(Atom("make-text"));
+				textCreate.append(m_tail[2].tailVector()[i].tailVector()[1]);
+				//std::cout << m_tail[2].tailVector()[i].tailVector()[1].head().asPString() << std::endl << std::endl;
+				pointCreate = Expression(Atom("make-point"));
+				pointCreate.append(Atom(-Xshifter + (N + B + B) / 2.0));
+				pointCreate.append(Atom(-Yshifter + 0.0));
+				propCreate = Expression(Atom("set-property"));
+				propCreate.append(Atom("\"position\""));
+				propCreate.append(pointCreate);
+				propCreate.append(textCreate);
+
+			}
+			else if (m_tail[2].tailVector()[i].tailVector()[0].head().asPString() == "\"abscissa-label\"")//(13, 26)
+			{
+				textCreate = Expression(Atom("make-text"));
+				textCreate.append(m_tail[2].tailVector()[i].tailVector()[1]);
+
+				pointCreate = Expression(Atom("make-point"));
+				pointCreate.append(Atom(-Xshifter + (N + B + B) / 2.0));
+				pointCreate.append(Atom(-Yshifter + N + A + A));
+				propCreate = Expression(Atom("set-property"));
+				propCreate.append(Atom("\"position\""));
+				propCreate.append(pointCreate);
+				propCreate.append(textCreate);
+			}
+			else if (m_tail[2].tailVector()[i].tailVector()[0].head().asPString() == "\"ordinate-label\"")//(0, 13)
+			{
+				textCreate = Expression(Atom("make-text"));
+				textCreate.append(m_tail[2].tailVector()[i].tailVector()[1]);
+				propCreate = Expression(Atom("set-property"));
+				propCreate.append(Atom("\"text-rotation\""));
+				propCreate.append(Atom(std::atan2(0, -1) / -2.0));
+				propCreate.append(textCreate);
+
+				textCreate = propCreate;
+				pointCreate = Expression(Atom("make-point"));
+				pointCreate.append(Atom(-Xshifter + 0.0));
+				pointCreate.append(Atom(-Yshifter + (N + A + A) / 2.0));
+				propCreate = Expression(Atom("set-property"));
+				propCreate.append(Atom("\"position\""));
+				propCreate.append(pointCreate);
+				propCreate.append(textCreate);
+			}
+
+			if (!(m_tail[2].tailVector()[i].tailVector()[0].head().asPString() == "\"text-scale\""))//skip
+			{
+				scaleCreate = Expression(Atom("set-property"));
+				scaleCreate.append(Atom("\"text-scale\""));
+				scaleCreate.append(scaleF);
+				scaleCreate.append(propCreate);
+				graphList.append(scaleCreate.eval(env));//evaluate lambda
+			}
+
+
+
 		}
 	}
-
-	for (unsigned int i = 0; i < m_tail[2].tailVector().size(); i++)
-	{
-
-		if (m_tail[2].tailVector()[i].tailVector()[0].head().asPString() == "\"title\"")//(13, 0)
-		{
-			textCreate = Expression(Atom("make-text"));
-			textCreate.append(m_tail[2].tailVector()[i].tailVector()[1]);
-			//std::cout << m_tail[2].tailVector()[i].tailVector()[1].head().asPString() << std::endl << std::endl;
-			pointCreate = Expression(Atom("make-point"));
-			pointCreate.append(Atom(-Xshifter + (N + B + B) / 2.0));
-			pointCreate.append(Atom(-Yshifter + 0.0));
-			propCreate = Expression(Atom("set-property"));
-			propCreate.append(Atom("\"position\""));
-			propCreate.append(pointCreate);
-			propCreate.append(textCreate);
-
-		}
-		else if (m_tail[2].tailVector()[i].tailVector()[0].head().asPString() == "\"abscissa-label\"")//(13, 26)
-		{
-			textCreate = Expression(Atom("make-text"));
-			textCreate.append(m_tail[2].tailVector()[i].tailVector()[1]);
-
-			pointCreate = Expression(Atom("make-point"));
-			pointCreate.append(Atom(-Xshifter + (N + B + B) / 2.0));
-			pointCreate.append(Atom(-Yshifter + N + A + A));
-			propCreate = Expression(Atom("set-property"));
-			propCreate.append(Atom("\"position\""));
-			propCreate.append(pointCreate);
-			propCreate.append(textCreate);
-		}
-		else if (m_tail[2].tailVector()[i].tailVector()[0].head().asPString() == "\"ordinate-label\"")//(0, 13)
-		{
-			textCreate = Expression(Atom("make-text"));
-			textCreate.append(m_tail[2].tailVector()[i].tailVector()[1]);
-			propCreate = Expression(Atom("set-property"));
-			propCreate.append(Atom("\"text-rotation\""));
-			propCreate.append(Atom(std::atan2(0, -1) / -2.0));
-			propCreate.append(textCreate);
-
-			textCreate = propCreate;
-			pointCreate = Expression(Atom("make-point"));
-			pointCreate.append(Atom(-Xshifter + 0.0));
-			pointCreate.append(Atom(-Yshifter + (N + A + A) / 2.0));
-			propCreate = Expression(Atom("set-property"));
-			propCreate.append(Atom("\"position\""));
-			propCreate.append(pointCreate);
-			propCreate.append(textCreate);
-		}
-
-		if (!(m_tail[2].tailVector()[i].tailVector()[0].head().asPString() == "\"text-scale\""))//skip
-		{
-			scaleCreate = Expression(Atom("set-property"));
-			scaleCreate.append(Atom("\"text-scale\""));
-			scaleCreate.append(scaleF);
-			scaleCreate.append(propCreate);
-			graphList.append(scaleCreate.eval(env));//evaluate lambda
-		}
-
-
-
-	}
-
 	//graph limits
 	std::stringstream precision;
 	precision << std::setprecision(2) << Ymax;

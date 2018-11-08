@@ -5,21 +5,104 @@ class NotebookTest : public QObject {
   Q_OBJECT
 
 private slots:
-
   void initTestCase();
   void defaultTest();
+  void graphTests();
+  void testDiscretePlotLayout();
   void plotscriptTests();
   void pointTests();
   void lineTests();
   void textTests();
   void tester();
-  void graphTests();
-
+ 
+  
   // TODO: implement additional tests here
   
 private:
 	NotebookApp widget;
 };
+
+/*
+findLines - find lines in a scene contained within a bounding box
+with a small margin
+*/
+int findLines(QGraphicsScene * scene, QRectF bbox, qreal margin) {
+
+	QPainterPath selectPath;
+
+	QMarginsF margins(margin, margin, margin, margin);
+	selectPath.addRect(bbox.marginsAdded(margins));
+	scene->setSelectionArea(selectPath, Qt::ContainsItemShape);
+
+	int numlines(0);
+	foreach(auto item, scene->selectedItems()) {
+		if (item->type() == QGraphicsLineItem::Type) {
+			numlines += 1;
+		}
+	}
+
+	return numlines;
+}
+
+/*
+findPoints - find points in a scene contained within a specified rectangle
+*/
+int findPoints(QGraphicsScene * scene, QPointF center, qreal radius) {
+
+	QPainterPath selectPath;
+	selectPath.addRect(QRectF(center.x() - radius, center.y() - radius, 2 * radius, 2 * radius));
+	scene->setSelectionArea(selectPath, Qt::ContainsItemShape);
+
+	int numpoints(0);
+	foreach(auto item, scene->selectedItems()) {
+		if (item->type() == QGraphicsEllipseItem::Type) {
+			numpoints += 1;
+		}
+	}
+
+	return numpoints;
+}
+
+/*
+findText - find text in a scene centered at a specified point with a given
+rotation and string contents
+*/
+int findText(QGraphicsScene * scene, QPointF center, qreal rotation, QString contents) {
+
+	int numtext(0);
+	foreach(auto item, scene->items(center)) {
+		if (item->type() == QGraphicsTextItem::Type) {
+			QGraphicsTextItem * text = static_cast<QGraphicsTextItem *>(item);
+			if ((text->toPlainText() == contents) &&
+				(text->rotation() == rotation) &&
+				(text->pos() + text->boundingRect().center() == center)) {
+				numtext += 1;
+			}
+		}
+	}
+
+	return numtext;
+}
+
+/*
+intersectsLine - find lines in a scene that intersect a specified rectangle
+*/
+int intersectsLine(QGraphicsScene * scene, QPointF center, qreal radius) {
+
+	QPainterPath selectPath;
+	selectPath.addRect(QRectF(center.x() - radius, center.y() - radius, 2 * radius, 2 * radius));
+	scene->setSelectionArea(selectPath, Qt::IntersectsItemShape);
+
+	int numlines(0);
+	foreach(auto item, scene->selectedItems()) {
+		if (item->type() == QGraphicsLineItem::Type) {
+			numlines += 1;
+		}
+	}
+
+	return numlines;
+}
+
 
 void NotebookTest::initTestCase(){
 	widget.show();
@@ -273,6 +356,29 @@ void NotebookTest::pointTests()
 		}
 		QCOMPARE(point->rect(), pos);
 	}
+	/*
+	for (int i = 0; i < viewwid->items().size(); i++)
+	{
+		if (viewwid->items()[i]->type() == 8)
+		{
+			auto text = qgraphicsitem_cast<QGraphicsTextItem *>(viewwid->items()[i]);
+			//qDebug() << '(' << viewwid->items()[i]->x() << ", " << viewwid->items()[i]->y() << "); Scale: " << viewwid->items()[i]->scale() << "; Type: " << viewwid->items()[i]->type() << "; Text: " << text->toPlainText();
+
+			qDebug() << '(' << viewwid->items()[i]->sceneBoundingRect().center().x() << ", " << viewwid->items()[i]->sceneBoundingRect().center().y() << "); Scale: " << viewwid->items()[i]->scale() << "; Type: Text; Text: " << text->toPlainText() << "; Rotation: " << text->rotation();
+
+
+		}
+		else if (viewwid->items()[i]->type() == 4)
+		{
+			qDebug() << '(' << viewwid->items()[i]->sceneBoundingRect().center().x() << ", " << viewwid->items()[i]->sceneBoundingRect().center().y() << "); Scale: " << viewwid->items()[i]->scale() << "; Type: Point" << "; Width: " << viewwid->items()[i]->sceneBoundingRect().width() << "; Height: " << viewwid->items()[i]->sceneBoundingRect().height();
+		}
+		else
+		{
+			qDebug() << '(' << viewwid->items()[i]->sceneBoundingRect().center().x() << ", " << viewwid->items()[i]->sceneBoundingRect().center().y() << "); Scale: " << viewwid->items()[i]->scale() << "; Type: Line";
+		}
+		//qDebug() << viewwid->items()[0]->scale() << endl;
+	}
+	*/
 }
 
 
@@ -547,14 +653,17 @@ void NotebookTest::graphTests()
 
 	//testing (get-property "key" (3))
 	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10);
-	QTest::keyClicks(inwid, "(begin (define f (lambda(x) (list x (+ (* 2 x) 1)))) (discrete-plot (map f (range -2 2 0.5)) (list (list \"title\" \"The Data\") (list \"abscissa-label\" \"X Label\") (list \"ordinate-label\" \"Y Label\") (list \"text-scale\" 1))))");
-	QTest::keyPress(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
-	QTest::keyRelease(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
-	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 60000);
+	std::string program = R"(
+(begin (define f (lambda (x) (list x (+ (* 2 x) 1)))) (discrete-plot (map f (range -2 2 0.5))))
+)";
+	inwid->setPlainText(QString::fromStdString(program));
+	QTest::keyClick(inwid, Qt::Key_Return, Qt::ShiftModifier);
+	//QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 60000);
 	auto viewwid = outwid->findChild<QGraphicsView *>();
 	QVERIFY2(viewwid, "Could not find view widget");
-	QCOMPARE(viewwid->items().size(), 31);
+	//QCOMPARE(viewwid->items().size(), 31);
 	//QGraphicsLineItem::type
+	
 	for (int i = 0; i < viewwid->items().size(); i++)
 	{
 		if (viewwid->items()[i]->type() == 8)
@@ -572,6 +681,7 @@ void NotebookTest::graphTests()
 		}
 		//qDebug() << viewwid->items()[0]->scale() << endl;
 	}
+	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 100000);
 	//QVERIFY2(viewwid->items().size() == 31, "incorrect number of items in QGraphicsView");
 	// * text = qgraphicsitem_cast<QGraphicsTextItem *>(viewwid->items()[0]);
 	//QCOMPARE(text->toPlainText(), QString("NONE"));
@@ -581,6 +691,117 @@ void NotebookTest::graphTests()
 }
 
 
+void NotebookTest::testDiscretePlotLayout()
+{
+	auto inputWidget = widget.findChild<InputWidget *>("input");
+	auto outputWidget = widget.findChild<OutputWidget *>("output");
+	std::string program = R"( 
+(discrete-plot (list (list -1 -1) (list 1 1)) 
+    (list (list "title" "The Title") 
+          (list "abscissa-label" "X Label") 
+          (list "ordinate-label" "Y Label") ))
+)";
+
+	inputWidget->setPlainText(QString::fromStdString(program));
+	QTest::keyClick(inputWidget, Qt::Key_Return, Qt::ShiftModifier);
+
+	auto view = outputWidget->findChild<QGraphicsView *>();
+	QVERIFY2(view, "Could not find QGraphicsView as child of OutputWidget");
+
+	auto scene = view->scene();
+
+	for (int i = 0; i < view->items().size(); i++)
+	{
+		if (view->items()[i]->type() == 8)
+		{
+			auto text = qgraphicsitem_cast<QGraphicsTextItem *>(view->items()[i]);
+			//qDebug() << '(' << view->items()[i]->x() << ", " << view->items()[i]->y() << "); Scale: " << view->items()[i]->scale() << "; Type: " << view->items()[i]->type() << "; Text: " << text->toPlainText();
+
+			qDebug() << '(' << view->items()[i]->sceneBoundingRect().center().x() << ", " << view->items()[i]->sceneBoundingRect().center().y() << "); Scale: " << view->items()[i]->scale() << "; Type: Text; Text: " << text->toPlainText() << "; Rotation: " << text->rotation();
+
+
+		}
+		else if(view->items()[i]->type() == 4)
+		{
+			qDebug() << '(' << view->items()[i]->sceneBoundingRect().center().x() << ", " << view->items()[i]->sceneBoundingRect().center().y() << "); Scale: " << view->items()[i]->scale() << "; Type: Point"  << "; Width: " << view->items()[i]->sceneBoundingRect().width() << "; Height: " << view->items()[i]->sceneBoundingRect().height();
+		}
+		else
+		{
+			qDebug() << '(' << view->items()[i]->sceneBoundingRect().center().x() << ", " << view->items()[i]->sceneBoundingRect().center().y() << "); Scale: " << view->items()[i]->scale() << "; Type: Line";
+		}
+		//qDebug() << view->items()[0]->scale() << endl;
+	}
+	QTest::mouseClick(inputWidget, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10000);
+	// first check total number of items
+	// 8 lines + 2 points + 7 text = 17
+	auto items = scene->items();
+	QCOMPARE(items.size(), 17);
+
+	// make them all selectable
+	foreach(auto item, items) {
+		item->setFlag(QGraphicsItem::ItemIsSelectable);
+	}
+
+	double scalex = 20.0 / 2.0;
+	double scaley = 20.0 / 2.0;
+
+	double xmin = scalex * -1;
+	double xmax = scalex * 1;
+	double ymin = scaley * -1;
+	double ymax = scaley * 1;
+	double xmiddle = (xmax + xmin) / 2;
+	double ymiddle = (ymax + ymin) / 2;
+
+	// check title
+	QCOMPARE(findText(scene, QPointF(xmiddle, -(ymax + 3)), 0, QString("The Title")), 1);
+
+	// check abscissa label
+	QCOMPARE(findText(scene, QPointF(xmiddle, -(ymin - 3)), 0, QString("X Label")), 1);
+
+	// check ordinate label
+	QCOMPARE(findText(scene, QPointF(xmin - 3, -ymiddle), -90, QString("Y Label")), 1);
+
+	// check abscissa min label
+	QCOMPARE(findText(scene, QPointF(xmin, -(ymin - 2)), 0, QString("-1")), 1);
+
+	// check abscissa max label
+	QCOMPARE(findText(scene, QPointF(xmax, -(ymin - 2)), 0, QString("1")), 1);
+
+	// check ordinate min label
+	QCOMPARE(findText(scene, QPointF(xmin - 2, -ymin), 0, QString("-1")), 1);
+
+	// check ordinate max label
+	QCOMPARE(findText(scene, QPointF(xmin - 2, -ymax), 0, QString("1")), 1);
+
+	// check the bounding box bottom
+	QCOMPARE(findLines(scene, QRectF(xmin, -ymin, 20, 0), 0.1), 1);
+
+	// check the bounding box top
+	QCOMPARE(findLines(scene, QRectF(xmin, -ymax, 20, 0), 0.1), 1);
+
+	// check the bounding box left and (-1, -1) stem
+	QCOMPARE(findLines(scene, QRectF(xmin, -ymax, 0, 20), 0.1), 2);
+
+	// check the bounding box right and (1, 1) stem
+	QCOMPARE(findLines(scene, QRectF(xmax, -ymax, 0, 20), 0.1), 2);
+
+	// check the abscissa axis
+	QCOMPARE(findLines(scene, QRectF(xmin, 0, 20, 0), 0.1), 1);
+
+	// check the ordinate axis 
+	QCOMPARE(findLines(scene, QRectF(0, -ymax, 0, 20), 0.1), 1);
+
+	// check the point at (-1,-1)
+	QCOMPARE(findPoints(scene, QPointF(-10, 10), 0.6), 1);
+
+	// check the point at (1,1)
+	QCOMPARE(findPoints(scene, QPointF(10, -10), 0.6), 1);
+}
+/*
+void NotebookTest::testDiscretePlotLayout() {
+
+}
+*/
 
 
 
