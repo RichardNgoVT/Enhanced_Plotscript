@@ -839,7 +839,7 @@ Expression Expression::handle_discretePlot(Environment & env) {
 	}
 
 	//Y axis
-	if (Xmin < 0.0 && Xmax > 0.0)
+	if (Xmin <= 0.0 && Xmax >= 0.0)
 	{
 		lineCreate = Expression(Atom("make-line"));
 
@@ -1254,7 +1254,7 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 	graphList.append(propCreate.eval(env));
 
 	//X axis
-	if (Ymin < 0.0 && Ymax > 0.0)
+	if (Ymin <= 0.0 && Ymax >= 0.0)
 	{
 		lineCreate = Expression(Atom("make-line"));
 
