@@ -8,7 +8,7 @@ private slots:
   void initTestCase();
   void defaultTest();
   void graphTests();
-  void testDiscretePlotLayout();
+  //void testDiscretePlotLayout();
   void plotscriptTests();
   void pointTests();
   void lineTests();
@@ -654,19 +654,11 @@ void NotebookTest::graphTests()
 	//testing (get-property "key" (3))
 	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10);
 	std::string program = R"(
-(begin
-    (define f (lambda (x) 
-        (list x (+ (* 2 x) 1))))
-    (discrete-plot (map f (range 3 5 0.5))
-       (list
-       (list "title" "The Data")
-       (list "abscissa-label" "X Label")
-       (list "ordinate-label" "Y Label")
-       (list "text-scale" 1))))
+(begin (define f (lambda (x) (sin x))) (continuous-plot f (list (- pi) pi) (list (list "title" "A continuous linear function") (list "abscissa-label" "x") (list "ordinate-label" "y"))))
 )";
 	inwid->setPlainText(QString::fromStdString(program));
 	QTest::keyClick(inwid, Qt::Key_Return, Qt::ShiftModifier);
-	//QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 60000);
+	
 	auto viewwid = outwid->findChild<QGraphicsView *>();
 	QVERIFY2(viewwid, "Could not find view widget");
 	//QCOMPARE(viewwid->items().size(), 31);
@@ -696,9 +688,10 @@ void NotebookTest::graphTests()
 	//QCOMPARE(text->pos(), defaultPos);
 	//QCOMPARE(text->font(), defaultFontCheck.font());
 	//qDebug() << "HEY1\n";
+	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 60000);
 }
 
-
+/*
 void NotebookTest::testDiscretePlotLayout()
 {
 	auto inputWidget = widget.findChild<InputWidget *>("input");
@@ -805,6 +798,7 @@ void NotebookTest::testDiscretePlotLayout()
 	// check the point at (1,1)
 	QCOMPARE(findPoints(scene, QPointF(10, -10), 0.6), 1);
 }
+*/
 /*
 void NotebookTest::testDiscretePlotLayout() {
 
