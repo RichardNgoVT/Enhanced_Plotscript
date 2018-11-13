@@ -1055,11 +1055,14 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 	double y1;
 	double y2;
 	double y3;
+
+	unsigned int i = 2;
 	//bool iterated = false;
 	for (int j = 0; j < 10; j++)//should be 10
 	{
 		//iterated = false;
-		for (unsigned int i = 2; i < Xplot.size(); i+=2)
+		//for (unsigned int i = 2; i < Xplot.size(); i+=2)
+		while(i < Xplot.size())
 		{
 			lambda.tailVector()[0] = Expression(Xplot[i - 2]);//does this work?
 			y1 = lambda.eval(env).head().asNumber();
@@ -1094,9 +1097,13 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 			{
 				Xplot.insert(Xplot.begin() + i, (Xplot[i] - Xplot[i - 1]) / 2 + Xplot[i - 1]);
 				Xplot.insert(Xplot.begin() + i - 1, (Xplot[i - 1] - Xplot[i - 2]) / 2 + Xplot[i - 2]);
-				i = i + 2;
+				i = i + 4;
 			}
-
+			else
+			{
+				i++;
+			}
+			//i = i + 2;
 		}
 
 	}
