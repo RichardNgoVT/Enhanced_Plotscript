@@ -1062,6 +1062,7 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 	{
 		//iterated = false;
 		//for (unsigned int i = 2; i < Xplot.size(); i+=2)
+		i = 2;
 		while(i < Xplot.size())
 		{
 			lambda.tailVector()[0] = Expression(Xplot[i - 2]);//does this work?
@@ -1092,6 +1093,10 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 			{
 				Ymin = y3;
 			}
+		//	if (j == 9)
+			//{
+				//std::cout << 180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2.0) + pow((y3 - y2), 2.0))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))) << " " << -180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2) + pow((y3 - y2), 2))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))) << "\n";
+		//	}
 			//if ((180 - (arcCos((x3-x2)/sqrt((x3-x2)^2 + (y3-y2)^2)) - arcCos((x2-x1)/sqrt((x2-x1)^2 + (y2-y1)^2))) < 175) || (-180 - (arcCos((x3-x2)/sqrt((x3-x2)^2 + (y3-y2)^2)) - arcCos((x2-x1)/sqrt((x2-x1)^2 + (y2-y1)^2))) > -175))
 			if ((180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2.0) + pow((y3 - y2), 2.0))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))) < 175) || (-180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2) + pow((y3 - y2), 2))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))) > -175))
 			{
@@ -1104,9 +1109,11 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 				i++;
 			}
 			//i = i + 2;
+			
 		}
 
 	}
+//	std::cout << Xplot.size() << "\n";
 
 	//graphing
 	Expression graphList;
