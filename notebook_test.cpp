@@ -7,13 +7,14 @@ class NotebookTest : public QObject {
 private slots:
   void initTestCase();
   void defaultTest();
-  void graphTests();
-  //void testDiscretePlotLayout();
+ // void graphTests();
+  void testDiscretePlotLayout();
+  void testContinuousPlotLayout();
   void plotscriptTests();
   void pointTests();
   void lineTests();
   void textTests();
-  void tester();
+  void centerTester();
  
   
   // TODO: implement additional tests here
@@ -97,6 +98,7 @@ int intersectsLine(QGraphicsScene * scene, QPointF center, qreal radius) {
 	foreach(auto item, scene->selectedItems()) {
 		if (item->type() == QGraphicsLineItem::Type) {
 			numlines += 1;
+			//qDebug() << "here";
 		}
 	}
 
@@ -114,6 +116,8 @@ void NotebookTest::defaultTest() {
 	QVERIFY2(inwid, "Could not find input widget with name: 'input'");
 	QVERIFY2(outwid, "Could not find out widget with name: 'output'");
 }
+
+
 
 
 
@@ -534,7 +538,7 @@ void NotebookTest::textTests()
 	posCheck.setY(0.0 - (text->boundingRect().height() / 2.0));
 	QCOMPARE(text->toPlainText(), QString("Hello World!"));
 	QCOMPARE(text->pos(), posCheck);
-	qDebug() << '(' << text->sceneBoundingRect().center().x() << ", " << text->sceneBoundingRect().center().y() << "); Scale: " << text->scale() << "; Type: " << text->type() << "; Text: " << text->toPlainText();
+	//qDebug() << '(' << text->sceneBoundingRect().center().x() << ", " << text->sceneBoundingRect().center().y() << "); Scale: " << text->scale() << "; Type: " << text->type() << "; Text: " << text->toPlainText();
 	//Debug() << "Bounding Rect: TopL" << '(' << text->sceneBoundingRect().topLeft().x() << ", " << text->sceneBoundingRect().center().y() << "); TopR
 	//QCOMPARE(text->font(), defaultFontCheck.font());
 
@@ -606,7 +610,7 @@ void NotebookTest::textTests()
 }
 
 
-void NotebookTest::tester()
+void NotebookTest::centerTester()
 {
 	auto inwid = widget.findChild<InputWidget *>("input");
 	auto outwid = widget.findChild<OutputWidget *>("output");
@@ -632,7 +636,7 @@ void NotebookTest::tester()
 
 
 
-
+/*
 
 void NotebookTest::graphTests()
 {
@@ -654,7 +658,10 @@ void NotebookTest::graphTests()
 	//testing (get-property "key" (3))
 	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10);
 	std::string program = R"(
-(begin (define f (lambda (x) (sin x))) (continuous-plot f (list (- pi) pi) (list (list "title" "A continuous linear function") (list "abscissa-label" "x") (list "ordinate-label" "y"))))
+(discrete-plot (list (list -1 -1) (list 1 1)) 
+    (list (list "title" "The Title") 
+          (list "abscissa-label" "X Label") 
+          (list "ordinate-label" "Y Label")))
 )";
 	inwid->setPlainText(QString::fromStdString(program));
 	QTest::keyClick(inwid, Qt::Key_Return, Qt::ShiftModifier);
@@ -669,14 +676,15 @@ void NotebookTest::graphTests()
 		if (viewwid->items()[i]->type() == 8)
 		{
 			auto text = qgraphicsitem_cast<QGraphicsTextItem *>(viewwid->items()[i]);
-			//qDebug() << '(' << viewwid->items()[i]->x() << ", " << viewwid->items()[i]->y() << "); Scale: " << viewwid->items()[i]->scale() << "; Type: " << viewwid->items()[i]->type() << "; Text: " << text->toPlainText();
-	
-			qDebug() << '(' << viewwid->items()[i]->sceneBoundingRect().center().x() << ", " << viewwid->items()[i]->sceneBoundingRect().center().y() << "); Scale: " << viewwid->items()[i]->scale() << "; Type: " << viewwid->items()[i]->type() << "; Text: " << text->toPlainText();
+			qDebug() << '(' << viewwid->items()[i]->x() << ", " << viewwid->items()[i]->y() << "); Scale: " << viewwid->items()[i]->scale() << "; Type: " << viewwid->items()[i]->type() << "; Text: " << text->toPlainText();
+			//qDebug() << viewwid->items()[i]->sceneBoundingRect();
+			//qDebug() << '(' << viewwid->items()[i]->sceneBoundingRect().center().x() << ", " << viewwid->items()[i]->sceneBoundingRect().center().y() << "); Scale: " << viewwid->items()[i]->scale() << "; Type: " << viewwid->items()[i]->type() << "; Text: " << text->toPlainText();
 
 
 		}
 		else
 		{
+		//	qDebug() << viewwid->items()[i]->sceneBoundingRect();
 			qDebug() << '(' << viewwid->items()[i]->sceneBoundingRect().center().x() << ", " << viewwid->items()[i]->sceneBoundingRect().center().y() << "); Scale: " << viewwid->items()[i]->scale() << "; Type: " << viewwid->items()[i]->type();
 		}
 		//qDebug() << viewwid->items()[0]->scale() << endl;
@@ -687,11 +695,9 @@ void NotebookTest::graphTests()
 	//QCOMPARE(text->toPlainText(), QString("NONE"));
 	//QCOMPARE(text->pos(), defaultPos);
 	//QCOMPARE(text->font(), defaultFontCheck.font());
-	//qDebug() << "HEY1\n";
-	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 60000);
 }
+*/
 
-/*
 void NotebookTest::testDiscretePlotLayout()
 {
 	auto inputWidget = widget.findChild<InputWidget *>("input");
@@ -710,7 +716,7 @@ void NotebookTest::testDiscretePlotLayout()
 	QVERIFY2(view, "Could not find QGraphicsView as child of OutputWidget");
 
 	auto scene = view->scene();
-
+	/*
 	for (int i = 0; i < view->items().size(); i++)
 	{
 		if (view->items()[i]->type() == 8)
@@ -732,6 +738,7 @@ void NotebookTest::testDiscretePlotLayout()
 		}
 		//qDebug() << view->items()[0]->scale() << endl;
 	}
+	*/
 	//QTest::mouseClick(inputWidget, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10000);
 	// first check total number of items
 	// 8 lines + 2 points + 7 text = 17
@@ -798,12 +805,103 @@ void NotebookTest::testDiscretePlotLayout()
 	// check the point at (1,1)
 	QCOMPARE(findPoints(scene, QPointF(10, -10), 0.6), 1);
 }
-*/
-/*
-void NotebookTest::testDiscretePlotLayout() {
 
+void NotebookTest::testContinuousPlotLayout()
+{
+	auto inwid = widget.findChild<InputWidget *>("input");
+	auto outwid = widget.findChild<OutputWidget *>("output");
+	QGraphicsTextItem defaultFontCheck;
+	QPointF defaultPos;
+	defaultPos.setX(0.0);
+	defaultPos.setY(0.0);
+
+
+	//clears just in case
+	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10);
+	QTest::keyPress(inwid, Qt::Key_A, Qt::ControlModifier, 10);
+	QTest::keyPress(inwid, Qt::Key_A, Qt::ControlModifier, 10);
+	QTest::keyPress(inwid, Qt::Key_Backspace, Qt::NoModifier, 10);
+	QTest::keyRelease(inwid, Qt::Key_Backspace, Qt::NoModifier, 10);
+
+	//testing (get-property "key" (3))
+	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10);
+	std::string program = R"(
+(begin (define f (lambda (x) (sin x))) (continuous-plot f (list (- pi) pi) (list (list "title" "A continuous linear function") (list "abscissa-label" "x") (list "ordinate-label" "y"))))
+
+)";
+	inwid->setPlainText(QString::fromStdString(program));
+	QTest::keyClick(inwid, Qt::Key_Return, Qt::ShiftModifier);
+
+	auto viewwid = outwid->findChild<QGraphicsView *>();
+	QVERIFY2(viewwid, "Could not find view widget");
+	QCOMPARE(viewwid->items().size(), 67 + 12);
+	
+	//QGraphicsLineItem::type
+	
+	//double Ytest;
+	//double Yvalue;
+	//bool correct;
+	//std::vector<double> Ystore;
+	//double Yscale = 20 / (1 - (-1));
+	//double Xscale = 20 / (std::atan2(0, -1) * 2);
+	//auto scene = viewwid->scene();
+	
+	//for (double i = 0; i < 51; i++)
+	//{
+		//Ytest = sin(i);
+	//	QVERIFY2(intersectsLine(scene, QPointF(i*Xscale, -Ytest * Yscale), .1), "No lines found near expected point");
+	//	QCOMPARE(intersectsLine(scene, QPointF(0, 0), 100), 1);//can't find any lines
+	//}
+	//for (int i = 0; i < viewwid->items().size(); i++)
+//	{
+		//if (viewwid->items()[i]->type() == 6)
+	//	{
+			//auto line = qgraphicsitem_cast<QGraphicsLineItem *>(viewwid->items()[i]);//storelastvalue
+			//Ytest = sin(line->x1);
+			//Ytest = sin(scene->items()[i]->sceneBoundingRect().bottomLeft().x());
+			//QVERIFY2(intersectsLine(scene, QPointF(scene->items()[i]->sceneBoundingRect().bottomLeft().x(), -Ytest*Yscale), 10), "No lines found near expected point");
+			/*
+			qDebug() << "\n" << viewwid->items()[i]->boundingRect().bottomLeft().y() << " " << viewwid->items()[i]->boundingRect().topLeft().y() << " " << Ytest;
+			if (Ytest == viewwid->items()[i]->sceneBoundingRect().bottomLeft().y())
+			{
+				Yvalue = viewwid->items()[i]->sceneBoundingRect().bottomLeft().y();
+			}
+			else if(Ytest == viewwid->items()[i]->sceneBoundingRect().topLeft().y())
+			{
+				Yvalue = viewwid->items()[i]->sceneBoundingRect().topLeft().y();
+			}
+			else
+			{
+				Yvalue = 2.0;//impossible
+			}
+			QCOMPARE(Yvalue, Ytest);
+			Ystore.push_back(Yvalue);
+			*/
+	//	}
+	//}
+	/*
+	double angle;
+	for (int i = 0; i < viewwid->items().size(); i++)
+	{
+		if (viewwid->items()[i]->type() == 4)
+		{	
+			angle = (180.0 / (std::atan2(0, -1))) * (acos((viewwid->items()[i]->sceneBoundingRect().center().x() - viewwid->items()[i - 1]->sceneBoundingRect().center().x()) / sqrt(pow((viewwid->items()[i]->sceneBoundingRect().center().x() - viewwid->items()[i - 1]->sceneBoundingRect().center().x()), 2.0) + pow((viewwid->items()[i]->sceneBoundingRect().center().y() - viewwid->items()[i - 1]->sceneBoundingRect().center().y()), 2.0))) - acos((viewwid->items()[i - 1]->sceneBoundingRect().center().x() - viewwid->items()[i - 2]->sceneBoundingRect().center().x()) / sqrt(pow((viewwid->items()[i - 1]->sceneBoundingRect().center().x() - viewwid->items()[i - 2]->sceneBoundingRect().center().x()), 2) + pow((viewwid->items()[i - 1]->sceneBoundingRect().center().y() - viewwid->items()[i - 2]->sceneBoundingRect().center().y()), 2))));
+			if (angle < 0)
+			{
+				angle = angle * -1.0;
+			}
+			QVERIFY2(angle >= 175.0, "angle exists thats less than 175 degrees");
+		}
+	}
+	*/
+	//QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 100000);
+	//QVERIFY2(viewwid->items().size() == 31, "incorrect number of items in QGraphicsView");
+	// * text = qgraphicsitem_cast<QGraphicsTextItem *>(viewwid->items()[0]);
+	//QCOMPARE(text->toPlainText(), QString("NONE"));
+	//QCOMPARE(text->pos(), defaultPos);
+	//QCOMPARE(text->font(), defaultFontCheck.font());
 }
-*/
+
 
 
 

@@ -160,6 +160,7 @@ TEST_CASE( "Test assignment", "[atom]" ) {
     REQUIRE(b.isSymbol());
     REQUIRE(b.asSymbol() == "hi");
   }
+
 }
 
 TEST_CASE( "test comparison", "[atom]" ) {
@@ -229,6 +230,32 @@ TEST_CASE( "test comparison", "[atom]" ) {
     Atom c("bye");
     REQUIRE(a == b);
     REQUIRE(a != c);
+  }
+
+  {
+	  INFO("compare symbol to list");
+	  Atom a;
+	  a.setList();
+	  Atom b;
+	  b.setList();
+	  Atom c("bye");
+	  Atom d(a);
+	  REQUIRE(a == b);
+	  REQUIRE(a != c);
+	  REQUIRE(a == d);
+  }
+
+  {
+	  INFO("compare symbol to symbol");
+	  Atom a;
+	  a.setProcedure();
+	  Atom b;
+	  b.setProcedure();
+	  Atom c("bye");
+	  Atom d(a);
+	  REQUIRE(a == b);
+	  REQUIRE(a != c);
+	  REQUIRE(a == d);
   }
 
 }

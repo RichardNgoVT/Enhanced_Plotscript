@@ -98,7 +98,7 @@ void Expression::append(const Atom & a){
 void Expression::append(const Expression & a) {
 	m_tail.emplace_back(a);
 }
-
+/*
 void Expression::HexpressVisual(Atom headman, std::vector<Expression> tailman, Expression express, int layer)//ONLY WORKS IN HOST, helper function for troubleshooting
 {
 	Expression holder;
@@ -165,7 +165,7 @@ void Expression::HheadOutputer(Atom headman)//helps with HexpressVisual outputti
 		std::cout << "(unde):()";
 	}
 }
-
+*/
 
 
 Expression * Expression::tail(){
@@ -195,6 +195,7 @@ Expression apply(const Atom & op, const std::vector<Expression> & args, const En
   
   // must map to a proc
   if(!env.is_proc(op)){
+	//  std::cout << "here";
     throw SemanticError("Error during evaluation: symbol does not name a procedure");
   }
   
@@ -625,6 +626,7 @@ Expression Expression::handle_getProperty(Environment & env) {
 }
 
 Expression Expression::handle_discretePlot(Environment & env) {
+	//std::cout << "HERE: " << m_head.asSymbol() << std::endl;
 	Expression graphList;
 	Expression textCreate;
 	Expression propCreate;
@@ -1050,6 +1052,7 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 	for (int i = 0; i < 51; i++)//points
 	{
 		Xplot.push_back(i*(Xmax - Xmin) / 50.0 + Xmin);
+
 	}
 
 	double y1;
@@ -1093,10 +1096,19 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 			{
 				Ymin = y3;
 			}
-		//	if (j == 9)
-			//{
-				//std::cout << 180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2.0) + pow((y3 - y2), 2.0))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))) << " " << -180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2) + pow((y3 - y2), 2))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))) << "\n";
-		//	}
+			/*
+			if (j == 9)
+			{
+				if (180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2.0) + pow((y3 - y2), 2.0))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))) < 175)
+				{
+					std::cout << (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2.0) + pow((y3 - y2), 2.0))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2))));
+				}
+				else {
+					std::cout << (-1.0) * (-180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2) + pow((y3 - y2), 2))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))));
+				}
+				std::cout << "\n";
+			}
+			*/
 			//if ((180 - (arcCos((x3-x2)/sqrt((x3-x2)^2 + (y3-y2)^2)) - arcCos((x2-x1)/sqrt((x2-x1)^2 + (y2-y1)^2))) < 175) || (-180 - (arcCos((x3-x2)/sqrt((x3-x2)^2 + (y3-y2)^2)) - arcCos((x2-x1)/sqrt((x2-x1)^2 + (y2-y1)^2))) > -175))
 			if ((180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2.0) + pow((y3 - y2), 2.0))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))) < 175) || (-180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2) + pow((y3 - y2), 2))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))) > -175))
 			{
@@ -1113,8 +1125,19 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 		}
 
 	}
-//	std::cout << Xplot.size() << "\n";
+	/*
+	double Ri = 0;
+	
+	for (unsigned int R = 0; R < Xplot.size(); R++)
+	{
 
+		lambda.tailVector()[0] = Expression(Xplot[R]);//does this work?
+		Ri = lambda.eval(env).head().asNumber();
+		std::cout << "(" << Xplot[R] << ", " << Ri << ")\n";
+
+	}
+	std::cout << Xplot.size() << "\n";
+	*/
 	//graphing
 	Expression graphList;
 	Expression textCreate;
@@ -1479,9 +1502,15 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 // difficult with the ast data structure used (no parent pointer).
 // this limits the practical depth of our ASTdef
 Expression Expression::eval(Environment & env){
-	//cout << endl << "EVAL: ";
+	//std::cout << std::endl << "EVAL: ";
 	//HexpressVisual(m_head, m_tail, Expression(), 0);
-	//cout << endl;
+	//std::cout << std::endl;
+	/*
+	if (m_head.isSymbol() && m_head.asSymbol() == "discrete-plot")
+		{
+		std::cout << "HERE: " << m_head.asSymbol() << std::endl;
+		}
+		*/
 	Expression holder;
 	/*
 	if (m_head.isProperty())//if commented out, expressions with property lists can't be used normally by other functions
@@ -1493,6 +1522,7 @@ Expression Expression::eval(Environment & env){
 	}
 	*/
 		if (m_tail.empty()) {
+
 			if (m_head.asSymbol() == "list")//empty list
 			{
 				return apply(m_head, m_tail, env);
@@ -1532,8 +1562,9 @@ Expression Expression::eval(Environment & env){
 		}
 		// else attempt to treat as procedure
 		else {
+
 			std::vector<Expression> results;
-			
+
 			for (Expression::IteratorType it = m_tail.begin(); it != m_tail.end(); ++it) {
 				results.push_back(it->eval(env));
 			}
@@ -1547,7 +1578,9 @@ Expression Expression::eval(Environment & env){
 			}
 			*/
 			//cout << "ENDforloop" << endl;
+
 			if (m_head.isSymbol() && m_head.asSymbol() == "discrete-plot") {
+
 				m_tail = results;
 				return handle_discretePlot(env);
 			}

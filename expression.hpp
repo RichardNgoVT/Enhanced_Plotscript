@@ -102,9 +102,9 @@ public:
   void markProperty();
 
   //used to cout expressions (for testing)
-  void HexpressVisual(Atom headman, std::vector<Expression> tailman, Expression express, int layer);
+  //void HexpressVisual(Atom headman, std::vector<Expression> tailman, Expression express, int layer);
 
-  void HheadOutputer(Atom headman);
+ // void HheadOutputer(Atom headman);
 
 private:
 

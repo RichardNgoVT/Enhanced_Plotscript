@@ -58,9 +58,7 @@ Expression parse(const TokenSequenceType &tokens) noexcept {
           }
           stack.push(&ast);//
         } else {//expression within expression
-          if (stack.empty()) {//??
-            return Expression();
-          }
+
 
           if (!append(stack.top(), t)) {//
             return Expression();

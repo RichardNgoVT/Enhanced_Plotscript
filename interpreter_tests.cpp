@@ -411,3 +411,67 @@ TEST_CASE("Tests with get-property function", "[interpreter]") {
 		
 	}
 }
+
+TEST_CASE("Tests with Discrete function", "[interpreter]") {
+	{
+		std::string program;
+		std::string initial;
+		Expression result;
+
+		initial = R"((begin (define make-point (lambda (x y) (set-property "size" (0) (set-property "object-name" "point" (list x y))))) (define make-line (lambda (p1 p2) (set-property "thickness" (1) (set-property "object-name" "line" (list p1 p2))))) (define make-text (lambda (str) (set-property "text-rotation" (0) (set-property "text-scale" (1.0) (set-property "position" (make-point 0 0) (set-property "object-name" "text" (str))))))) )";
+		//INFO(program);
+		//result = run(program);
+
+		program = R"((discrete-plot (list (list (- 1) (- 1)) (list 1 1)))))";//no labels
+		program = initial + program;
+		INFO(program);
+		result = run(program);
+		
+		program = R"((discrete-plot (list (list (- 1) (- 1)) (list 1 1)) (list (list "title" "The Title") (list "abscissa-label" "X Label") (list "ordinate-label" "Y Label")))))";
+		program = initial + program;
+		INFO(program);
+		result = run(program);
+
+
+		program = R"((begin (define f (lambda (x) (list x (+ (* 2 x) 1)))) (discrete-plot (map f (range -2 2 0.5)) (list (list "title" "The Data") (list "abscissa-label" "X Label") (list "ordinate-label" "Y Label") (list "text-scale" 1))))))";
+		program = initial + program;
+		INFO(program);
+		result = run(program);
+		
+		REQUIRE(true);//didn't crash
+		
+	}
+}
+
+TEST_CASE("Tests with Continous function", "[interpreter]") {
+	{
+
+		std::string program;
+		std::string initial;
+		Expression result;
+
+		initial = R"((begin (define make-point (lambda (x y) (set-property "size" (0) (set-property "object-name" "point" (list x y))))) (define make-line (lambda (p1 p2) (set-property "thickness" (1) (set-property "object-name" "line" (list p1 p2))))) (define make-text (lambda (str) (set-property "text-rotation" (0) (set-property "text-scale" (1.0) (set-property "position" (make-point 0 0) (set-property "object-name" "text" (str))))))) )";
+
+		program = R"((begin (define f (lambda (x) (+ (* 2 x) 1))) (continuous-plot f (list -2 2) (list (list "title" "A continuous linear function") (list "abscissa-label" "x") (list "ordinate-label" "y"))))))";
+		program = initial + program;
+		INFO(program);
+		result = run(program);
+		
+
+		program = R"((begin (define f (lambda (x) (sin x))) (continuous-plot f (list (- pi) pi) (list (list "title" "A continuous linear function") (list "abscissa-label" "x") (list "ordinate-label" "y"))))))";
+		program = initial + program;
+		INFO(program);
+		result = run(program);
+
+		program = R"((begin (define f (lambda (x) (/ 1 (+ 1 (^ e (- (* 20 x))))))) (continuous-plot f (list (- 1) 1)))))";
+		program = initial + program;
+		INFO(program);//no labels
+		result = run(program);
+
+
+
+
+		REQUIRE(true);//didn't crash
+
+	}
+}
