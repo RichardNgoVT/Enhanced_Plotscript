@@ -17,6 +17,7 @@ set(interpreter_src
   expression.hpp expression.cpp
   parse.hpp parse.cpp
   interpreter.hpp interpreter.cpp
+  threader.hpp threader.cpp
   )
 
 # EDIT
@@ -31,6 +32,7 @@ set(unittest_src
   semantic_error.hpp
   token_tests.cpp
   unit_tests.cpp
+  threader_tests.cpp
   )
 
 # EDIT
