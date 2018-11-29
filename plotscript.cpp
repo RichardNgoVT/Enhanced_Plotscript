@@ -97,7 +97,7 @@ int eval_from_stream(std::istream & stream){
 	inputQ.push(line);
 	outputQ.wait_and_pop(exp);
 	std::cout << exp << std::endl;
-	th1.join();
+	//th1.join();
 
 
 	/*
@@ -143,7 +143,7 @@ int eval_from_command(std::string argexp){
 }
 
 // A REPL is a repeated read-eval-print loop
-void repl(){
+void repl(std::thread &th1, ThreadSafeQueue<std::string> &inputQ, ThreadSafeQueue<Expression> &outputQ){
 	bool running = false;
   //Interpreter interp;
   //std::ifstream PREifs(STARTUP_FILE);
@@ -159,9 +159,9 @@ void repl(){
 
 
 
-	ThreadSafeQueue<std::string> inputQ;
-	ThreadSafeQueue<Expression> outputQ;
-	std::thread th1;
+	//ThreadSafeQueue<std::string> inputQ;
+	//ThreadSafeQueue<Expression> outputQ;
+	//std::thread th1;
 	//std::thread th1(threadSender, std::ref(inputQ), std::ref(outputQ));
 
 	Expression exp;
@@ -244,8 +244,6 @@ void repl(){
     }
 	*/
   }
-  inputQ.push("%stop");
-  th1.join();
 }
 
 //std::thread th1(threadSender, script, expr);
@@ -255,7 +253,9 @@ int main(int argc, char *argv[])
 {  
 
 	//std::thread th1(threadSender, script, expr);
-
+	ThreadSafeQueue<std::string> inputQ;
+	ThreadSafeQueue<Expression> outputQ;
+	std::thread th1;
   if(argc == 2){
     return eval_from_file(argv[1]);
   }
@@ -268,8 +268,9 @@ int main(int argc, char *argv[])
     }
   }
   else{
-    repl();//do this as a thread?
+    repl(th1, inputQ, outputQ);//do this as a thread?
   }
-    
+  inputQ.push("%stop");
+  th1.join();
   return EXIT_SUCCESS;
 }
