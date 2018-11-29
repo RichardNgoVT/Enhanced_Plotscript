@@ -91,6 +91,11 @@ bool Expression::isHeadNone() const noexcept
 	return m_head.isNone();
 }
 
+bool Expression::isHeadError() const noexcept
+{
+	return m_head.isError();
+}
+
 void Expression::append(const Atom & a){
   m_tail.emplace_back(a);
 }
@@ -1693,6 +1698,11 @@ void Expression::markProcedure()
 void Expression::markProperty()
 {
 	m_head.setProperty();
+}
+
+void Expression::markError()
+{
+	m_head.setError();
 }
 
 bool operator!=(const Expression & left, const Expression & right) noexcept{

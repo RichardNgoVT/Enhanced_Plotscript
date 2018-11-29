@@ -31,20 +31,36 @@ void info(const std::string & err_str){
 
 void threadSender(ThreadSafeQueue<std::string> & inputQ, ThreadSafeQueue<Expression> & outputQ)
 {
+
 	Interpreter interp;
 	std::string line;
 
 	std::ifstream PREifs(STARTUP_FILE);
 	interp.parseStream(PREifs);
 	interp.evaluate();
-
-	while (1)
+	bool running = true;
+	while (running == true)
 	{
+
 		inputQ.wait_and_pop(line);
+
+		if (line == "%stop")
+		{
+			running = false;
+			break;
+		}
+
 		std::istringstream expression(line);
 
 		if (!interp.parseStream(expression)) {
+			//Expression ErrorMsg;
+			//ErrorMsg.head().setError("Invalid Expression. Could not parse.");
+			//outputQ.push(ErrorMsg);
+			Expression ErrorMsg;
+			ErrorMsg.head().setError();
 			error("Invalid Expression. Could not parse.");
+			outputQ.push(ErrorMsg);
+			continue;
 		}
 		else {
 			try {
@@ -54,6 +70,7 @@ void threadSender(ThreadSafeQueue<std::string> & inputQ, ThreadSafeQueue<Express
 			}
 			catch (const SemanticError & ex) {
 				std::cerr << ex.what() << std::endl;
+				continue;
 			}
 		}
 	}
@@ -123,6 +140,7 @@ int eval_from_command(std::string argexp){
 
 // A REPL is a repeated read-eval-print loop
 void repl(){
+	bool running = false;
   //Interpreter interp;
   //std::ifstream PREifs(STARTUP_FILE);
  
@@ -133,23 +151,76 @@ void repl(){
  
   //interp.parseStream(PREifs);
  // interp.evaluate();
+
+
+
+
 	ThreadSafeQueue<std::string> inputQ;
 	ThreadSafeQueue<Expression> outputQ;
-	std::thread th1(threadSender, std::ref(inputQ), std::ref(outputQ));
+	std::thread th1;
+	//std::thread th1(threadSender, std::ref(inputQ), std::ref(outputQ));
 
 	Expression exp;
 
   while(!std::cin.eof()){
     
     prompt();
-    std::string line = readline();//block
-    
+    std::string line = readline();//block    
+
+
     if(line.empty()) continue;
+	if (line == "%start")
+	{
+		if (running == true)
+		{
+			continue;
+		}
+		running = true;
+		th1 = std::thread(threadSender, std::ref(inputQ), std::ref(outputQ));
+		continue;
+		
+	}
 
-	inputQ.push(line);
+	if (line == "%stop")
+	{
+		if (running == false)
+		{
+			continue;
+		}
+		running = false;
+		inputQ.push(line);
+		th1.join();
+		continue;
+	}
 
-	outputQ.wait_and_pop(exp);
-	std::cout << exp << std::endl;
+	if (line == "%reset")
+	{
+		if (running == true)
+		{
+			running = false;
+			inputQ.push("%stop");
+			th1.join();
+		}
+		running = true;
+		th1 = std::thread(threadSender, std::ref(inputQ), std::ref(outputQ));
+		continue;
+
+	}
+
+	if (running == false)
+	{
+		error("Error: interpreter kernel not running");
+	}
+	else
+	{
+		inputQ.push(line);
+
+		outputQ.wait_and_pop(exp);
+		if (!exp.isHeadError())
+		{
+			std::cout << exp << std::endl;
+		}
+	}
 
 
 	/*

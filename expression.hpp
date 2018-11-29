@@ -89,6 +89,8 @@ public:
   /// checks for none type
   bool isHeadNone() const noexcept;
 
+  bool isHeadError() const noexcept;
+
   /// Evaluate expression using a post-order traversal (recursive)
   Expression eval(Environment & env);
 
@@ -100,6 +102,8 @@ public:
   void markProcedure();
 
   void markProperty();
+
+  void markError();
 
   //used to cout expressions (for testing)
   //void HexpressVisual(Atom headman, std::vector<Expression> tailman, Expression express, int layer);

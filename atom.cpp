@@ -75,6 +75,10 @@ Atom::Atom(const Atom & x): Atom(){
   {
 	  setProperty();
   }
+  else if (x.isError())
+  {
+	  setError();
+  }
 }
 
 Atom & Atom::operator=(const Atom & x){
@@ -103,6 +107,9 @@ Atom & Atom::operator=(const Atom & x){
 	}
 	else if (x.m_type == PropertyKind) {
 		setProperty();
+	}
+	else if (x.m_type == ErrorKind) {
+		setError();
 	}
   }
   return *this;
@@ -151,6 +158,11 @@ bool Atom::isProperty() const noexcept
 	return m_type == PropertyKind;
 }
 
+bool Atom::isError() const noexcept
+{
+	return m_type == ErrorKind;
+}
+
 
 void Atom::setNumber(double value){
 
@@ -167,7 +179,7 @@ void Atom::setComplex(std::complex<double> value) {
 void Atom::setSymbol(const std::string & value){
 
   // we need to ensure the destructor of the symbol string is called
-  if(m_type == SymbolKind){
+  if(m_type == SymbolKind || m_type == StringKind){
     stringValue.~basic_string();
   }
     
@@ -180,7 +192,7 @@ void Atom::setSymbol(const std::string & value){
 void Atom::setPString(const std::string & value) {
 
 	// we need to ensure the destructor of the PString string is called
-	if (m_type == StringKind) {
+	if (m_type == SymbolKind || m_type == StringKind) {
 		stringValue.~basic_string();
 	}
 
@@ -188,6 +200,11 @@ void Atom::setPString(const std::string & value) {
 
 	// copy construct in place
 	new (&stringValue) std::string(value);
+}
+
+void Atom::setError()
+{
+	m_type = ErrorKind;
 }
 
 void Atom::setList() {
@@ -289,6 +306,11 @@ bool Atom::operator==(const Atom & right) const noexcept{
   case PropertyKind:
   {
 	  if (right.m_type != PropertyKind) return false;
+  }
+  break;
+  case ErrorKind:
+  {
+	  if (right.m_type != ErrorKind) return false;
   }
   break;
   default:

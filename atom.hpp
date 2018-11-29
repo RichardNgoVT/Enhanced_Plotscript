@@ -64,11 +64,14 @@ public:
   /// predicate to determine if an Atom is of type List
   bool isList() const noexcept;
 
-  /// predicate to determine if an Atom is of type List
+  /// predicate to determine if an Atom is of type Procedure
   bool isProcedure() const noexcept;
 
-  /// predicate to determine if an Atom is of type List
+  /// predicate to determine if an Atom is of type Property
   bool isProperty() const noexcept;
+
+  ///checks if expression resulted in an error
+  bool isError() const noexcept;
 
   /// value of Atom as a number, return 0 if not a Number
   double asNumber() const noexcept;
@@ -82,6 +85,7 @@ public:
   /// value of Atom as a string, returns empty-string if not a String
   std::string asPString() const noexcept;
 
+
   /// equality comparison based on type and value
   bool operator==(const Atom & right) const noexcept;
 
@@ -94,10 +98,12 @@ public:
   //sets up for property
   void setProperty();
 
+  //sets up for error
+  void setError();
 private:
 
   // internal enum of known types
-  enum Type {NoneKind, NumberKind, SymbolKind, ComplexKind, ListKind, ProcedureKind, StringKind, PropertyKind};
+  enum Type {NoneKind, NumberKind, SymbolKind, ComplexKind, ListKind, ProcedureKind, StringKind, PropertyKind, ErrorKind};
 
   // track the type
   Type m_type;
