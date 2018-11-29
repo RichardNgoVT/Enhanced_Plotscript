@@ -94,6 +94,7 @@ int eval_from_stream(std::istream & stream){
 	inputQ.push(line);
 	outputQ.wait_and_pop(exp);
 	std::cout << exp << std::endl;
+	th1.join();
 
 
 	/*
@@ -216,13 +217,13 @@ void repl(){
 		inputQ.push(line);
 
 		outputQ.wait_and_pop(exp);
-		if (!exp.isHeadError())
-		{
+		//if (!exp.isHeadError())
+	//	{
 			std::cout << exp << std::endl;
-		}
+		//}
 	}
 
-
+	
 	/*
     std::istringstream expression(line);
     
@@ -240,6 +241,8 @@ void repl(){
     }
 	*/
   }
+  inputQ.push("%stop");
+  th1.join();
 }
 
 //std::thread th1(threadSender, script, expr);

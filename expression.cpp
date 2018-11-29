@@ -1645,6 +1645,10 @@ std::ostream & operator<<(std::ostream & out, const Expression & exp){
 	{
 		out << "NONE";
 	}
+	else if (exp.isHeadError())
+	{
+		out << "";
+	}
 	else
 	{
 		out << "(";
