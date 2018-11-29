@@ -39,6 +39,10 @@ void threadSender(ThreadSafeQueue<std::string> & inputQ, ThreadSafeQueue<Express
 	interp.parseStream(PREifs);
 	interp.evaluate();
 	bool running = true;
+
+	Expression ErrorMsg;
+	ErrorMsg.head().setError();
+
 	while (running == true)
 	{
 
@@ -56,8 +60,6 @@ void threadSender(ThreadSafeQueue<std::string> & inputQ, ThreadSafeQueue<Express
 			//Expression ErrorMsg;
 			//ErrorMsg.head().setError("Invalid Expression. Could not parse.");
 			//outputQ.push(ErrorMsg);
-			Expression ErrorMsg;
-			ErrorMsg.head().setError();
 			error("Invalid Expression. Could not parse.");
 			outputQ.push(ErrorMsg);
 			continue;
@@ -70,6 +72,7 @@ void threadSender(ThreadSafeQueue<std::string> & inputQ, ThreadSafeQueue<Express
 			}
 			catch (const SemanticError & ex) {
 				std::cerr << ex.what() << std::endl;
+				outputQ.push(ErrorMsg);
 				continue;
 			}
 		}
@@ -210,17 +213,17 @@ void repl(){
 
 	if (running == false)
 	{
-		error("Error: interpreter kernel not running");
+		error("interpreter kernel not running");
 	}
 	else
 	{
 		inputQ.push(line);
 
 		outputQ.wait_and_pop(exp);
-		//if (!exp.isHeadError())
-	//	{
+		if (!exp.isHeadError())
+		{
 			std::cout << exp << std::endl;
-		//}
+		}
 	}
 
 	
