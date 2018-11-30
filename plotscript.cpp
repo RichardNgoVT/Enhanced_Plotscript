@@ -2,20 +2,19 @@
 #include <sstream>
 #include <iostream>
 #include <fstream>
-#include <thread>
+//#include <thread>
 
 #include <stdio.h>     
 #include <stdlib.h>  
 
 #include "interpreter.hpp"
-#include "thread_safe_queue.hpp"
+//#include "thread_safe_queue.hpp"
 //#include "testing_stuff.hpp"
+#include "interp_accesser.hpp"
 #include "semantic_error.hpp"
-#include "startup_config.hpp"
+//#include "startup_config.hpp"
 
-ThreadSafeQueue<std::string> inputQ;
-ThreadSafeQueue<Expression> outputQ;
-std::thread th1;
+
 
 void prompt(){
   std::cout << "\nplotscript> ";
@@ -35,10 +34,9 @@ void error(const std::string & err_str){
 void info(const std::string & err_str){
   std::cout << "Info: " << err_str << std::endl;
 }
-
+/*
 void threadSender(ThreadSafeQueue<std::string> & inputQ, ThreadSafeQueue<Expression> & outputQ)
 {
-
 	Interpreter interp;
 	std::string line;
 
@@ -55,7 +53,7 @@ void threadSender(ThreadSafeQueue<std::string> & inputQ, ThreadSafeQueue<Express
 
 		inputQ.wait_and_pop(line);
 
-		if (line == "%stop")
+		if (line == "%stop")// || exitkey == true)
 		{
 			running = false;
 			break;
@@ -85,7 +83,7 @@ void threadSender(ThreadSafeQueue<std::string> & inputQ, ThreadSafeQueue<Express
 		}
 	}
 }
-
+*/
 int eval_from_stream(std::istream & stream){
   //Interpreter interp;
   //std::ifstream PREifs(STARTUP_FILE);
@@ -95,15 +93,17 @@ int eval_from_stream(std::istream & stream){
   //}
 	//interp.parseStream(PREifs);
 	//interp.evaluate();
-	ThreadSafeQueue<std::string> inputQ;
-	ThreadSafeQueue<Expression> outputQ;
-	std::thread th1(threadSender, std::ref(inputQ), std::ref(outputQ));
+	InterpAccesser interpA;
 	Expression exp;
 	std::string line{ std::istreambuf_iterator<char>(stream), std::istreambuf_iterator<char>() };
 
-	inputQ.push(line);
-	outputQ.wait_and_pop(exp);
-	std::cout << exp << std::endl;
+	interpA.push_in(line);
+	interpA.wait_pop_out(exp);
+
+	if (!exp.isHeadError())
+	{
+		std::cout << exp << std::endl;
+	}
 	//th1.join();
 
 
@@ -150,8 +150,8 @@ int eval_from_command(std::string argexp){
 }
 
 // A REPL is a repeated read-eval-print loop
-void repl(std::thread &th1, ThreadSafeQueue<std::string> &inputQ, ThreadSafeQueue<Expression> &outputQ){
-	bool running = false;
+void repl(){
+	
   //Interpreter interp;
   //std::ifstream PREifs(STARTUP_FILE);
  
@@ -164,12 +164,7 @@ void repl(std::thread &th1, ThreadSafeQueue<std::string> &inputQ, ThreadSafeQueu
  // interp.evaluate();
 
 
-
-
-	//ThreadSafeQueue<std::string> inputQ;
-	//ThreadSafeQueue<Expression> outputQ;
-	//std::thread th1;
-	//std::thread th1(threadSender, std::ref(inputQ), std::ref(outputQ));
+	InterpAccesser interpA;
 
 	Expression exp;
 
@@ -178,59 +173,49 @@ void repl(std::thread &th1, ThreadSafeQueue<std::string> &inputQ, ThreadSafeQueu
     prompt();
     std::string line = readline();//block    
 
-
+	if (line == "%exit")
+	{
+		interpA.stop();
+		return;
+	}
     if(line.empty()) continue;
 	if (line == "%start")
 	{
-		if (running == true)
-		{
-			continue;
-		}
-		running = true;
-		th1 = std::thread(threadSender, std::ref(inputQ), std::ref(outputQ));
+		interpA.start();
 		continue;
 		
 	}
 
 	if (line == "%stop")
 	{
-		if (running == false)
-		{
-			continue;
-		}
-		running = false;
-		inputQ.push(line);
-		th1.join();
+		interpA.stop();
 		continue;
 	}
 
 	if (line == "%reset")
 	{
-		if (running == true)
-		{
-			running = false;
-			inputQ.push("%stop");
-			th1.join();
-		}
-		running = true;
-		th1 = std::thread(threadSender, std::ref(inputQ), std::ref(outputQ));
+		interpA.stop();
+		interpA.start();
 		continue;
 
 	}
 
-	if (running == false)
+	if (interpA.online() == false)
 	{
 		error("interpreter kernel not running");
 	}
 	else
 	{
-		inputQ.push(line);
+		interpA.push_in(line);
 
-		outputQ.wait_and_pop(exp);
-		if (!exp.isHeadError())
-		{
-			std::cout << exp << std::endl;
-		}
+		interpA.wait_pop_out(exp);
+		//while (interpA.try_pop_out(exp))
+		//{
+			if (!exp.isHeadError())
+			{
+				std::cout << exp << std::endl;
+			}
+		//}
 	}
 
 	
@@ -252,8 +237,8 @@ void repl(std::thread &th1, ThreadSafeQueue<std::string> &inputQ, ThreadSafeQueu
 	*/
   }
 }
-
-void goAwayThread(void)
+/*
+void goAwayThread(std::thread &th1, ThreadSafeQueue<std::string> &inputQ)
 {
 	inputQ.push("%stop");
 	if (th1.joinable())
@@ -261,19 +246,12 @@ void goAwayThread(void)
 		th1.join();
 	}
 }
-
+*/
 //std::thread th1(threadSender, script, expr);
 
 
 int main(int argc, char *argv[])
 {  
-	
-	//ThreadSafeQueue<std::string> inputQ;
-	//ThreadSafeQueue<Expression> outputQ;
-	//std::thread th1;
-
-	
-	atexit(goAwayThread);
   if(argc == 2){
     return eval_from_file(argv[1]);
   }
@@ -286,8 +264,7 @@ int main(int argc, char *argv[])
     }
   }
   else{
-    repl(th1, inputQ, outputQ);//do this as a thread?
+    repl();//do this as a thread?
   }
-  
   return EXIT_SUCCESS;
 }

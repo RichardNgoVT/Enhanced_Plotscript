@@ -10,6 +10,7 @@ Defines the Expression type and assiciated functions.
 #include "token.hpp"
 #include "atom.hpp"
 
+//bool exitkey = false;
 // forward declare Environment
 class Environment;
 
@@ -105,6 +106,10 @@ public:
 
   void markError();
 
+  //void exitmark();
+
+  Expression exitnow();
+
   //used to cout expressions (for testing)
   //void HexpressVisual(Atom headman, std::vector<Expression> tailman, Expression express, int layer);
 
@@ -135,6 +140,8 @@ private:
   Expression handle_discretePlot(Environment & env);
   Expression handle_continuousPlot(Environment & env);
 
+
+
   const double N = 20.0;
   const double A = 3.0;
   const double B = 3.0;
@@ -142,6 +149,7 @@ private:
   const double D = 2.0;
   const double P = 0.5;
 
+  bool exitkey = false;
 };
 
 /// Render expression to output stream
