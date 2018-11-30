@@ -94,6 +94,7 @@ int eval_from_stream(std::istream & stream){
 	//interp.parseStream(PREifs);
 	//interp.evaluate();
 	InterpAccesser interpA;
+	interpA.start();
 	Expression exp;
 	std::string line{ std::istreambuf_iterator<char>(stream), std::istreambuf_iterator<char>() };
 
@@ -104,6 +105,7 @@ int eval_from_stream(std::istream & stream){
 	{
 		std::cout << exp << std::endl;
 	}
+	interpA.stop();
 	//th1.join();
 
 
@@ -151,7 +153,8 @@ int eval_from_command(std::string argexp){
 
 // A REPL is a repeated read-eval-print loop
 void repl(){
-	
+	InterpAccesser interpA;
+	interpA.start();
   //Interpreter interp;
   //std::ifstream PREifs(STARTUP_FILE);
  
@@ -164,7 +167,7 @@ void repl(){
  // interp.evaluate();
 
 
-	InterpAccesser interpA;
+	
 
 	Expression exp;
 
