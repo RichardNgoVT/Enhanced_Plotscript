@@ -3,12 +3,19 @@
 #include <iostream>
 #include <fstream>
 #include <thread>
+
+#include <stdio.h>     
+#include <stdlib.h>  
+
 #include "interpreter.hpp"
 #include "thread_safe_queue.hpp"
 //#include "testing_stuff.hpp"
 #include "semantic_error.hpp"
 #include "startup_config.hpp"
 
+ThreadSafeQueue<std::string> inputQ;
+ThreadSafeQueue<Expression> outputQ;
+std::thread th1;
 
 void prompt(){
   std::cout << "\nplotscript> ";
@@ -246,16 +253,27 @@ void repl(std::thread &th1, ThreadSafeQueue<std::string> &inputQ, ThreadSafeQueu
   }
 }
 
+void goAwayThread(void)
+{
+	inputQ.push("%stop");
+	if (th1.joinable())
+	{
+		th1.join();
+	}
+}
+
 //std::thread th1(threadSender, script, expr);
 
 
 int main(int argc, char *argv[])
 {  
+	
+	//ThreadSafeQueue<std::string> inputQ;
+	//ThreadSafeQueue<Expression> outputQ;
+	//std::thread th1;
 
-	//std::thread th1(threadSender, script, expr);
-	ThreadSafeQueue<std::string> inputQ;
-	ThreadSafeQueue<Expression> outputQ;
-	std::thread th1;
+	
+	atexit(goAwayThread);
   if(argc == 2){
     return eval_from_file(argv[1]);
   }
@@ -270,7 +288,6 @@ int main(int argc, char *argv[])
   else{
     repl(th1, inputQ, outputQ);//do this as a thread?
   }
-  inputQ.push("%stop");
-  th1.join();
+  
   return EXIT_SUCCESS;
 }
