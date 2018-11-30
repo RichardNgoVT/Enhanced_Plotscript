@@ -1,7 +1,7 @@
 #ifndef INTERP_ACCESSER_HPP
 #define INTERP_ACCESSER_HPP
-//#include <thread>
-//#include <mutex>
+#include <thread>
+#include <mutex>
 #include <fstream>
 #include "thread_safe_queue.hpp"
 #include "interpreter.hpp"
