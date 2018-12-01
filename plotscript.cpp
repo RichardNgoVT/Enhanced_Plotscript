@@ -12,8 +12,8 @@
 //#include "testing_stuff.hpp"
 #include "interp_accesser.hpp"
 #include "semantic_error.hpp"
+#include "cntlc_tracer.hpp"
 //#include "startup_config.hpp"
-
 
 
 void prompt(){
@@ -23,7 +23,7 @@ void prompt(){
 std::string readline(){
   std::string line;
   std::getline(std::cin, line);
-
+ 
   return line;
 }
 
@@ -171,10 +171,22 @@ void repl(){
 
 	Expression exp;
 
-  while(!std::cin.eof()){
-    
+  while(true){//(!std::cin.eof()){
+	  global_status_flag = 0;
     prompt();
     std::string line = readline();//block    
+
+	if (std::cin.fail() || std::cin.eof()) {
+		std::cin.clear(); // reset cin state
+		line.clear(); //clear input string
+		if (interpA.online())
+		{
+			//std::cout << "Interrupted stdin.\n";
+			error("interpreter kernel interrupted");
+			interpA.exit();
+		}
+		
+	}
 
 	if (line == "%exit")
 	{
@@ -211,14 +223,33 @@ void repl(){
 	{
 		interpA.push_in(line);
 
-		interpA.wait_pop_out(exp);
 		//while (interpA.try_pop_out(exp))
-		//{
+		//interpA.wait_pop_out(exp);
+		
+		while(interpA.empty_out())
+		{
+			if (global_status_flag > 0)
+			{
+				//std::cout << "Interrupted eval.\n";
+				if (interpA.online())
+				{
+					error("interpreter kernel interrupted");
+					interpA.exit();
+				}
+				
+
+
+				break;
+			}
+		}
+		if (global_status_flag == 0)
+		{
+			interpA.try_pop_out(exp);
 			if (!exp.isHeadError())
 			{
 				std::cout << exp << std::endl;
 			}
-		//}
+		}
 	}
 
 	
@@ -255,6 +286,7 @@ void goAwayThread(std::thread &th1, ThreadSafeQueue<std::string> &inputQ)
 
 int main(int argc, char *argv[])
 {  
+	install_handler();
   if(argc == 2){
     return eval_from_file(argv[1]);
   }

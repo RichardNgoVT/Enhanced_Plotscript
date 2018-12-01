@@ -5,11 +5,11 @@ void error2(const std::string & err_str) {
 }
 
 
-void threadSender(ThreadSafeQueue<std::string> & inputQ, ThreadSafeQueue<Expression> & outputQ)
+void threadSender(ThreadSafeQueue<std::string> & inputQ, ThreadSafeQueue<Expression> & outputQ, Interpreter & interp)
 {
 	//std::string STARTUP_FILE;
 	//
-	Interpreter interp;
+	
 	std::string line;
 
 	std::ifstream PREifs(STARTUP_FILE);
@@ -69,12 +69,18 @@ InterpAccesser::~InterpAccesser()
 
 void InterpAccesser::start()
 {
+	Expression trash;
 	if (running == true)
 	{
 		return;
 	}
+	while (!outputQ.empty())
+	{
+		outputQ.try_pop(trash);
+	}
 	running = true;
-	th1 = std::thread(threadSender, std::ref(inputQ), std::ref(outputQ));
+	interp.enable();
+	th1 = std::thread(threadSender, std::ref(inputQ), std::ref(outputQ), std::ref(interp));
 }
 
 void InterpAccesser::stop()
@@ -84,17 +90,37 @@ void InterpAccesser::stop()
 	{
 		return;
 	}
-	while (inputQ.try_pop(trash))
+	while (!inputQ.empty())
 	{
+		inputQ.try_pop(trash);
 	}
 	running = false;
 	inputQ.push("%stop");
 	th1.join();
+	interp.reseter();
+}
+
+void InterpAccesser::exit()
+{
+	interp.disable();
+	stop();
+	start();
+
 }
 
 bool InterpAccesser::online()
 {
 	return running;
+}
+
+bool InterpAccesser::empty_in()
+{
+	return inputQ.empty();
+}
+
+bool InterpAccesser::empty_out()
+{
+	return outputQ.empty();
 }
 
 void InterpAccesser::push_in(const std::string & script)

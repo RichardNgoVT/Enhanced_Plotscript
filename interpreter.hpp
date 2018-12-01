@@ -36,7 +36,12 @@ public:
     \throws SemanticError when a semantic error is encountered
    */
   Expression evaluate();
-  //void exiter();
+
+  void disable();
+
+  void enable();
+
+  void reseter();
 
 private:
 
@@ -45,6 +50,8 @@ private:
 
   // the AST
   Expression ast;
+
+  mutable std::mutex the_mutex;
 };
 
 #endif

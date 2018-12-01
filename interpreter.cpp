@@ -24,9 +24,19 @@ Expression Interpreter::evaluate(){
 
   return ast.eval(env);
 }
-/*
-void Interpreter::exiter() {
 
-	return ast.exitmark();
+void Interpreter::disable() {
+	std::lock_guard<std::mutex> lock(the_mutex);
+	ast.disablemark();
 }
-*/
+
+void Interpreter::enable()
+{
+	std::lock_guard<std::mutex> lock(the_mutex);
+	ast.enablemark();
+}
+
+void Interpreter::reseter()
+{
+	env.reset();
+}

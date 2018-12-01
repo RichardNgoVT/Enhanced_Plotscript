@@ -14,7 +14,10 @@ public:
 	~InterpAccesser();
 	void start();
 	void stop();
+	void exit();
 	bool online();
+	bool empty_in();
+	bool empty_out();
 	void push_in(const std::string & script);
 	void push_out(const Expression & exp);
 	bool try_pop_in(std::string & script);
@@ -23,14 +26,11 @@ public:
 	void wait_pop_out(Expression & exp);
 
 
-
-
-
-
 private:
 	ThreadSafeQueue<std::string> inputQ;
 	ThreadSafeQueue<Expression> outputQ;
 	std::thread th1;
+	Interpreter interp;
 	bool running;
 };
 

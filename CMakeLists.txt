@@ -19,6 +19,7 @@ set(interpreter_src
   interpreter.hpp interpreter.cpp
   interp_accesser.hpp interp_accesser.cpp
   thread_safe_queue.hpp
+  cntlc_tracer.hpp
   )
 
 # EDIT

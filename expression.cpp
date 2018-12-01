@@ -1716,17 +1716,24 @@ void Expression::markError()
 {
 	m_head.setError();
 }
-/*
-void Expression::exitmark()
-{
 
+void Expression::disablemark()
+{
+	std::lock_guard<std::mutex> lock(the_mutex);//make sure
 	exitkey = true;
 }
-*/
+
+void Expression::enablemark()
+{
+	std::lock_guard<std::mutex> lock(the_mutex);//make sure
+	exitkey = false;
+}
+
 Expression Expression::exitnow()
 {
 		Expression done;
 		done.markError();
+		std::cout << "EXITED EARLY\n";
 		return done;
 }
 
