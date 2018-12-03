@@ -174,19 +174,13 @@ void repl(){
   while(true){//(!std::cin.eof()){
 	  global_status_flag = 0;
     prompt();
-    std::string line = readline();//block    
-
+    std::string line = readline();//block  
 	if (std::cin.fail() || std::cin.eof()) {
 		std::cin.clear(); // reset cin state
 		line.clear(); //clear input string
-		if (interpA.online())
-		{
-			//std::cout << "Interrupted stdin.\n";
-			error("interpreter kernel interrupted");
-			interpA.exit();
-		}
-		
 	}
+
+	
 
 	if (line == "%exit")
 	{
@@ -231,14 +225,12 @@ void repl(){
 			if (global_status_flag > 0)
 			{
 				//std::cout << "Interrupted eval.\n";
-				if (interpA.online())
+				if (interpA.online())//not nessesary
 				{
 					error("interpreter kernel interrupted");
 					interpA.exit();
 				}
 				
-
-
 				break;
 			}
 		}
@@ -250,6 +242,7 @@ void repl(){
 				std::cout << exp << std::endl;
 			}
 		}
+		
 	}
 
 	

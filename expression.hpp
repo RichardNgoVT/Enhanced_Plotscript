@@ -6,7 +6,6 @@ Defines the Expression type and assiciated functions.
 
 #include <string>
 #include <vector>
-#include <mutex>
 #include "token.hpp"
 #include "atom.hpp"
 
@@ -105,11 +104,11 @@ public:
   void markProperty();
 
   void markError();
-
+  /*
   void disablemark();
 
   void enablemark();
-
+  */
   Expression exitnow();
 
   //used to cout expressions (for testing)
@@ -152,8 +151,7 @@ private:
   const double P = 0.5;
 
 
-  mutable std::mutex the_mutex;
-  bool exitkey = false;
+  
 };
 
 /// Render expression to output stream

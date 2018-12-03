@@ -12,10 +12,11 @@ needed.
 
 // system includes
 #include <map>
-
+#include <mutex>
 // module includes
 #include "atom.hpp"
 #include "expression.hpp"
+
 
 /*! \typedef Procedure
 \brief A Procedure is a C++ function pointer taking a vector of 
@@ -89,6 +90,12 @@ public:
   /*! Reset the environment to its default state. */
   void reset();
 
+  void disablemark();
+
+  void enablemark();
+
+  bool checkexit();
+
 private:
   
   // Environment is a mapping from symbols to expressions or procedures
@@ -107,6 +114,9 @@ private:
 
   // the environment map
   std::map<std::string, EnvResult> envmap;
+
+  mutable std::mutex the_mutex;
+  bool exitkey = false;
 };
 
 #endif

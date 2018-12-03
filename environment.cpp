@@ -797,3 +797,20 @@ void Environment::reset(){
   //creates a list of numbers starting from a lower bound, to a upper bound, in specified increments
   envmap.emplace("range", EnvResult(ProcedureType, RangeLIST));
 }
+
+void Environment::disablemark()
+{
+	std::lock_guard<std::mutex> lock(the_mutex);//make sure
+	exitkey = true;
+}
+
+void Environment::enablemark()
+{
+	std::lock_guard<std::mutex> lock(the_mutex);//make sure
+	exitkey = false;
+}
+
+bool Environment::checkexit()
+{
+	return exitkey;
+}

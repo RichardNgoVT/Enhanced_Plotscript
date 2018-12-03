@@ -74,10 +74,12 @@ void InterpAccesser::start()
 	{
 		return;
 	}
-	while (!outputQ.empty())
+	
+	while (!outputQ.empty())//just in case, get rid for interupt testing
 	{
 		outputQ.try_pop(trash);
 	}
+	
 	running = true;
 	interp.enable();
 	th1 = std::thread(threadSender, std::ref(inputQ), std::ref(outputQ), std::ref(interp));

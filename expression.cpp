@@ -498,7 +498,7 @@ Expression Expression::handle_map(Environment & env) {
 	Expression resultHold;
 	for (unsigned int i = 0; i < list.tailVector().size(); i++)
 	{
-		if (exitkey == true) return exitnow();
+		if (env.checkexit() == true) return exitnow();
 		m_tail.clear();
 		
 
@@ -661,7 +661,7 @@ Expression Expression::handle_discretePlot(Environment & env) {
 
 	for (unsigned int i = 0; i < m_tail[0].tailVector().size(); i++)
 	{
-		if (exitkey == true) return exitnow();
+		if (env.checkexit() == true) return exitnow();
 		if (m_tail[0].tailVector()[i].tailVector()[0].head().asNumber() > Xmax)
 		{
 			Xmax = m_tail[0].tailVector()[i].tailVector()[0].head().asNumber();
@@ -690,7 +690,7 @@ Expression Expression::handle_discretePlot(Environment & env) {
 
 	for (unsigned int i = 0; i < m_tail[0].tailVector().size(); i++)
 	{
-		if (exitkey == true) return exitnow();
+		if (env.checkexit() == true) return exitnow();
 		pointCreate = Expression(Atom("make-point"));
 		pointCreate.append(Atom((m_tail[0].tailVector()[i].tailVector()[0].head().asNumber())*XScale));
 		pointCreate.append(Atom(-(m_tail[0].tailVector()[i].tailVector()[1].head().asNumber())*YScale));//make and scale point
@@ -1059,7 +1059,7 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 
 	for (int i = 0; i < 51; i++)//points
 	{
-		if (exitkey == true) return exitnow();
+		if (env.checkexit() == true) return exitnow();
 		Xplot.push_back(i*(Xmax - Xmin) / 50.0 + Xmin);
 
 	}
@@ -1072,12 +1072,13 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 	//bool iterated = false;
 	for (int j = 0; j < 10; j++)//should be 10
 	{
-		if (exitkey == true) return exitnow();
+		if (env.checkexit() == true) return exitnow();
 		//iterated = false;
 		//for (unsigned int i = 2; i < Xplot.size(); i+=2)
 		i = 2;
 		while(i < Xplot.size())
 		{
+			if (env.checkexit() == true) return exitnow();
 			lambda.tailVector()[0] = Expression(Xplot[i - 2]);//does this work?
 			y1 = lambda.eval(env).head().asNumber();
 
@@ -1183,7 +1184,7 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 	Expression holder;
 	for (unsigned int i = 0; i < Xplot.size()-1; i++)
 	{
-		if (exitkey == true) return exitnow();
+		if (env.checkexit() == true) return exitnow();
 		lambda.tailVector()[0] = Expression(Xplot[i]);
 		Yi = lambda.eval(env).head().asNumber();
 		//pointCreate = Expression(Atom("make-point"));
@@ -1513,7 +1514,7 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 // difficult with the ast data structure used (no parent pointer).
 // this limits the practical depth of our ASTdef
 Expression Expression::eval(Environment & env){
-	if (exitkey == true) return exitnow();
+	if (env.checkexit() == true) return exitnow();
 	//std::cout << std::endl << "EVAL: ";
 	//HexpressVisual(m_head, m_tail, Expression(), 0);
 	//std::cout << std::endl;
@@ -1578,7 +1579,7 @@ Expression Expression::eval(Environment & env){
 			std::vector<Expression> results;
 
 			for (Expression::IteratorType it = m_tail.begin(); it != m_tail.end(); ++it) {
-				if (exitkey == true) return exitnow();
+				if (env.checkexit() == true) return exitnow();
 				results.push_back(it->eval(env));
 			}
 			//cout << "BEGINforloop" << endl;
@@ -1716,24 +1717,24 @@ void Expression::markError()
 {
 	m_head.setError();
 }
-
+/*
 void Expression::disablemark()
 {
 	std::lock_guard<std::mutex> lock(the_mutex);//make sure
-	exitkey = true;
+	env.checkexit() = true;
 }
 
 void Expression::enablemark()
 {
 	std::lock_guard<std::mutex> lock(the_mutex);//make sure
-	exitkey = false;
+	env.checkexit() = false;
 }
-
+*/
 Expression Expression::exitnow()
 {
 		Expression done;
 		done.markError();
-		std::cout << "EXITED EARLY\n";
+		//std::cout << "EXITED EARLY\n";
 		return done;
 }
 

@@ -27,13 +27,13 @@ Expression Interpreter::evaluate(){
 
 void Interpreter::disable() {
 	std::lock_guard<std::mutex> lock(the_mutex);
-	ast.disablemark();
+	env.disablemark();
 }
 
 void Interpreter::enable()
 {
 	std::lock_guard<std::mutex> lock(the_mutex);
-	ast.enablemark();
+	env.enablemark();
 }
 
 void Interpreter::reseter()
