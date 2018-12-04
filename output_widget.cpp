@@ -18,7 +18,7 @@ OutputWidget::OutputWidget(QWidget * parent) : QWidget(parent) {
 	auto layout = new QGridLayout();
 
 	//fitInView(grapher.sceneRect(), Qt::KeepAspectRatio);
-
+	//interpA = new InterpAccesser();
 	viewer.setScene(&grapher);
 	viewer.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	viewer.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -32,13 +32,67 @@ void OutputWidget::resizeEvent(QResizeEvent* event)
 	viewer.fitInView(grapher.itemsBoundingRect(), Qt::KeepAspectRatio);
 }
 
+void OutputWidget::startHandle()
+{
+	handle_Expression(Expression(), false);
+}
+
+void OutputWidget::notReady()
+{
+	ready = false;
+}
+
+
+int OutputWidget::startPressed()
+{
+	return psEnter("%start");
+}
+
+int OutputWidget::stopPressed()
+{
+	return psEnter("%stop");
+}
+
+int OutputWidget::resetPressed()
+{
+	return psEnter("%reset");
+}
+
+int OutputWidget::interruptPressed()
+{
+	if (interpA.online())
+	{
+		std::stringstream Qout;
+		Qout.str(std::string());
+		std::streambuf* old = std::cerr.rdbuf(Qout.rdbuf());
+		std::cerr << "Error: interpreter kernel not running.";
+
+		grapher.clear();
+		QString qstr = QString::fromStdString(Qout.str());
+		auto text = new QGraphicsTextItem(qstr);
+		text->setPos(0, 0);
+		grapher.addItem(text);
+
+		std::cerr.rdbuf(old);
+
+
+		interpA.stop();
+		interpA.start();
+		
+	}
+	return EXIT_SUCCESS;
+	//std::lock_guard<std::mutex> lock(the_mutex);
+	//exitkey = true;
+}
 
 
 int OutputWidget::psEnter(QString inputtxt)
 {
+//	viewer.fitInView(grapher.itemsBoundingRect(), Qt::KeepAspectRatio);
+	std::cout << inputtxt.toStdString() << "\n";//TESTING
 	std::istringstream stream(inputtxt.toStdString());
-	
-	
+	//bool why = interpA.online();
+	/*
 	std::ifstream PREifs(STARTUP_FILE);
 	//if (!PREifs) {
 	//  error("Prelambdas could not be established.");
@@ -47,9 +101,9 @@ int OutputWidget::psEnter(QString inputtxt)
 
 	interp.parseStream(PREifs);
 	interp.evaluate();
-
+	*/
 	
-
+	/*
 	if (!interp.parseStream(stream)) {
 		std::stringstream Qout;
 		Qout.str(std::string());
@@ -89,26 +143,83 @@ int OutputWidget::psEnter(QString inputtxt)
 			return EXIT_FAILURE;
 		}
 	}
+	*/
+	std::string line = inputtxt.toStdString();
+	//std::stringstream Qout;
+	std::cout << "HERE!" << "\n";//TESTING
 
+		if (line == "%exit")
+		{
+			interpA.stop();
+			return EXIT_SUCCESS;
+		}
+		
+		if (line == "%start")
+		{
+			interpA.start();
+			return EXIT_SUCCESS;
 
-			viewer.fitInView(grapher.itemsBoundingRect(), Qt::KeepAspectRatio);
+		}
 
+		if (line == "%stop")
+		{
+			interpA.stop();
+			return EXIT_SUCCESS;
+		}
 
-	
-	
-	
+		if (line == "%reset")
+		{
+			interpA.stop();
+			interpA.start();
+			return EXIT_SUCCESS;
 
+		}
+		std::cout << "HERE! before" << "\n";//TESTING
+		if (interpA.online() == false)
+		{
+			std::cout << "HERE! error" << "\n";
+			std::stringstream Qout;
+			Qout.str(std::string());
+			std::streambuf* old = std::cerr.rdbuf(Qout.rdbuf());
+			std::cerr << "Error: interpreter kernel not running.";
 
+			grapher.clear();
+			QString qstr = QString::fromStdString(Qout.str());
+			auto text = new QGraphicsTextItem(qstr);
+			text->setPos(0, 0);
+			grapher.addItem(text);
 
+			std::cerr.rdbuf(old);
+
+			return EXIT_FAILURE;
+		}
+		else
+		{
+			std::cout << "HERE! almost" << "\n";//TESTING
+			std::cout << line << "\n";//TESTING
+			interpA.push_in(line);
+			std::cout << "HERE! DONE" << "\n";//TESTING
+		}
+			//viewer.fitInView(grapher.itemsBoundingRect(), Qt::KeepAspectRatio);
 	return EXIT_SUCCESS;
 }
 
-int OutputWidget::handle_Expression(Expression exp, bool recurs)
+int OutputWidget::handle_Expression(Expression expRec, bool recurs)
 {
+	Expression exp = expRec;
 	std::stringstream Qout;
 	if (recurs == false)
 	{
-		grapher.clear();
+		if (interpA.try_pop_out(exp))
+		{
+			ready = true;
+			grapher.clear();
+		}
+		else
+		{
+			return EXIT_SUCCESS;
+		}
+		
 	}
 	if (exp.isHeadList())
 	{
@@ -257,5 +368,17 @@ int OutputWidget::handle_Expression(Expression exp, bool recurs)
 		return EXIT_SUCCESS;
 	}
 
+}
+
+bool OutputWidget::outputReady()
+{
+	return ready;
+	/*
+	if (interpA.online())
+	{
+		return !(interpA.empty_out());
+	}
+	return false;
+	*/
 }
 

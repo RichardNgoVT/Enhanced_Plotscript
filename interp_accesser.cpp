@@ -60,6 +60,7 @@ void threadSender(ThreadSafeQueue<std::string> & inputQ, ThreadSafeQueue<Express
 InterpAccesser::InterpAccesser()
 {
 	running = false;
+	start();
 }
 
 InterpAccesser::~InterpAccesser()
@@ -112,7 +113,9 @@ void InterpAccesser::exit()
 
 bool InterpAccesser::online()
 {
+	std::cout << "HERE! running?" << "\n";
 	return running;
+	std::cout << "HERE! running finished" << "\n";
 }
 
 bool InterpAccesser::empty_in()
@@ -127,7 +130,9 @@ bool InterpAccesser::empty_out()
 
 void InterpAccesser::push_in(const std::string & script)
 {
+	std::cout << "HERE! inside" << "\n";
 	inputQ.push(script);
+	std::cout << "HERE! inside finish" << "\n";
 }
 
 void InterpAccesser::push_out(const Expression & exp)

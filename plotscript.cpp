@@ -154,7 +154,7 @@ int eval_from_command(std::string argexp){
 // A REPL is a repeated read-eval-print loop
 void repl(){
 	InterpAccesser interpA;
-	interpA.start();
+	//interpA.start();
   //Interpreter interp;
   //std::ifstream PREifs(STARTUP_FILE);
  
