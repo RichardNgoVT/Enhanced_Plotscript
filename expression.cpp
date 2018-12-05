@@ -1035,6 +1035,108 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 	if (!(m_tail[0].isHeadSymbol() && env.is_exp(m_tail[0].head())))//also check if lambda only has one argument
 	{
 		throw SemanticError("Error in call to continuous-plot function: first argument not a lambda");
+
+	}
+	if (!m_tail[1].eval(env).isHeadList())//also check if list contains only numbers, if list is of size 2
+	{
+		throw SemanticError("Error in call to continuous-plot function: second argument not a list");
+	}
+	Expression lambda;
+	lambda = m_tail[0].head();
+	lambda.append(Expression(0));//buffer
+	double Xmax;
+	double Xmin;
+	double Ymax;
+	double Ymin;
+
+	//double Xshifter = (N + B + B) / 2;
+	//double Yshifter = (N + A + A) / 2;
+
+	Xmax = m_tail[1].eval(env).tailVector()[1].head().asNumber();
+	Xmin = m_tail[1].eval(env).tailVector()[0].head().asNumber();
+
+	std::vector<double> Xplot;
+
+	for (int i = 0; i < 51; i++)//points
+	{
+		Xplot.push_back(i*(Xmax - Xmin) / 50.0 + Xmin);
+
+	}
+
+	double y1;
+	double y2;
+	double y3;
+
+	unsigned int i = 2;
+	//bool iterated = false;
+	for (int j = 0; j < 10; j++)//should be 10
+	{
+		//iterated = false;
+		//for (unsigned int i = 2; i < Xplot.size(); i+=2)
+		i = 2;
+		while (i < Xplot.size())
+		{
+			lambda.tailVector()[0] = Expression(Xplot[i - 2]);//does this work?
+			y1 = lambda.eval(env).head().asNumber();
+
+			lambda.tailVector()[0] = Expression(Xplot[i - 1]);
+			y2 = lambda.eval(env).head().asNumber();
+			if (i == 2)
+			{
+				Ymax = y1;
+				Ymin = y1;
+				if (Ymax < y2)
+				{
+					Ymax = y2;
+				}
+				if (Ymin > y2)
+				{
+					Ymin = y2;
+				}
+			}
+			lambda.tailVector()[0] = Expression(Xplot[i]);
+			y3 = lambda.eval(env).head().asNumber();
+			if (Ymax < y3)
+			{
+				Ymax = y3;
+			}
+			if (Ymin > y3)
+			{
+				Ymin = y3;
+			}
+			/*
+			if (j == 9)
+			{
+			if (180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2.0) + pow((y3 - y2), 2.0))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))) < 175)
+			{
+			std::cout << (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2.0) + pow((y3 - y2), 2.0))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2))));
+			}
+			else {
+			std::cout << (-1.0) * (-180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2) + pow((y3 - y2), 2))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))));
+			}
+			std::cout << "\n";
+			}
+			*/
+			//if ((180 - (arcCos((x3-x2)/sqrt((x3-x2)^2 + (y3-y2)^2)) - arcCos((x2-x1)/sqrt((x2-x1)^2 + (y2-y1)^2))) < 175) || (-180 - (arcCos((x3-x2)/sqrt((x3-x2)^2 + (y3-y2)^2)) - arcCos((x2-x1)/sqrt((x2-x1)^2 + (y2-y1)^2))) > -175))
+			if ((180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2.0) + pow((y3 - y2), 2.0))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))) < 175) || (-180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2) + pow((y3 - y2), 2))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))) > -175))
+			{
+				Xplot.insert(Xplot.begin() + i, (Xplot[i] - Xplot[i - 1]) / 2 + Xplot[i - 1]);
+				Xplot.insert(Xplot.begin() + i - 1, (Xplot[i - 1] - Xplot[i - 2]) / 2 + Xplot[i - 2]);
+				i = i + 4;
+			}
+			else
+			{
+				i++;
+			}
+			//i = i + 2;
+
+		}
+
+	}
+	/*
+	if (!(m_tail[0].isHeadSymbol() && env.is_exp(m_tail[0].head())))//also check if lambda only has one argument
+	{
+		throw SemanticError("Error in call to continuous-plot function: first argument not a lambda");
 	
 	}
 	if (!m_tail[1].eval(env).isHeadList())//also check if list contains only numbers, if list is of size 2
@@ -1115,25 +1217,25 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 			{
 				Ymin = y3;
 			}
-			/*
-			if (j == 9)
-			{
-				if (180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2.0) + pow((y3 - y2), 2.0))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))) < 175)
-				{
-					std::cout << (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2.0) + pow((y3 - y2), 2.0))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2))));
-				}
-				else {
-					std::cout << (-1.0) * (-180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2) + pow((y3 - y2), 2))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))));
-				}
-				std::cout << "\n";
-			}
-			*/
+			
+			//if (j == 9)
+			//{
+			//	if (180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2.0) + pow((y3 - y2), 2.0))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))) < 175)
+			//	{
+			//		std::cout << (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2.0) + pow((y3 - y2), 2.0))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2))));
+			//	}
+			//	else {
+			//		std::cout << (-1.0) * (-180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2) + pow((y3 - y2), 2))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))));
+			//	}
+			//	std::cout << "\n";
+			//}
+			
 			//if ((180 - (arcCos((x3-x2)/sqrt((x3-x2)^2 + (y3-y2)^2)) - arcCos((x2-x1)/sqrt((x2-x1)^2 + (y2-y1)^2))) < 175) || (-180 - (arcCos((x3-x2)/sqrt((x3-x2)^2 + (y3-y2)^2)) - arcCos((x2-x1)/sqrt((x2-x1)^2 + (y2-y1)^2))) > -175))
 		//	if ((180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2.0) + pow((y3 - y2), 2.0))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))) < 175) || (-180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2) + pow((y3 - y2), 2))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))) > -175))
 
-			angleTest = 180.0 / (std::atan2(0, -1)) * acos(((Xplot[i - 1] - Xplot[i - 2])*(Xplot[i] - Xplot[i - 1]) + (y2 - y1)*(y3 - y2)) / (sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2.0) + pow((y2 - y1), 2.0)) * sqrt(pow((Xplot[i] - Xplot[i - 1]), 2.0) + pow((y3 - y2), 2.0))));
+			//angleTest = 180.0 / (std::atan2(0, -1)) * acos(((Xplot[i - 1] - Xplot[i - 2])*(Xplot[i] - Xplot[i - 1]) + (y2 - y1)*(y3 - y2)) / (sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2.0) + pow((y2 - y1), 2.0)) * sqrt(pow((Xplot[i] - Xplot[i - 1]), 2.0) + pow((y3 - y2), 2.0))));
 
-		//	angleTester = (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2.0) + pow((y3 - y2), 2.0))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2))));
+			angleTest = (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2.0) + pow((y3 - y2), 2.0))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2))));
 
 			if (angleTest>5.0 || angleTest<-5.0)
 			{
@@ -1150,6 +1252,7 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 		}
 
 	}
+	*/
 	/*
 	double Ri = 0;
 	
