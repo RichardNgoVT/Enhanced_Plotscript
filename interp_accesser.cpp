@@ -38,7 +38,10 @@ void threadSender(ThreadSafeQueue<std::string> & inputQ, ThreadSafeQueue<Express
 			//outputQ.push(ErrorMsg);
 			Expression ErrorMsg;
 			//error2("Invalid Expression. Could not parse");
-			ErrorMsg.head().setError("Error: Invalid Expression. Could not parse");
+
+			ErrorMsg.head().setError(line);
+			//ErrorMsg.head().setError("Error: Invalid Expression. Could not parse");
+
 			outputQ.push(ErrorMsg);
 			continue;
 		}

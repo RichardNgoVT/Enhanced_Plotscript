@@ -24,7 +24,8 @@ public:
 	void resizeEvent(QResizeEvent* event);
 	void startHandle(Expression exp);
 	void outputError(std::string error);
-
+signals:
+	void waitforme();
 
 
 private:
