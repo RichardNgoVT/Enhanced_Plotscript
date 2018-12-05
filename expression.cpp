@@ -1069,8 +1069,14 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 	double angleTest;
 	unsigned int i = 2;
 	//bool iterated = false;
+	bool ready = false;
 	for (int j = 0; j < 10; j++)//should be 10
 	{
+		if (ready == true)
+		{
+			break;
+		}
+		ready = true;
 		//iterated = false;
 		//for (unsigned int i = 2; i < Xplot.size(); i+=2)
 		i = 2;
@@ -1123,6 +1129,7 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 
 			if (angleTest>5.0 || angleTest<-5.0)
 			{
+				ready = false;
 				Xplot.insert(Xplot.begin() + i, (Xplot[i] - Xplot[i - 1]) / 2 + Xplot[i - 1]);
 				Xplot.insert(Xplot.begin() + i - 1, (Xplot[i - 1] - Xplot[i - 2]) / 2 + Xplot[i - 2]);
 				i = i + 4;
