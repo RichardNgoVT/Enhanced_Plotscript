@@ -36,7 +36,6 @@ void OutputWidget::startHandle(Expression exp)
 {
 	handle_Expression(exp, false);
 	viewer.fitInView(grapher.itemsBoundingRect(), Qt::KeepAspectRatio);
-	emit waitforme();
 }
 
 void OutputWidget::outputError(std::string error)

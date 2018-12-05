@@ -56,7 +56,7 @@ NotebookApp::NotebookApp(QWidget * parent) : QWidget(parent) {
 
 	QObject::connect(inEna, &QTimer::timeout, input, &InputWidget::selfEnable);
 
-	QObject::connect(output, &OutputWidget::waitforme, input, &InputWidget::selfEnable);
+	
 	
 
 
@@ -133,7 +133,7 @@ void NotebookApp::checkOutput()
 		{
 			emit expOut(exp);
 		}
-		//inEna->start(0);
+		inEna->start(0);
 		waiting = false;
 	}
 	else

@@ -7,9 +7,10 @@ class NotebookTest : public QObject {
 private slots:
   void initTestCase();
   void defaultTest();
+  void tester();
+  void testContinuousPlotLayout();
  // void graphTests();
   void testDiscretePlotLayout();
-  void testContinuousPlotLayout();
   void plotscriptTests();
   void pointTests();
   void lineTests();
@@ -117,7 +118,129 @@ void NotebookTest::defaultTest() {
 	QVERIFY2(outwid, "Could not find out widget with name: 'output'");
 }
 
+void NotebookTest::tester()
+{
+	auto inwid = widget.findChild<InputWidget *>("input");
+	auto outwid = widget.findChild<OutputWidget *>("output");
+	QGraphicsTextItem defaultFontCheck;
+	QPointF defaultPos;
+	defaultPos.setX(0.0);
+	defaultPos.setY(0.0);
 
+
+	//clears just in case
+	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10);
+	QTest::keyPress(inwid, Qt::Key_A, Qt::ControlModifier, 10);
+	QTest::keyPress(inwid, Qt::Key_A, Qt::ControlModifier, 10);
+	QTest::keyPress(inwid, Qt::Key_Backspace, Qt::NoModifier, 10);
+	QTest::keyRelease(inwid, Qt::Key_Backspace, Qt::NoModifier, 10);
+
+	//testing (get-property "key" (3))
+	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10);
+	std::string program = R"(
+(begin (define f (lambda (x) (sin x))) (continuous-plot f (list (- pi) pi) (list (list "title" "A continuous linear function") (list "abscissa-label" "x") (list "ordinate-label" "y"))))
+
+)";
+	inwid->setPlainText(QString::fromStdString(program));
+	//QTest::keyClick(inwid, Qt::Key_Return, Qt::ShiftModifier);
+	//	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 50);
+	QTest::keyPress(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
+	QTest::keyRelease(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
+
+	//QTest::keyPress(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
+	//QTest::keyRelease(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
+	auto viewwid = outwid->findChild<QGraphicsView *>();
+	QVERIFY2(viewwid, "Could not find view widget");
+	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 1000);
+	QCOMPARE(viewwid->items().size(), 67 + 12);
+	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 100000);
+	/*
+
+	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10);
+	QTest::keyPress(inwid, Qt::Key_A, Qt::ControlModifier, 10);
+	QTest::keyPress(inwid, Qt::Key_A, Qt::ControlModifier, 10);
+	QTest::keyPress(inwid, Qt::Key_Backspace, Qt::NoModifier, 10);
+	QTest::keyRelease(inwid, Qt::Key_Backspace, Qt::NoModifier, 10);
+
+
+
+	//testing (cos pi)
+	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10);
+	QTest::keyPress(inwid, Qt::Key_A, Qt::ControlModifier, 10);
+	QTest::keyPress(inwid, Qt::Key_A, Qt::ControlModifier, 10);
+	QTest::keyPress(inwid, Qt::Key_Backspace, Qt::NoModifier, 10);
+	QTest::keyRelease(inwid, Qt::Key_Backspace, Qt::NoModifier, 10);
+	QTest::keyClicks(inwid, "(cos pi)");
+	QTest::keyPress(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
+	QTest::keyRelease(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
+	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 100000);
+
+	*/
+	//QGraphicsLineItem::type
+
+	//double Ytest;
+	//double Yvalue;
+	//bool correct;
+	//std::vector<double> Ystore;
+	//double Yscale = 20 / (1 - (-1));
+	//double Xscale = 20 / (std::atan2(0, -1) * 2);
+	//auto scene = viewwid->scene();
+
+	//for (double i = 0; i < 51; i++)
+	//{
+	//Ytest = sin(i);
+	//	QVERIFY2(intersectsLine(scene, QPointF(i*Xscale, -Ytest * Yscale), .1), "No lines found near expected point");
+	//	QCOMPARE(intersectsLine(scene, QPointF(0, 0), 100), 1);//can't find any lines
+	//}
+	//for (int i = 0; i < viewwid->items().size(); i++)
+	//	{
+	//if (viewwid->items()[i]->type() == 6)
+	//	{
+	//auto line = qgraphicsitem_cast<QGraphicsLineItem *>(viewwid->items()[i]);//storelastvalue
+	//Ytest = sin(line->x1);
+	//Ytest = sin(scene->items()[i]->sceneBoundingRect().bottomLeft().x());
+	//QVERIFY2(intersectsLine(scene, QPointF(scene->items()[i]->sceneBoundingRect().bottomLeft().x(), -Ytest*Yscale), 10), "No lines found near expected point");
+	/*
+	qDebug() << "\n" << viewwid->items()[i]->boundingRect().bottomLeft().y() << " " << viewwid->items()[i]->boundingRect().topLeft().y() << " " << Ytest;
+	if (Ytest == viewwid->items()[i]->sceneBoundingRect().bottomLeft().y())
+	{
+	Yvalue = viewwid->items()[i]->sceneBoundingRect().bottomLeft().y();
+	}
+	else if(Ytest == viewwid->items()[i]->sceneBoundingRect().topLeft().y())
+	{
+	Yvalue = viewwid->items()[i]->sceneBoundingRect().topLeft().y();
+	}
+	else
+	{
+	Yvalue = 2.0;//impossible
+	}
+	QCOMPARE(Yvalue, Ytest);
+	Ystore.push_back(Yvalue);
+	*/
+	//	}
+	//}
+	/*
+	double angle;
+	for (int i = 0; i < viewwid->items().size(); i++)
+	{
+	if (viewwid->items()[i]->type() == 4)
+	{
+	angle = (180.0 / (std::atan2(0, -1))) * (acos((viewwid->items()[i]->sceneBoundingRect().center().x() - viewwid->items()[i - 1]->sceneBoundingRect().center().x()) / sqrt(pow((viewwid->items()[i]->sceneBoundingRect().center().x() - viewwid->items()[i - 1]->sceneBoundingRect().center().x()), 2.0) + pow((viewwid->items()[i]->sceneBoundingRect().center().y() - viewwid->items()[i - 1]->sceneBoundingRect().center().y()), 2.0))) - acos((viewwid->items()[i - 1]->sceneBoundingRect().center().x() - viewwid->items()[i - 2]->sceneBoundingRect().center().x()) / sqrt(pow((viewwid->items()[i - 1]->sceneBoundingRect().center().x() - viewwid->items()[i - 2]->sceneBoundingRect().center().x()), 2) + pow((viewwid->items()[i - 1]->sceneBoundingRect().center().y() - viewwid->items()[i - 2]->sceneBoundingRect().center().y()), 2))));
+	if (angle < 0)
+	{
+	angle = angle * -1.0;
+	}
+	QVERIFY2(angle >= 175.0, "angle exists thats less than 175 degrees");
+	}
+	}
+	*/
+	//QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 100000);
+	//QVERIFY2(viewwid->items().size() == 31, "incorrect number of items in QGraphicsView");
+	// * text = qgraphicsitem_cast<QGraphicsTextItem *>(viewwid->items()[0]);
+	//QCOMPARE(text->toPlainText(), QString("NONE"));
+	//QCOMPARE(text->pos(), defaultPos);
+	//QCOMPARE(text->font(), defaultFontCheck.font());
+}
 
 
 
@@ -615,6 +738,12 @@ void NotebookTest::centerTester()
 	auto inwid = widget.findChild<InputWidget *>("input");
 	auto outwid = widget.findChild<OutputWidget *>("output");
 
+	//clears just in case
+	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10);
+	QTest::keyPress(inwid, Qt::Key_A, Qt::ControlModifier, 10);
+	QTest::keyPress(inwid, Qt::Key_A, Qt::ControlModifier, 10);
+	QTest::keyPress(inwid, Qt::Key_Backspace, Qt::NoModifier, 10);
+	QTest::keyRelease(inwid, Qt::Key_Backspace, Qt::NoModifier, 10);
 
 	QString qstr = QString::fromStdString("(make-text \"hello world\")");
 	
@@ -702,6 +831,16 @@ void NotebookTest::testDiscretePlotLayout()
 {
 	auto inputWidget = widget.findChild<InputWidget *>("input");
 	auto outputWidget = widget.findChild<OutputWidget *>("output");
+
+
+	//clears just in case
+	QTest::mouseClick(inputWidget, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 10);
+	QTest::keyPress(inputWidget, Qt::Key_A, Qt::ControlModifier, 10);
+	QTest::keyPress(inputWidget, Qt::Key_A, Qt::ControlModifier, 10);
+	QTest::keyPress(inputWidget, Qt::Key_Backspace, Qt::NoModifier, 10);
+	QTest::keyRelease(inputWidget, Qt::Key_Backspace, Qt::NoModifier, 10);
+
+
 	std::string program = R"( 
 (discrete-plot (list (list -1 -1) (list 1 1)) 
     (list (list "title" "The Title") 
@@ -711,7 +850,6 @@ void NotebookTest::testDiscretePlotLayout()
 
 	inputWidget->setPlainText(QString::fromStdString(program));
 	QTest::keyClick(inputWidget, Qt::Key_Return, Qt::ShiftModifier);
-
 	auto view = outputWidget->findChild<QGraphicsView *>();
 	QVERIFY2(view, "Could not find QGraphicsView as child of OutputWidget");
 
@@ -830,10 +968,16 @@ void NotebookTest::testContinuousPlotLayout()
 
 )";
 	inwid->setPlainText(QString::fromStdString(program));
-	QTest::keyClick(inwid, Qt::Key_Return, Qt::ShiftModifier);
-
+	//QTest::keyClick(inwid, Qt::Key_Return, Qt::ShiftModifier);
+//	QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 50);
+	QTest::keyPress(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
+	QTest::keyRelease(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
+	
+	//QTest::keyPress(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
+	//QTest::keyRelease(inwid, Qt::Key_Return, Qt::ShiftModifier, 10);
 	auto viewwid = outwid->findChild<QGraphicsView *>();
 	QVERIFY2(viewwid, "Could not find view widget");
+	//QTest::mouseClick(inwid, Qt::LeftButton, Qt::NoModifier, QPoint(0, 0), 100000);
 	QCOMPARE(viewwid->items().size(), 67 + 12);
 	
 	//QGraphicsLineItem::type

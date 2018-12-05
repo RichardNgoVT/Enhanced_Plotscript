@@ -1067,7 +1067,8 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 	double y1;
 	double y2;
 	double y3;
-
+	double angleTest;
+	double angleTester;
 	unsigned int i = 2;
 	//bool iterated = false;
 	for (int j = 0; j < 10; j++)//should be 10
@@ -1079,13 +1080,15 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 		while(i < Xplot.size())
 		{
 			if (env.checkexit() == true) return exitnow();
-			lambda.tailVector()[0] = Expression(Xplot[i - 2]);//does this work?
-			y1 = lambda.eval(env).head().asNumber();
-
-			lambda.tailVector()[0] = Expression(Xplot[i - 1]);
-			y2 = lambda.eval(env).head().asNumber();
+			
 			if (i == 2)
 			{
+				lambda.tailVector()[0] = Expression(Xplot[i - 2]);//does this work?
+				y1 = lambda.eval(env).head().asNumber();
+
+				lambda.tailVector()[0] = Expression(Xplot[i - 1]);
+				y2 = lambda.eval(env).head().asNumber();
+
 				Ymax = y1;
 				Ymin = y1;
 				if (Ymax < y2)
@@ -1096,6 +1099,11 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 				{
 					Ymin = y2;
 				}
+			}
+			else
+			{
+				y1 = y2;
+				y2 = y3;
 			}
 			lambda.tailVector()[0] = Expression(Xplot[i]);
 			y3 = lambda.eval(env).head().asNumber();
@@ -1121,7 +1129,13 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 			}
 			*/
 			//if ((180 - (arcCos((x3-x2)/sqrt((x3-x2)^2 + (y3-y2)^2)) - arcCos((x2-x1)/sqrt((x2-x1)^2 + (y2-y1)^2))) < 175) || (-180 - (arcCos((x3-x2)/sqrt((x3-x2)^2 + (y3-y2)^2)) - arcCos((x2-x1)/sqrt((x2-x1)^2 + (y2-y1)^2))) > -175))
-			if ((180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2.0) + pow((y3 - y2), 2.0))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))) < 175) || (-180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2) + pow((y3 - y2), 2))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))) > -175))
+		//	if ((180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2.0) + pow((y3 - y2), 2.0))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))) < 175) || (-180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2) + pow((y3 - y2), 2))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))) > -175))
+
+			angleTest = 180.0 / (std::atan2(0, -1)) * acos(((Xplot[i - 1] - Xplot[i - 2])*(Xplot[i] - Xplot[i - 1]) + (y2 - y1)*(y3 - y2)) / (sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2.0) + pow((y2 - y1), 2.0)) * sqrt(pow((Xplot[i] - Xplot[i - 1]), 2.0) + pow((y3 - y2), 2.0))));
+
+			angleTester = (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2.0) + pow((y3 - y2), 2.0))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2))));
+
+			if (angleTest>5.0 || angleTest<-5.0)
 			{
 				Xplot.insert(Xplot.begin() + i, (Xplot[i] - Xplot[i - 1]) / 2 + Xplot[i - 1]);
 				Xplot.insert(Xplot.begin() + i - 1, (Xplot[i - 1] - Xplot[i - 2]) / 2 + Xplot[i - 2]);
