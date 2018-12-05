@@ -77,7 +77,7 @@ Atom::Atom(const Atom & x): Atom(){
   }
   else if (x.isError())
   {
-	  setError();
+	  setError(x.stringValue);
   }
 }
 
@@ -109,7 +109,7 @@ Atom & Atom::operator=(const Atom & x){
 		setProperty();
 	}
 	else if (x.m_type == ErrorKind) {
-		setError();
+		setError(x.stringValue);
 	}
   }
   return *this;
@@ -118,7 +118,7 @@ Atom & Atom::operator=(const Atom & x){
 Atom::~Atom(){
 
   // we need to ensure the destructor of the symbol or pstring string is called
-  if(m_type == SymbolKind || m_type == StringKind){
+  if(m_type == SymbolKind || m_type == StringKind || m_type == ErrorKind){
     stringValue.~basic_string();
   }
 }
@@ -179,7 +179,7 @@ void Atom::setComplex(std::complex<double> value) {
 void Atom::setSymbol(const std::string & value){
 
   // we need to ensure the destructor of the symbol string is called
-  if(m_type == SymbolKind || m_type == StringKind){
+  if(m_type == SymbolKind || m_type == StringKind || m_type == ErrorKind){
     stringValue.~basic_string();
   }
     
@@ -192,7 +192,7 @@ void Atom::setSymbol(const std::string & value){
 void Atom::setPString(const std::string & value) {
 
 	// we need to ensure the destructor of the PString string is called
-	if (m_type == SymbolKind || m_type == StringKind) {
+	if (m_type == SymbolKind || m_type == StringKind || m_type == ErrorKind) {
 		stringValue.~basic_string();
 	}
 
@@ -202,9 +202,18 @@ void Atom::setPString(const std::string & value) {
 	new (&stringValue) std::string(value);
 }
 
-void Atom::setError()
+void Atom::setError(const std::string & value)
 {
+
+	if (m_type == SymbolKind || m_type == StringKind || m_type == ErrorKind) {
+		stringValue.~basic_string();
+	}
+
 	m_type = ErrorKind;
+
+	// copy construct in place
+	new (&stringValue) std::string(value);
+	
 }
 
 void Atom::setList() {
@@ -248,6 +257,17 @@ std::string Atom::asPString() const noexcept {
 	std::string result;
 
 	if (m_type == StringKind) {
+		result = stringValue;
+	}
+
+	return result;
+}
+
+std::string Atom::asError() const noexcept {
+
+	std::string result;
+
+	if (m_type == ErrorKind) {
 		result = stringValue;
 	}
 
@@ -311,6 +331,7 @@ bool Atom::operator==(const Atom & right) const noexcept{
   case ErrorKind:
   {
 	  if (right.m_type != ErrorKind) return false;
+	  return stringValue == right.stringValue;
   }
   break;
   default:

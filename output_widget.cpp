@@ -32,177 +32,28 @@ void OutputWidget::resizeEvent(QResizeEvent* event)
 	viewer.fitInView(grapher.itemsBoundingRect(), Qt::KeepAspectRatio);
 }
 
-void OutputWidget::startHandle()
+void OutputWidget::startHandle(Expression exp)
 {
-	handle_Expression(Expression(), false);
+	handle_Expression(exp, false);
+	viewer.fitInView(grapher.itemsBoundingRect(), Qt::KeepAspectRatio);
 }
 
-void OutputWidget::notReady()
+void OutputWidget::outputError(std::string error)
 {
-	ready = false;
+	std::stringstream Qout;
+	Qout.str(std::string());
+	std::streambuf* old = std::cerr.rdbuf(Qout.rdbuf());
+	std::cerr << error;
+
+	grapher.clear();
+	QString qstr = QString::fromStdString(Qout.str());
+	auto text = new QGraphicsTextItem(qstr);
+	text->setPos(0, 0);
+	grapher.addItem(text);
+	std::cerr.rdbuf(old);
+	viewer.fitInView(grapher.itemsBoundingRect(), Qt::KeepAspectRatio);
 }
 
-
-int OutputWidget::startPressed()
-{
-	return psEnter("%start");
-}
-
-int OutputWidget::stopPressed()
-{
-	return psEnter("%stop");
-}
-
-int OutputWidget::resetPressed()
-{
-	return psEnter("%reset");
-}
-
-int OutputWidget::interruptPressed()
-{
-	if (interpA.online())
-	{
-		std::stringstream Qout;
-		Qout.str(std::string());
-		std::streambuf* old = std::cerr.rdbuf(Qout.rdbuf());
-		std::cerr << "Error: interpreter kernel not running.";
-
-		grapher.clear();
-		QString qstr = QString::fromStdString(Qout.str());
-		auto text = new QGraphicsTextItem(qstr);
-		text->setPos(0, 0);
-		grapher.addItem(text);
-
-		std::cerr.rdbuf(old);
-
-
-		interpA.stop();
-		interpA.start();
-		
-	}
-	return EXIT_SUCCESS;
-	//std::lock_guard<std::mutex> lock(the_mutex);
-	//exitkey = true;
-}
-
-
-int OutputWidget::psEnter(QString inputtxt)
-{
-//	viewer.fitInView(grapher.itemsBoundingRect(), Qt::KeepAspectRatio);
-	std::cout << inputtxt.toStdString() << "\n";//TESTING
-	std::istringstream stream(inputtxt.toStdString());
-	//bool why = interpA.online();
-	/*
-	std::ifstream PREifs(STARTUP_FILE);
-	//if (!PREifs) {
-	//  error("Prelambdas could not be established.");
-	// return EXIT_FAILURE;
-	//}
-
-	interp.parseStream(PREifs);
-	interp.evaluate();
-	*/
-	
-	/*
-	if (!interp.parseStream(stream)) {
-		std::stringstream Qout;
-		Qout.str(std::string());
-		std::streambuf* old = std::cerr.rdbuf(Qout.rdbuf());
-		std::cerr << "Error: Invalid Program. Could not parse.";
-
-		grapher.clear();
-		QString qstr = QString::fromStdString(Qout.str());
-		auto text = new QGraphicsTextItem(qstr);
-		text->setPos(0, 0);
-		grapher.addItem(text);
-
-		std::cerr.rdbuf(old);
-		
-		return EXIT_FAILURE;
-	}
-	else {
-		try {//notebookimplmentation
-			Expression exp = interp.evaluate();
-			//exp.HexpressVisual(exp.head(), exp.tailVector(), Expression(), 0);
-			handle_Expression(exp, false);
-			
-		}
-		catch (const SemanticError & ex) {
-			std::stringstream Qout;
-			Qout.str(std::string());
-			std::streambuf* old = std::cerr.rdbuf(Qout.rdbuf());
-			std::cerr << ex.what();
-
-			grapher.clear();
-			QString qstr = QString::fromStdString(Qout.str());
-			auto text = new QGraphicsTextItem(qstr);
-			text->setPos(0, 0);
-			grapher.addItem(text);
-
-			std::cerr.rdbuf(old);
-			return EXIT_FAILURE;
-		}
-	}
-	*/
-	std::string line = inputtxt.toStdString();
-	//std::stringstream Qout;
-	std::cout << "HERE!" << "\n";//TESTING
-
-		if (line == "%exit")
-		{
-			interpA.stop();
-			return EXIT_SUCCESS;
-		}
-		
-		if (line == "%start")
-		{
-			interpA.start();
-			return EXIT_SUCCESS;
-
-		}
-
-		if (line == "%stop")
-		{
-			interpA.stop();
-			return EXIT_SUCCESS;
-		}
-
-		if (line == "%reset")
-		{
-			interpA.stop();
-			interpA.start();
-			return EXIT_SUCCESS;
-
-		}
-		std::cout << "HERE! before" << "\n";//TESTING
-		if (interpA.online() == false)
-		{
-			std::cout << "HERE! error" << "\n";
-			std::stringstream Qout;
-			Qout.str(std::string());
-			std::streambuf* old = std::cerr.rdbuf(Qout.rdbuf());
-			std::cerr << "Error: interpreter kernel not running.";
-
-			grapher.clear();
-			QString qstr = QString::fromStdString(Qout.str());
-			auto text = new QGraphicsTextItem(qstr);
-			text->setPos(0, 0);
-			grapher.addItem(text);
-
-			std::cerr.rdbuf(old);
-
-			return EXIT_FAILURE;
-		}
-		else
-		{
-			std::cout << "HERE! almost" << "\n";//TESTING
-			std::cout << line << "\n";//TESTING
-			interpA.push_in(line);
-			std::cout << "HERE! DONE" << "\n";//TESTING
-		}
-			//viewer.fitInView(grapher.itemsBoundingRect(), Qt::KeepAspectRatio);
-	return EXIT_SUCCESS;
-}
 
 int OutputWidget::handle_Expression(Expression expRec, bool recurs)
 {
@@ -210,16 +61,7 @@ int OutputWidget::handle_Expression(Expression expRec, bool recurs)
 	std::stringstream Qout;
 	if (recurs == false)
 	{
-		if (interpA.try_pop_out(exp))
-		{
-			ready = true;
 			grapher.clear();
-		}
-		else
-		{
-			return EXIT_SUCCESS;
-		}
-		
 	}
 	if (exp.isHeadList())
 	{
@@ -370,15 +212,4 @@ int OutputWidget::handle_Expression(Expression expRec, bool recurs)
 
 }
 
-bool OutputWidget::outputReady()
-{
-	return ready;
-	/*
-	if (interpA.online())
-	{
-		return !(interpA.empty_out());
-	}
-	return false;
-	*/
-}
 

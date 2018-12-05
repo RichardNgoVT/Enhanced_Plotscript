@@ -13,6 +13,8 @@ public:
 	public slots :
 	void keyPressEvent(QKeyEvent *event);//event from key presses
 	void keyReleaseEvent(QKeyEvent *event);//event from key release
+	void selfDisable();
+	void selfEnable();
 
 signals:
 	void sftent(QString inputtxt);

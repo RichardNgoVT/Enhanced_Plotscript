@@ -19,25 +19,19 @@ public:
 	
 	//Interperter interp;
 	int handle_Expression(Expression exp, bool recurs);
-	bool outputReady();
 	
 	public slots :
-	int psEnter(QString inputtxt);
-	int startPressed();
-	int stopPressed();
-	int resetPressed();
-	int interruptPressed();
 	void resizeEvent(QResizeEvent* event);
-	void startHandle();
-	void notReady();
+	void startHandle(Expression exp);
+	void outputError(std::string error);
+
 
 
 private:
 	//bool exitkey = false;
-	mutable std::mutex the_mutex;
-	InterpAccesser interpA;
-	bool ready = false;
-	
+	//mutable std::mutex the_mutex;
+
+
 };
 
 

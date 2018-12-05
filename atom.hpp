@@ -85,6 +85,8 @@ public:
   /// value of Atom as a string, returns empty-string if not a String
   std::string asPString() const noexcept;
 
+  std::string asError() const noexcept;
+
 
   /// equality comparison based on type and value
   bool operator==(const Atom & right) const noexcept;
@@ -99,7 +101,7 @@ public:
   void setProperty();
 
   //sets up for error
-  void setError();
+  void setError(const std::string & value);
 private:
 
   // internal enum of known types

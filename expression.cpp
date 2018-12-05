@@ -1715,7 +1715,7 @@ void Expression::markProperty()
 
 void Expression::markError()
 {
-	m_head.setError();
+	m_head.setError("");
 }
 /*
 void Expression::disablemark()

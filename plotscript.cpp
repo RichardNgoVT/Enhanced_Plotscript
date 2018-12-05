@@ -241,6 +241,10 @@ void repl(){
 			{
 				std::cout << exp << std::endl;
 			}
+			else
+			{
+				std::cerr << exp.head().asError() << std::endl;
+			}
 		}
 		
 	}

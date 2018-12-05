@@ -17,8 +17,7 @@ void threadSender(ThreadSafeQueue<std::string> & inputQ, ThreadSafeQueue<Express
 	interp.evaluate();
 	bool running = true;
 
-	Expression ErrorMsg;
-	ErrorMsg.head().setError();
+	
 
 	while (running == true)
 	{
@@ -37,7 +36,9 @@ void threadSender(ThreadSafeQueue<std::string> & inputQ, ThreadSafeQueue<Express
 			//Expression ErrorMsg;
 			//ErrorMsg.head().setError("Invalid Expression. Could not parse.");
 			//outputQ.push(ErrorMsg);
-			error2("Invalid Expression. Could not parse.");
+			Expression ErrorMsg;
+			//error2("Invalid Expression. Could not parse");
+			ErrorMsg.head().setError("Error: Invalid Expression. Could not parse");
 			outputQ.push(ErrorMsg);
 			continue;
 		}
@@ -48,7 +49,23 @@ void threadSender(ThreadSafeQueue<std::string> & inputQ, ThreadSafeQueue<Express
 				//std::cout << exp << std::endl;
 			}
 			catch (const SemanticError & ex) {
-				std::cerr << ex.what() << std::endl;
+				Expression ErrorMsg;
+				std::stringstream Qout;
+				Qout.str(std::string());
+				std::streambuf* old = std::cerr.rdbuf(Qout.rdbuf());
+				std::cerr << ex.what();
+
+				std::string errorHold;
+				errorHold = Qout.str();
+
+				std::cerr.rdbuf(old);
+
+
+
+
+
+				//std::cerr << ex.what() << std::endl;
+				ErrorMsg.head().setError(errorHold);
 				outputQ.push(ErrorMsg);
 				continue;
 			}
@@ -113,9 +130,7 @@ void InterpAccesser::exit()
 
 bool InterpAccesser::online()
 {
-	std::cout << "HERE! running?" << "\n";
 	return running;
-	std::cout << "HERE! running finished" << "\n";
 }
 
 bool InterpAccesser::empty_in()
@@ -130,9 +145,7 @@ bool InterpAccesser::empty_out()
 
 void InterpAccesser::push_in(const std::string & script)
 {
-	std::cout << "HERE! inside" << "\n";
 	inputQ.push(script);
-	std::cout << "HERE! inside finish" << "\n";
 }
 
 void InterpAccesser::push_out(const Expression & exp)

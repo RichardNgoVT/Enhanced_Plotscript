@@ -23,61 +23,40 @@ NotebookApp::NotebookApp(QWidget * parent) : QWidget(parent) {
 	interruptB->setObjectName("interrupt");
 
 	timer = new QTimer(this);
+	timer->setSingleShot(true);
 	//should be unessesary, but somehow interpA goes out of scope when accessed in a helper function
 	//startExp = new QTimer(this);
-	startInter = new QTimer(this);
-	resetReady = new QTimer(this);
 	inEna = new QTimer(this);
+	inEna->setSingleShot(true);
 	inDis = new QTimer(this);
+	inDis->setSingleShot(true);
 
-	QObject::connect(input, &InputWidget::sftent, output, &OutputWidget::psEnter);//connects
-	QObject::connect(input, &InputWidget::sftent, this, &NotebookApp::handleInput);
-
-
-	QObject::connect(startB, &QPushButton::pressed, output, &OutputWidget::startPressed);
-
-	QObject::connect(stopB, &QPushButton::pressed, output, &OutputWidget::stopPressed);
-
-	QObject::connect(resetB, &QPushButton::pressed, output, &OutputWidget::resetPressed);
+	QObject::connect(input, &InputWidget::sftent, this, &NotebookApp::psEnter);//connects
 
 
+	QObject::connect(startB, &QPushButton::pressed, this, &NotebookApp::startPressed);
 
-	QObject::connect(interruptB, &QPushButton::pressed, output, &OutputWidget::interruptPressed);
+	QObject::connect(stopB, &QPushButton::pressed, this, &NotebookApp::stopPressed);
 
-	QObject::connect(startInter, &QTimer::timeout, output, &OutputWidget::interruptPressed);
+	QObject::connect(resetB, &QPushButton::pressed, this, &NotebookApp::resetPressed);
 
-	
-	
-	QObject::connect(timer, &QTimer::timeout, output, &OutputWidget::startHandle);
+
+
+	QObject::connect(interruptB, &QPushButton::pressed, this, &NotebookApp::interruptPressed);
+
+
 
 	QObject::connect(timer, &QTimer::timeout, this, &NotebookApp::checkOutput);
 
-	QObject::connect(resetReady, &QTimer::timeout, output, &OutputWidget::notReady);
+	QObject::connect(this, &NotebookApp::expOut, output, &OutputWidget::startHandle);
+
+	QObject::connect(this, &NotebookApp::errorOut, output, &OutputWidget::outputError);
+
+	QObject::connect(inDis, &QTimer::timeout, input, &InputWidget::selfDisable);
+
+	QObject::connect(inEna, &QTimer::timeout, input, &InputWidget::selfEnable);
+
 	
-	//QObject::connect(input, &InputWidget::sftent, this, &NotebookApp::show);//connects
-	//QGraphicsScene test;
-
-	// layout the widgets
-	//output->setOut();
-	//QGraphicsView viewer;
-	/*
-	static QGraphicsScene scene;
-	scene.addText("Hello, world!");
-
-	static QGraphicsView viewer(&scene);
-	*/
-	/*
-	QGraphicsScene* grapher = new QGraphicsScene(0, 0, 300, 300, &viewer);
-	grapher->setBackgroundBrush(Qt::yellow);
-	viewer.setScene(grapher);
-
-	QGraphicsRectItem* rect = new QGraphicsRectItem(50, 50, 100, 100);
-	grapher->addItem(rect);
-
-
-	grapher->addText("supp");
-	*/
-
 	
 
 
@@ -108,47 +87,155 @@ NotebookApp::NotebookApp(QWidget * parent) : QWidget(parent) {
 }
 
 
-
-void NotebookApp::outputApp() {
-
-	this->show();
+int NotebookApp::startPressed()
+{
+	return psEnter("%start");
 }
 
-void NotebookApp::handleInput(QString inputtxt)
+int NotebookApp::stopPressed()
 {
-	//inDis->start(0);
-	timer->start(0);
-	waiting = true;
+	return psEnter("%stop");
 }
 
-void NotebookApp::canInterrupt()
+int NotebookApp::resetPressed()
 {
+	return psEnter("%reset");
+}
 
-	//if (waiting == true)
-	//{
-		startInter->start(0);
-		waiting = false;
-		//resetReady->start(0);//justincase
-	//}
+int NotebookApp::interruptPressed()
+{
+	if (interpA.online())
+	{
+		emit errorOut("Error: interpreter kernel interrupted");
+		interpA.exit();
+		inEna->start(0);
+	}
+	waiting = false;
+	return EXIT_FAILURE;
+	//std::lock_guard<std::mutex> lock(the_mutex);
+	//exitkey = true;
 }
 
 
 
 void NotebookApp::checkOutput()
 {
-	timer->start(0);
-	/*
-		if (output->outputReady() == false)
+	Expression exp;
+	if (interpA.try_pop_out(exp) && waiting == true)
+	{
+		if (exp.isHeadError())
 		{
-			timer->start(0);
-			//output->handle_Expression(Expression(), false);
-
-
+			emit errorOut(exp.head().asError());
 		}
 		else
 		{
-			waiting = false;
-			resetReady->start(0);
+			emit expOut(exp);
 		}
+		inEna->start(0);
+		waiting = false;
+	}
+	else
+	{
+		timer->start(0);
+	}
+}
+
+int NotebookApp::psEnter(QString inputtxt)
+{
+	//	viewer.fitInView(grapher.itemsBoundingRect(), Qt::KeepAspectRatio);
+	//std::cout << inputtxt.toStdString() << "\n";//TESTING
+	//std::istringstream stream(inputtxt.toStdString());
+	//bool why = interpA.online();
+	/*
+	std::ifstream PREifs(STARTUP_FILE);
+	//if (!PREifs) {
+	//  error("Prelambdas could not be established.");
+	// return EXIT_FAILURE;
+	//}
+
+	interp.parseStream(PREifs);
+	interp.evaluate();
 	*/
+
+	/*
+	if (!interp.parseStream(stream)) {
+	std::stringstream Qout;
+	Qout.str(std::string());
+	std::streambuf* old = std::cerr.rdbuf(Qout.rdbuf());
+	std::cerr << "Error: Invalid Program. Could not parse.";
+
+	grapher.clear();
+	QString qstr = QString::fromStdString(Qout.str());
+	auto text = new QGraphicsTextItem(qstr);
+	text->setPos(0, 0);
+	grapher.addItem(text);
+
+	std::cerr.rdbuf(old);
+
+	return EXIT_FAILURE;
+	}
+	else {
+	try {//notebookimplmentation
+	Expression exp = interp.evaluate();
+	//exp.HexpressVisual(exp.head(), exp.tailVector(), Expression(), 0);
+	handle_Expression(exp, false);
+
+	}
+	catch (const SemanticError & ex) {
+	std::stringstream Qout;
+	Qout.str(std::string());
+	std::streambuf* old = std::cerr.rdbuf(Qout.rdbuf());
+	std::cerr << ex.what();
+
+	grapher.clear();
+	QString qstr = QString::fromStdString(Qout.str());
+	auto text = new QGraphicsTextItem(qstr);
+	text->setPos(0, 0);
+	grapher.addItem(text);
+
+	std::cerr.rdbuf(old);
+	return EXIT_FAILURE;
+	}
+	}
+	*/
+	std::string line = inputtxt.toStdString();
+	//std::stringstream Qout;
+	//std::cout << "HERE!" << "\n";//TESTING
+
+
+	if (line == "%start")
+	{
+		interpA.start();
+		return EXIT_SUCCESS;
+
+	}
+
+	if (line == "%stop")
+	{
+		interpA.stop();
+		return EXIT_SUCCESS;
+	}
+
+	if (line == "%reset")
+	{
+		interpA.stop();
+		interpA.start();
+		return EXIT_SUCCESS;
+
+	}
+
+	if (interpA.online() == false)
+	{
+		emit errorOut("Error: interpreter kernel not running");
+		return EXIT_FAILURE;
+	}
+	else
+	{
+		interpA.push_in(line);
+		waiting = true;
+		timer->start(0);
+		inDis->start(0);
+		
+	}
+	return EXIT_SUCCESS;
 }

@@ -29,7 +29,6 @@ bool ThreadSafeQueue<T>::empty() const {
 template<typename T>
 void ThreadSafeQueue<T>::push(const T& value) {
 	std::unique_lock<std::mutex> lock(the_mutex);
-	std::cout << "HERE! inside2" << "\n";
 	the_queue.push(value);
 	lock.unlock();
 	the_condition_variable.notify_one();

@@ -25,6 +25,16 @@ void InputWidget::keyReleaseEvent(QKeyEvent *event)//event from key release
 	QPlainTextEdit::keyReleaseEvent(event);
 }
 
+void InputWidget::selfDisable()
+{
+	setEnabled(false);
+}
+
+void InputWidget::selfEnable()
+{
+	setEnabled(true);
+}
+
 /*
 ExampleWidget::ExampleWidget(QPlainTextEdit * parent): QPlainTextEdit(parent){
 
