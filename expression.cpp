@@ -1035,7 +1035,7 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 	if (!(m_tail[0].isHeadSymbol() && env.is_exp(m_tail[0].head())))//also check if lambda only has one argument
 	{
 		throw SemanticError("Error in call to continuous-plot function: first argument not a lambda");
-	
+
 	}
 	if (!m_tail[1].eval(env).isHeadList())//also check if list contains only numbers, if list is of size 2
 	{
@@ -1059,7 +1059,6 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 
 	for (int i = 0; i < 51; i++)//points
 	{
-		if (env.checkexit() == true) return exitnow();
 		Xplot.push_back(i*(Xmax - Xmin) / 50.0 + Xmin);
 
 	}
@@ -1072,13 +1071,11 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 	//bool iterated = false;
 	for (int j = 0; j < 10; j++)//should be 10
 	{
-		if (env.checkexit() == true) return exitnow();
 		//iterated = false;
 		//for (unsigned int i = 2; i < Xplot.size(); i+=2)
 		i = 2;
-		while(i < Xplot.size())
+		while (i < Xplot.size())
 		{
-			if (env.checkexit() == true) return exitnow();
 			lambda.tailVector()[0] = Expression(Xplot[i - 2]);//does this work?
 			y1 = lambda.eval(env).head().asNumber();
 
@@ -1110,14 +1107,14 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 			/*
 			if (j == 9)
 			{
-				if (180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2.0) + pow((y3 - y2), 2.0))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))) < 175)
-				{
-					std::cout << (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2.0) + pow((y3 - y2), 2.0))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2))));
-				}
-				else {
-					std::cout << (-1.0) * (-180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2) + pow((y3 - y2), 2))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))));
-				}
-				std::cout << "\n";
+			if (180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2.0) + pow((y3 - y2), 2.0))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))) < 175)
+			{
+			std::cout << (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2.0) + pow((y3 - y2), 2.0))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2))));
+			}
+			else {
+			std::cout << (-1.0) * (-180 - (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2) + pow((y3 - y2), 2))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2)))));
+			}
+			std::cout << "\n";
 			}
 			*/
 			//if ((180 - (arcCos((x3-x2)/sqrt((x3-x2)^2 + (y3-y2)^2)) - arcCos((x2-x1)/sqrt((x2-x1)^2 + (y2-y1)^2))) < 175) || (-180 - (arcCos((x3-x2)/sqrt((x3-x2)^2 + (y3-y2)^2)) - arcCos((x2-x1)/sqrt((x2-x1)^2 + (y2-y1)^2))) > -175))
@@ -1132,19 +1129,19 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 				i++;
 			}
 			//i = i + 2;
-			
+
 		}
 
 	}
 	/*
 	double Ri = 0;
-	
+
 	for (unsigned int R = 0; R < Xplot.size(); R++)
 	{
 
-		lambda.tailVector()[0] = Expression(Xplot[R]);//does this work?
-		Ri = lambda.eval(env).head().asNumber();
-		std::cout << "(" << Xplot[R] << ", " << Ri << ")\n";
+	lambda.tailVector()[0] = Expression(Xplot[R]);//does this work?
+	Ri = lambda.eval(env).head().asNumber();
+	std::cout << "(" << Xplot[R] << ", " << Ri << ")\n";
 
 	}
 	std::cout << Xplot.size() << "\n";
@@ -1161,7 +1158,7 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 	double scaleF = 1.0;
 	double XScale;
 	double YScale;
-	
+
 
 	XScale = N / (Xmax - Xmin);
 	YScale = N / (Ymax - Ymin);
@@ -1182,19 +1179,18 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 	propCreate.append(Expression());
 
 	Expression holder;
-	for (unsigned int i = 0; i < Xplot.size()-1; i++)
+	for (unsigned int i = 0; i < Xplot.size() - 1; i++)
 	{
-		if (env.checkexit() == true) return exitnow();
 		lambda.tailVector()[0] = Expression(Xplot[i]);
 		Yi = lambda.eval(env).head().asNumber();
 		//pointCreate = Expression(Atom("make-point"));
 		pointCreate.tailVector()[0] = (Atom(Xplot[i] * XScale));
-		pointCreate.tailVector()[1] = (Atom(-Yi*YScale));
+		pointCreate.tailVector()[1] = (Atom(-Yi * YScale));
 
 		//lineCreate = Expression(Atom("make-line"));
 		lineCreate.tailVector()[0] = (pointCreate);
 
-		lambda.tailVector()[0] = Expression(Xplot[i+1]);
+		lambda.tailVector()[0] = Expression(Xplot[i + 1]);
 		Yi = lambda.eval(env).head().asNumber();
 		//pointCreate = Expression(Atom("make-point"));
 		pointCreate.tailVector()[0] = (Atom(Xplot[i + 1] * XScale));
@@ -1208,9 +1204,9 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 		propCreate.tailVector()[2] = (lineCreate);
 		holder = propCreate;
 		graphList.append(holder.eval(env));//m_tail of holder gets cleared for some reason
-		//std::cout << "hey";
+										   //std::cout << "hey";
 	}
-	
+
 
 	//create graph line boarders (maybe make a helper function?)
 
