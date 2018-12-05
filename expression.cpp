@@ -1068,7 +1068,7 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 	double y2;
 	double y3;
 	double angleTest;
-	double angleTester;
+	//double angleTester;
 	unsigned int i = 2;
 	//bool iterated = false;
 	for (int j = 0; j < 10; j++)//should be 10
@@ -1133,7 +1133,7 @@ Expression Expression::handle_continuousPlot(Environment & env) {
 
 			angleTest = 180.0 / (std::atan2(0, -1)) * acos(((Xplot[i - 1] - Xplot[i - 2])*(Xplot[i] - Xplot[i - 1]) + (y2 - y1)*(y3 - y2)) / (sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2.0) + pow((y2 - y1), 2.0)) * sqrt(pow((Xplot[i] - Xplot[i - 1]), 2.0) + pow((y3 - y2), 2.0))));
 
-			angleTester = (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2.0) + pow((y3 - y2), 2.0))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2))));
+		//	angleTester = (180.0 / (std::atan2(0, -1))) * (acos((Xplot[i] - Xplot[i - 1]) / sqrt(pow((Xplot[i] - Xplot[i - 1]), 2.0) + pow((y3 - y2), 2.0))) - acos((Xplot[i - 1] - Xplot[i - 2]) / sqrt(pow((Xplot[i - 1] - Xplot[i - 2]), 2) + pow((y2 - y1), 2))));
 
 			if (angleTest>5.0 || angleTest<-5.0)
 			{
