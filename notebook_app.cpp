@@ -60,11 +60,13 @@ NotebookApp::NotebookApp(QWidget * parent) : QWidget(parent) {
 	
 
 
+	QHBoxLayout * layoutButts = new QHBoxLayout();
+	layoutButts->addWidget(startB);
+	layoutButts->addWidget(stopB);
+	layoutButts->addWidget(resetB);
+	layoutButts->addWidget(interruptB);
 	QVBoxLayout * layout = new QVBoxLayout();
-	layout->addWidget(startB);
-	layout->addWidget(stopB);
-	layout->addWidget(resetB);
-	layout->addWidget(interruptB);
+	layout->addLayout(layoutButts);
 	layout->addWidget(input);//add input in top half, output in bottem half
 	layout->addWidget(output);
 
